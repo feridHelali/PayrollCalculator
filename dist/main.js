@@ -13,10 +13,10 @@
 /*!**************************!*\
   !*** ./src/main/main.ts ***!
   \**************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
-eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    var desc = Object.getOwnPropertyDescriptor(m, k);\n    if (!desc || (\"get\" in desc ? !m.__esModule : desc.writable || desc.configurable)) {\n      desc = { enumerable: true, get: function() { return m[k]; } };\n    }\n    Object.defineProperty(o, k2, desc);\n}) : (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    o[k2] = m[k];\n}));\nvar __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {\n    Object.defineProperty(o, \"default\", { enumerable: true, value: v });\n}) : function(o, v) {\n    o[\"default\"] = v;\n});\nvar __importStar = (this && this.__importStar) || function (mod) {\n    if (mod && mod.__esModule) return mod;\n    var result = {};\n    if (mod != null) for (var k in mod) if (k !== \"default\" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);\n    __setModuleDefault(result, mod);\n    return result;\n};\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\n__webpack_require__(/*! reflect-metadata */ \"./node_modules/reflect-metadata/Reflect.js\");\nconst electron_1 = __webpack_require__(/*! electron */ \"electron\");\nconst path = __importStar(__webpack_require__(/*! path */ \"path\"));\nconst url = __importStar(__webpack_require__(/*! url */ \"url\"));\nfunction createWindow() {\n    const mainWindow = new electron_1.BrowserWindow({\n        width: 800,\n        height: 600,\n        webPreferences: {\n            nodeIntegration: true,\n            contextIsolation: false,\n            preload: path.join(__dirname, 'preload.js') // if you have a preload script\n        }\n    });\n    const startUrl = process.env.ELECTRON_START_URL || url.format({\n        pathname: path.join(__dirname, '/../dist/index.html'),\n        protocol: 'file:',\n        slashes: true\n    });\n    mainWindow.loadURL(startUrl);\n    mainWindow.on('closed', () => {\n        electron_1.app.quit();\n    });\n}\nelectron_1.app.on('ready', createWindow);\nelectron_1.app.on('window-all-closed', () => {\n    if (process.platform !== 'darwin') {\n        electron_1.app.quit();\n    }\n});\nelectron_1.app.on('activate', () => {\n    if (electron_1.BrowserWindow.getAllWindows().length === 0) {\n        createWindow();\n    }\n});\n\n\n//# sourceURL=webpack://payyrollcalcutor/./src/main/main.ts?");
+eval("\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\n__webpack_require__(/*! reflect-metadata */ \"./node_modules/reflect-metadata/Reflect.js\");\nconst electron_1 = __webpack_require__(/*! electron */ \"electron\");\nfunction createWindow() {\n    const mainWindow = new electron_1.BrowserWindow({\n        width: 800,\n        height: 600,\n        webPreferences: {\n            nodeIntegration: true,\n            contextIsolation: false,\n        }\n    });\n    const startUrl = process.env.ELECTRON_START_URL || 'http://localhost:9000';\n    mainWindow.loadURL(startUrl);\n    mainWindow.on('closed', () => {\n        electron_1.app.quit();\n    });\n}\nelectron_1.app.on('ready', () => {\n    const template = [\n        {\n            label: 'الملف',\n            submenu: [\n                { label: 'فتح الملف' },\n                { label: 'حفظ الملف' },\n                { type: 'separator' },\n                { label: 'خروج', role: 'quit' }\n            ]\n        },\n        // Add more menu items as needed\n    ];\n    const menu = electron_1.Menu.buildFromTemplate(template);\n    electron_1.Menu.setApplicationMenu(menu);\n});\nelectron_1.app.on('ready', createWindow);\nelectron_1.app.on('window-all-closed', () => {\n    if (process.platform !== 'darwin') {\n        electron_1.app.quit();\n    }\n});\nelectron_1.app.on('activate', () => {\n    if (electron_1.BrowserWindow.getAllWindows().length === 0) {\n        createWindow();\n    }\n});\n\n\n//# sourceURL=webpack://payyrollcalcutor/./src/main/main.ts?");
 
 /***/ }),
 
@@ -28,28 +28,6 @@ eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ?
 
 "use strict";
 module.exports = require("electron");
-
-/***/ }),
-
-/***/ "path":
-/*!***********************!*\
-  !*** external "path" ***!
-  \***********************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("path");
-
-/***/ }),
-
-/***/ "url":
-/*!**********************!*\
-  !*** external "url" ***!
-  \**********************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("url");
 
 /***/ }),
 
@@ -83,7 +61,7 @@ eval("/*! **********************************************************************
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
@@ -93,7 +71,7 @@ eval("/*! **********************************************************************
 /******/ 	
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	// This entry module can't be inlined because the eval devtool is used.
 /******/ 	var __webpack_exports__ = __webpack_require__("./src/main/main.ts");
 /******/ 	
 /******/ })()

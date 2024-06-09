@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SideNav from './components/SideNav';
 import HomePage from './pages/HomePage';
 import PayrollPage from './pages/PayrollPage';
+import './styles/rtl.css'; // Import RTL CSS here
 
 const App: React.FC = () => {
   return (

@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow,Menu,MenuItemConstructorOptions  } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
@@ -10,15 +10,10 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      preload: path.join(__dirname, 'preload.js') // if you have a preload script
     }
   });
 
-  const startUrl = process.env.ELECTRON_START_URL || url.format({
-    pathname: path.join(__dirname, '/../dist/index.html'),
-    protocol: 'file:',
-    slashes: true
-  });
+  const startUrl = process.env.ELECTRON_START_URL || 'http://localhost:9000';
 
   mainWindow.loadURL(startUrl);
 
@@ -26,6 +21,27 @@ function createWindow() {
     app.quit();
   });
 }
+
+
+
+app.on('ready', () => {
+  const template:MenuItemConstructorOptions[] = [
+    {
+      label: 'الملف',
+      submenu: [
+        { label: 'فتح الملف' },
+        { label: 'حفظ الملف' },
+        { type: 'separator' },
+        { label: 'خروج', role: 'quit' }
+      ]
+    },
+    // Add more menu items as needed
+  ];
+
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
+});
+
 
 app.on('ready', createWindow);
 
