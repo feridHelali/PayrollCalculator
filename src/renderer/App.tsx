@@ -5,6 +5,7 @@ import SideNav from './components/SideNav';
 import HomePage from './pages/HomePage';
 import PayrollPage from './pages/PayrollPage';
 import './styles/rtl.css'; // Import RTL CSS here
+import ConventionCollectivePage from './pages/ConventionCollectivePage';
 
 const App: React.FC = () => {
   return (
@@ -13,8 +14,10 @@ const App: React.FC = () => {
         <SideNav />
         <Box p={4} flex="1">
           <Routes>
+            <Route path='/conventions' element={<ConventionCollectivePage />} />
             <Route path="/payroll" element={<PayrollPage />} />
             <Route path="/" element={<HomePage />} />
+            
           </Routes>
         </Box>
       </Flex>

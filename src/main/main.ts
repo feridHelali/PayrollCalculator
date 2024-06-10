@@ -1,7 +1,7 @@
 import 'reflect-metadata';
-import { app, BrowserWindow,Menu,MenuItemConstructorOptions  } from 'electron';
-import * as path from 'path';
-import * as url from 'url';
+import { app, BrowserWindow,Menu,MenuItemConstructorOptions,ipcMain  } from 'electron';
+import { ConventionCollectioveService } from '../services/ConventionCollectiveService';
+
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -55,4 +55,10 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
+});
+
+// IPC Setup in Electron Main Process
+ipcMain.handle('fetch-conventions', async (event:any, args:any) => {
+ console.log('fetchConventions Trigred from GUI')
+ return [];
 });
