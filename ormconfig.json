@@ -1,16 +1,16 @@
 {
     "type": "sqlite",
-    "database": "database.sqlite",
+    "database": "payroll.db",
     "synchronize": true,
     "logging": false,
     "entities": [
-      "src/db/entities/**/*.ts"
+      "src/main/db/entities/**/*.ts"
     ],
     "migrations": [
-      "src/db/migrations/**/*.ts"
+      "src/main/db/migrations/**/*.ts"
     ],
     "subscribers": [
-      "src/db/subscribers/**/*.ts"
+      "src/main/db/subscribers/**/*.ts"
     ]
   }
   

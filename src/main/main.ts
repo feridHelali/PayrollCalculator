@@ -1,7 +1,10 @@
 import 'reflect-metadata';
 import { app, BrowserWindow,Menu,MenuItemConstructorOptions,ipcMain  } from 'electron';
-import { ConventionCollectioveService } from '../services/ConventionCollectiveService';
+import AppDataSource from './typeorm.config';
+import { SqliteDriver } from 'typeorm/driver/sqlite/SqliteDriver';
 
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('sqlite3 path:', require.resolve('sqlite3'));
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -57,8 +60,13 @@ app.on('activate', () => {
   }
 });
 
-// IPC Setup in Electron Main Process
-ipcMain.handle('fetch-conventions', async (event:any, args:any) => {
- console.log('fetchConventions Trigred from GUI')
- return [];
+
+AppDataSource.initialize().then(() => {
+  console.log('Database connected');
+  console.log('Data Source has been initialized!');
+  // Your app logic here
+}).catch((error) => {
+  console.error('Error connecting to the database', error);
 });
+
+
