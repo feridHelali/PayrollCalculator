@@ -16,6 +16,8 @@ const AppDataSource = new DataSource({
     database: join(__dirname, '..', 'payroll.db'),
     entities: [ActualMonthSalary, Affair, SectorialJointAgreement, AgreementApplicationPeriods, SalaryTableCell, SalaryTable], 
     synchronize: true,
+    logging:true,
+    logger: 'advanced-console',
 });
 
 export default AppDataSource;
