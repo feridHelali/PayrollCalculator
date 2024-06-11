@@ -18,10 +18,10 @@ export class SalaryTable {
   salaryTableId!: number;
 
   @Column("text", { name: "type" })
-  type: string;
+  type!: string;
 
   @Column("numeric", { name: "consernedEmployee" })
-  consernedEmployee: number;
+  consernedEmployee!: number;
 
   @ManyToOne(
     () => AgreementApplicationPeriods,
@@ -33,21 +33,13 @@ export class SalaryTable {
       referencedColumnName: "agreementApplicationPeriodsId",
     },
   ])
-  agreementApplicationPeriods: AgreementApplicationPeriods;
+  agreementApplicationPeriods!: AgreementApplicationPeriods;
 
   @OneToMany(
     () => SalaryTableCell,
     (salaryTableCell) => salaryTableCell.salaryTable
   )
-  salaryTableCells: SalaryTableCell[]=[];
+  salaryTableCells!: SalaryTableCell[];
 
-  constructor(
-    type: string,
-    consernedEmployee: number,
-    agreementApplicationPeriods: AgreementApplicationPeriods
-  ) {
-    this.type = type;
-    this.consernedEmployee = consernedEmployee;
-    this.agreementApplicationPeriods = agreementApplicationPeriods;
-  }
+ 
 }

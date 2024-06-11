@@ -16,37 +16,22 @@ export class ActualMonthSalary {
   actualMonthSalaryId!: number;
 
   @Column("text", { name: "salaryPeriod" })
-  salaryPeriod: string;
+  salaryPeriod!: string;
 
   @Column("text", { name: "currentProfessionalCategory" })
-  currentProfessionalCategory: string;
+  currentProfessionalCategory!: string;
 
   @Column("integer", { name: "currentProfessionalDegree" })
-  currentProfessionalDegree: number;
+  currentProfessionalDegree!: number;
 
   @Column("integer", { name: "actualWorkingAge" })
-  actualWorkingAge: number;
+  actualWorkingAge!: number;
 
   @Column("real", { name: "theSalary" })
-  theSalary: number;
+  theSalary!: number;
 
   @ManyToOne(() => Affair, (affair) => affair.actualMonthSalaries)
   @JoinColumn([{ name: "affairID", referencedColumnName: "affairId" }])
-  affair: Affair;
+  affair!: Affair;
 
-  constructor(
-    salaryPeriod: string,
-    currentProfessionalCategory: string,
-    currentProfessionalDegree: number,
-    actualWorkingAge: number,
-    theSalary: number,
-    affair: Affair
-  ) {
-    this.salaryPeriod = salaryPeriod;
-    this.currentProfessionalCategory = currentProfessionalCategory;
-    this.currentProfessionalDegree = currentProfessionalDegree;
-    this.actualWorkingAge = actualWorkingAge;
-    this.theSalary = theSalary;
-    this.affair = affair;
-  }
 }

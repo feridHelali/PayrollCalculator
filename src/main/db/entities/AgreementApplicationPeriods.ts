@@ -18,13 +18,13 @@ export class AgreementApplicationPeriods {
   agreementApplicationPeriodsId!: number;
 
   @Column("date", { name: "start_date_of_application" })
-  startDateOfApplication: string;
+  startDateOfApplication!: string;
 
   @Column("date", { name: "end_date_of_application", nullable: true })
-  endDateOfApplication: string | null;
+  endDateOfApplication!: string | null;
 
   @Column("text", { name: "description", nullable: true })
-  description: string | null;
+  description!: string | null;
 
   @ManyToOne(
     () => SectorialJointAgreement,
@@ -34,23 +34,12 @@ export class AgreementApplicationPeriods {
   @JoinColumn([
     { name: "theAgreement", referencedColumnName: "sectorialJointAgreementId" },
   ])
-  theAgreement: SectorialJointAgreement;
+  theAgreement!: SectorialJointAgreement;
 
   @OneToMany(
     () => SalaryTable,
     (salaryTable) => salaryTable.agreementApplicationPeriods
   )
-  salaryTables: SalaryTable[]=[];
+  salaryTables!: SalaryTable[];
 
-  constructor(
-    startDateOfApplication: string,
-    endDateOfApplication: string | null,
-    description: string | null,
-    theAgreement: SectorialJointAgreement
-  ) {
-    this.startDateOfApplication = startDateOfApplication;
-    this.endDateOfApplication = endDateOfApplication;
-    this.description = description;
-    this.theAgreement = theAgreement;
-  }
 }

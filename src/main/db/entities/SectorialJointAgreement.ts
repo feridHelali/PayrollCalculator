@@ -10,22 +10,15 @@ export class SectorialJointAgreement {
   sectorialJointAgreementId!: number;
 
   @Column("text", { name: "agreement_name" })
-  agreementName: string;
+  agreementName!: string;
 
   @Column("text", { name: "description", nullable: true })
-  description: string | null;
+  description!: string | null;
 
   @OneToMany(
     () => AgreementApplicationPeriods,
     (agreementApplicationPeriods) => agreementApplicationPeriods.theAgreement
   )
-  agreementApplicationPeriods: AgreementApplicationPeriods[]=[];
+  agreementApplicationPeriods!: AgreementApplicationPeriods[];
 
-  constructor(
-    agreementName: string,
-    description: string | null
-  ) {
-    this.agreementName = agreementName;
-    this.description = description;
-  }
 }

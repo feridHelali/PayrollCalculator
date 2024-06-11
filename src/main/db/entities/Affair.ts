@@ -7,42 +7,28 @@ export class Affair {
   affairId!: number;
 
   @Column("text", { name: "claimant" })
-  claimant: string;
+  claimant!: string;
 
   @Column("date", { name: "startDateOfWork" })
-  startDateOfWork: string;
+  startDateOfWork!: string;
 
   @Column("date", { name: "endDateOfWork" })
-  endDateOfWork: string;
+  endDateOfWork!: string;
 
   @Column("text", { name: "professionalCategoryAtBegining" })
-  professionalCategoryAtBegining: string;
+  professionalCategoryAtBegining!: string;
 
   @Column("integer", { name: "professionalDegreeAtBegining" })
-  professionalDegreeAtBegining: number;
+  professionalDegreeAtBegining!: number;
 
   @Column("integer", { name: "sectorial_joint_AgreementID" })
-  sectorialJointAgreementId: number;
+  sectorialJointAgreementId!: number;
 
   @OneToMany(
     () => ActualMonthSalary,
     (actualMonthSalary) => actualMonthSalary.affair
   )
-  actualMonthSalaries: ActualMonthSalary[]=[];
+  actualMonthSalaries!: ActualMonthSalary[];
 
-  constructor(
-    claimant: string,
-    startDateOfWork: string,
-    endDateOfWork: string,
-    professionalCategoryAtBegining: string,
-    professionalDegreeAtBegining: number,
-    sectorialJointAgreementId: number
-  ) {
-    this.claimant = claimant;
-    this.startDateOfWork = startDateOfWork;
-    this.endDateOfWork = endDateOfWork;
-    this.professionalCategoryAtBegining = professionalCategoryAtBegining;
-    this.professionalDegreeAtBegining = professionalDegreeAtBegining;
-    this.sectorialJointAgreementId = sectorialJointAgreementId;
-  }
+ 
 }

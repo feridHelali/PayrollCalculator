@@ -13,39 +13,25 @@ export class SalaryTableCell {
   id!: number;
 
   @Column("text", { name: "professionalCategory" })
-  professionalCategory: string;
+  professionalCategory!: string;
 
   @Column("text", { name: "prefessionalSubCategory", nullable: true })
-  prefessionalSubCategory: string | null;
+  prefessionalSubCategory!: string | null;
 
   @Column("integer", { name: "ProfessionalDegree" })
-  professionalDegree: number;
+  professionalDegree!: number;
 
   @Column("integer", { name: "WorkingAge" })
-  workingAge: number;
+  workingAge!: number;
 
   @Column("real", { name: "salary" })
-  salary: number;
+  salary!: number;
 
   @ManyToOne(() => SalaryTable, (salaryTable) => salaryTable.salaryTableCells)
   @JoinColumn([
     { name: "SalaryTableId", referencedColumnName: "salaryTableId" },
   ])
-  salaryTable: SalaryTable;
+  salaryTable!: SalaryTable;
 
-  constructor(
-    professionalCategory: string,
-    prefessionalSubCategory: string | null,
-    professionalDegree: number,
-    workingAge: number,
-    salary: number,
-    salaryTable: SalaryTable
-  ) {
-    this.professionalCategory = professionalCategory;
-    this.prefessionalSubCategory = prefessionalSubCategory;
-    this.professionalDegree = professionalDegree;
-    this.workingAge = workingAge;
-    this.salary = salary;
-    this.salaryTable = salaryTable;
-  }
+
 }

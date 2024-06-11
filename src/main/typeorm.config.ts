@@ -8,11 +8,12 @@ import { SalaryTableCell } from './db/entities/SalaryTableCell';
 import { DataSource } from 'typeorm';
 import { join } from 'path';
 
+const databasePath = join(__dirname, '..', 'payroll.sqlite');
 
 
 const AppDataSource = new DataSource({
     type: 'better-sqlite3',
-    database: join(__dirname, '../../payroll.sqlite'),
+    database: databasePath,
     entities: [ActualMonthSalary, Affair, SectorialJointAgreement, AgreementApplicationPeriods, SalaryTableCell, SalaryTable], 
     synchronize: false,
     logging:true,

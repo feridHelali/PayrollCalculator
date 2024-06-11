@@ -9,8 +9,8 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "experimentalDecorators": true, // Add this line
-    "emitDecoratorMetadata": true,  // Add this line
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "jsx": "react",
     "sourceMap": true
   },

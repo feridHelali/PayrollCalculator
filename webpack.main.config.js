@@ -1,7 +1,7 @@
 const path = require('path');
-const webpack = require('webpack');
 
 module.exports = {
+  mode: 'development',
   target: 'electron-main',
   entry: './src/main/main.ts',
   output: {
@@ -10,10 +10,6 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
-    alias: {
-      // Ensure node-pre-gyp is properly handled
-      'node-pre-gyp': 'node-pre-gyp/lib/node-pre-gyp.js',
-    }
   },
   module: {
     rules: [
@@ -27,6 +23,9 @@ module.exports = {
         use: 'node-loader'
       }
     ]
+  },
+  externals: {
+    'better-sqlite3': 'commonjs better-sqlite3'
   },
   node: {
     __dirname: false,
