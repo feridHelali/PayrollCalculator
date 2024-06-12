@@ -75,7 +75,9 @@
     "react-router-dom": "^6.23.1",
     "redux": "^5.0.1",
     "reflect-metadata": "^0.2.2",
-    "typeorm": "^0.3.20"
+    "typedi": "^0.10.0",
+    "typeorm": "^0.3.20",
+    "typeorm-typedi-extensions": "^0.4.1"
   },
   "config": {
     "forge": {
