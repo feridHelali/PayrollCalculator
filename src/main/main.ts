@@ -1,23 +1,15 @@
 import 'reflect-metadata';
 import path from 'path';
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions, ipcMain } from 'electron';
-import AppDataSource from './typeorm.config';
+import initializeDatabase from './db/initializeDatabase';
 import { SecrorialJointAgreementService } from './services/SectorialJointAgreementService';
 
-async function initializeDatabase() {
-  try {
-    await AppDataSource.initialize();
-    console.log('Data Source has been initialized!');
-  } catch (err) {
-    console.error('Error during Data Source initialization:', err);
-    throw err;
-  }
-}
+
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 1000,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
