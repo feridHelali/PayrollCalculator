@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchAgreements,
   createAgreement,
@@ -22,6 +21,7 @@ import { sectorialJointAgreementProps } from '../../../types/sectorialAgreementP
 import { labels } from '../../arabic.labels';
 import AlfaSpinner from '../../shared/AlfaSpinner';
 import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
+import { useAppDispatch,useAppSelector } from '../../redux/redux.hooks';
 
 const initialAgreement: sectorialJointAgreementProps = {
   sectorialJointAgreementId: 0,
@@ -31,11 +31,10 @@ const initialAgreement: sectorialJointAgreementProps = {
 }
 
 const SectorialJointAgreementList: React.FC = () => {
-  console.log(window.electronAPI)
-  const dispatch: AppDispatch = useDispatch();
-  const agreements = useSelector((state: RootState) => state.agreements.agreements);
-  const agreementStatus = useSelector((state: RootState) => state.agreements.status);
-  const error = useSelector((state: RootState) => state.agreements.error);
+  const dispatch: AppDispatch = useAppDispatch();
+  const agreements = useAppSelector((state: RootState) => state.agreements.agreements);
+  const agreementStatus = useAppSelector((state: RootState) => state.agreements.status);
+  const error = useAppSelector((state: RootState) => state.agreements.error);
 
   const [newAgreement, setNewAgreement] = useState<sectorialJointAgreementProps>(initialAgreement);
   const [currentAgreement, setCurrentAgreement] = useState<sectorialJointAgreementProps | null>(null);
