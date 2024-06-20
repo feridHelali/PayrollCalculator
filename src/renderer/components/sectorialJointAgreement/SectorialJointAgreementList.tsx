@@ -88,7 +88,7 @@ const SectorialJointAgreementList: React.FC = () => {
         </VStack>
         <HStack spacing={4}>
           <Button onClick={currentAgreement ? handleUpdate : handleCreate}>
-            {currentAgreement ? 'Update Agreement' : 'Create Agreement'}
+            {currentAgreement ? labels.update : labels.create}
           </Button>
           {currentAgreement && (
             <Button onClick={() => {
