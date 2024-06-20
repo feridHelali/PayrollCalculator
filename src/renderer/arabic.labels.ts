@@ -1,3 +1,5 @@
+import { Affair } from "../main/db/entities/Affair";
+
 export const labels = {
     home: 'الرئيسية',
     conventionCollective: 'الاتفقيات المشتركة',
@@ -16,5 +18,7 @@ export const labels = {
     action:'العمليات',
     sectorialJointAgreementList:'قائمة الاتفاقيات القطاعية المشتركة',
     sectorialJointAgreementApplicationPeriods:"مدة التطبيق في الاتفاقيات القطاعية المشتركة",
+    affairs:"القظايا",
+    affair:"القضية",
 
   };

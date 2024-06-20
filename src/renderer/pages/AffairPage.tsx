@@ -2,12 +2,12 @@ import React from 'react';
 import { Box, Heading } from '@chakra-ui/react';
 import { labels } from '../arabic.labels';
 
-const HomePage: React.FC = () => {
+const AffairPage: React.FC = () => {
   return (
     <Box>
-      <Heading>{labels.home}</Heading>
+      <Heading>{labels.affairs} </Heading>
     </Box>
   );
 };
 
-export default HomePage;
+export default AffairPage;
