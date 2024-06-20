@@ -9,7 +9,7 @@ import { SalaryTable } from "./SalaryTable";
 
 @Entity("SalaryTableCell")
 export class SalaryTableCell {
-  @PrimaryGeneratedColumn({ type: "integer", name: "id"})
+  @PrimaryGeneratedColumn({ type: "integer", name: "id" })
   id!: number;
 
   @Column("text", { name: "professionalCategory" })
@@ -32,6 +32,4 @@ export class SalaryTableCell {
     { name: "SalaryTableId", referencedColumnName: "salaryTableId" },
   ])
   salaryTable!: SalaryTable;
-
-
 }

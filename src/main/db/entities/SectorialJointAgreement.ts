@@ -1,11 +1,11 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { AgreementApplicationPeriods } from "./AgreementApplicationPeriods";
+import { SalaryTable } from "./SalaryTable";
 
 @Entity("SectorialJointAgreement")
 export class SectorialJointAgreement {
   @PrimaryGeneratedColumn({
     type: "integer",
-    name: "sectorial_joint_AgreementID"
+    name: "sectorial_joint_AgreementID",
   })
   sectorialJointAgreementId!: number;
 
@@ -15,10 +15,6 @@ export class SectorialJointAgreement {
   @Column("text", { name: "description", nullable: true })
   description!: string | null;
 
-  @OneToMany(
-    () => AgreementApplicationPeriods,
-    (agreementApplicationPeriods) => agreementApplicationPeriods.theAgreement
-  )
-  agreementApplicationPeriods!: AgreementApplicationPeriods[];
-
+  @OneToMany(() => SalaryTable, (salaryTable) => salaryTable.agreemen)
+  salaryTables!: SalaryTable[];
 }

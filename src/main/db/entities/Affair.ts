@@ -29,6 +29,4 @@ export class Affair {
     (actualMonthSalary) => actualMonthSalary.affair
   )
   actualMonthSalaries!: ActualMonthSalary[];
-
- 
 }

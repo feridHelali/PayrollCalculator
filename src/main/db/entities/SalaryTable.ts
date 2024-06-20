@@ -6,14 +6,15 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { AgreementApplicationPeriods } from "./AgreementApplicationPeriods";
 import { SalaryTableCell } from "./SalaryTableCell";
+import { SectorialJointAgreement } from "./SectorialJointAgreement";
 
 @Entity("SalaryTable")
 export class SalaryTable {
   @PrimaryGeneratedColumn({
     type: "integer",
-    name: "salaryTableID"
+    name: "salaryTableID",
+  
   })
   salaryTableId!: number;
 
@@ -23,23 +24,18 @@ export class SalaryTable {
   @Column("numeric", { name: "consernedEmployee" })
   consernedEmployee!: number;
 
-  @ManyToOne(
-    () => AgreementApplicationPeriods,
-    (agreementApplicationPeriods) => agreementApplicationPeriods.salaryTables
-  )
-  @JoinColumn([
-    {
-      name: "agreementApplicationPeriodsID",
-      referencedColumnName: "agreementApplicationPeriodsId",
-    },
-  ])
-  agreementApplicationPeriods!: AgreementApplicationPeriods;
-
   @OneToMany(
     () => SalaryTableCell,
     (salaryTableCell) => salaryTableCell.salaryTable
   )
   salaryTableCells!: SalaryTableCell[];
 
- 
+  @ManyToOne(
+    () => SectorialJointAgreement,
+    (sectorialJointAgreement) => sectorialJointAgreement.salaryTables
+  )
+  @JoinColumn([
+    { name: "agreemenID", referencedColumnName: "sectorialJointAgreementId" },
+  ])
+  agreemen!: SectorialJointAgreement;
 }

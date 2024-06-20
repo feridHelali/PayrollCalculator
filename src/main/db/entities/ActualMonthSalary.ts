@@ -33,5 +33,4 @@ export class ActualMonthSalary {
   @ManyToOne(() => Affair, (affair) => affair.actualMonthSalaries)
   @JoinColumn([{ name: "affairID", referencedColumnName: "affairId" }])
   affair!: Affair;
-
 }
