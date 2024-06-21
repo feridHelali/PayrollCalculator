@@ -12,7 +12,7 @@ const AppDataSource = new DataSource({
   type: 'better-sqlite3',
   database: databasePath,
   entities: [ActualMonthSalary, Affair, SectorialJointAgreement, SalaryTableCell, SalaryTable],
-  synchronize: false,
+  synchronize: true,
   logging: true,
   logger: 'advanced-console',
   migrations: [

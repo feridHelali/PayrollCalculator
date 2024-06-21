@@ -9,7 +9,8 @@ const SideNav: React.FC = () => {
       <VStack spacing={4} align="stretch">
         <Link as={RouterLink} to="/">{labels.home}</Link>
         <Link as={RouterLink} to="/affairs">{labels.affair}</Link>
-        <Link as={RouterLink} to="/agreements">{labels.conventionCollective}</Link>
+        <Link as={RouterLink} to="/agreements">{labels.sectorialJointAgreement}</Link>
+        <Link as={RouterLink} to="/agreement-form">{labels.addSectorialJointAgreement}</Link>
       </VStack>
     </Box>
   );

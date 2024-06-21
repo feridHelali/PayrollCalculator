@@ -15,6 +15,6 @@ export class SectorialJointAgreement {
   @Column("text", { name: "description", nullable: true })
   description!: string | null;
 
-  @OneToMany(() => SalaryTable, (salaryTable) => salaryTable.agreemen)
+  @OneToMany(() => SalaryTable, (salaryTable) => salaryTable.agreement)
   salaryTables!: SalaryTable[];
 }

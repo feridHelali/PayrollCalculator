@@ -54,6 +54,10 @@ app.on('ready', async () => {
       return await agreementService.getAllSectorialJointAgreements();
     });
 
+    ipcMain.handle('fetch-agreement-by-id', async (event, id) => {
+      return await agreementService.getSectorialJointAgreementById(id);
+    });
+
     ipcMain.handle('create-agreement', async (event, agreement) => {
       return await agreementService.createSectorialJointAgreement(agreement);
     });

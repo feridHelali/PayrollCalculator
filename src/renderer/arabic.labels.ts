@@ -1,10 +1,12 @@
 import { Affair } from "../main/db/entities/Affair";
+import sectorialJointAgreementSlice from "./redux/sectorialJointAgreement/sectorialJointAgreementSlice";
 
 export const labels = {
     home: 'الرئيسية',
-    conventionCollective: 'الاتفقيات المشتركة',
+    sectorialJointAgreement: 'الاتفقيات المشتركة',
     sectorialJointAgreementName:'اسم الاتفاقية القطاعية المشتركة',
     descriptionSectorialJointAgreement: "بيانات على الاتفاقية القطاعية المشتركة",
+    addSectorialJointAgreement: 'اضافة الاتفاقية القطاعية المشتركة',
     category: 'فئة',
     degree:'مرتبة',
     cancel:'الغاء',

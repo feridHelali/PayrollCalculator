@@ -10,11 +10,18 @@ export class SectorialJointAgreementRepository {
   }
 
   async findAll(): Promise<SectorialJointAgreement[]> {
-    return this.repository.find();
+    return this.repository.find({
+      order: {
+        sectorialJointAgreementId: 'ASC',
+      },
+      relations: {
+        salaryTables: true,
+      }
+    });
   }
 
   async findById(id: number): Promise<SectorialJointAgreement | undefined> {
-    return this.repository.findOne({ where: { sectorialJointAgreementId: id } }) as Promise<SectorialJointAgreement | undefined>;
+    return this.repository.findOne({ where: { sectorialJointAgreementId: id },relations: { salaryTables: true } }) as Promise<SectorialJointAgreement | undefined>;
   }
 
   async create(sectorialJointAgreementData: Partial<SectorialJointAgreement>): Promise<SectorialJointAgreement> {

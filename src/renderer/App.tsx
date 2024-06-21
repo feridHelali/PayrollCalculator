@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage';
 import AffairPage from './pages/AffairPage';
 import './styles/rtl.css'; 
 import SectorialJointAgreementList from './pages/SectorialJointAgreementPage';
+import SectorialJointAgreementForm from './components/sectorialJointAgreement/SectorialJointAgreementForm';
 
 const App: React.FC = () => {
   console.log(window.electronAPI);
@@ -17,6 +18,8 @@ const App: React.FC = () => {
         <Box p={4} flex="1">
           <Routes>
             <Route path='/agreements' element={<SectorialJointAgreementList />} />
+            <Route path='/agreement-form' element={<SectorialJointAgreementForm />} />
+            <Route path='/agreement-form/:sectorialJointAgreementId' element={<SectorialJointAgreementForm />} />
             <Route path="/affairs" element={<AffairPage />} />
             <Route path="/" element={<HomePage />} />
             

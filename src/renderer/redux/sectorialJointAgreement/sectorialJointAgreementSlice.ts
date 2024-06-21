@@ -7,12 +7,16 @@ interface AgreementsState {
   agreements: sectorialJointAgreementProps[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
+  mode: 'create' | 'update';
+  currentAgreement: sectorialJointAgreementProps | null;
 }
 
 const initialState: AgreementsState = {
   agreements: [],
   status: 'idle',
   error: null,
+  mode: 'create',
+  currentAgreement: null,
 };
 
 export const fetchAgreements = createAsyncThunk<sectorialJointAgreementProps[]>(
@@ -21,6 +25,13 @@ export const fetchAgreements = createAsyncThunk<sectorialJointAgreementProps[]>(
     return await window.electronAPI.fetchAgreements();
   }
 );
+
+export const fetchAgreementById = createAsyncThunk<sectorialJointAgreementProps, number>(
+  'agreements/fetchAgreementById',
+  async (sectorialJointAgreementId: number) => {
+    return await window.electronAPI.fetchAgreementById(sectorialJointAgreementId);
+  }
+)
 
 export const createAgreement = createAsyncThunk<sectorialJointAgreementProps, sectorialJointAgreementProps>(
   'agreements/createAgreement',
@@ -61,8 +72,24 @@ const sectorialJointAgreementSlice = createSlice({
         state.status = 'failed';
         state.error = action.error.message ?? null;
       })
+      .addCase(fetchAgreementById.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchAgreementById.fulfilled, (state, action: PayloadAction<sectorialJointAgreementProps>) => {
+        state.currentAgreement = action.payload;
+        state.status = 'succeeded';
+        state.error = null;
+        state.mode = 'update';
+      })
+      .addCase(fetchAgreementById.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message ?? null;
+      })
       .addCase(createAgreement.fulfilled, (state, action: PayloadAction<sectorialJointAgreementProps>) => {
         state.agreements.push(action.payload);
+        state.status = 'succeeded';
+        state.error = null;
+        state.mode = 'create';
       })
       .addCase(updateAgreement.fulfilled, (state, action: PayloadAction<sectorialJointAgreementProps>) => {
         const index = state.agreements.findIndex(agreement => agreement.sectorialJointAgreementId === action.payload.sectorialJointAgreementId);

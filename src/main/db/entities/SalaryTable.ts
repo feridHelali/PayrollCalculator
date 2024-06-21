@@ -35,7 +35,7 @@ export class SalaryTable {
     (sectorialJointAgreement) => sectorialJointAgreement.salaryTables
   )
   @JoinColumn([
-    { name: "agreemenID", referencedColumnName: "sectorialJointAgreementId" },
+    { name: "agreementID", referencedColumnName: "sectorialJointAgreementId" },
   ])
-  agreemen!: SectorialJointAgreement;
+  agreement!: SectorialJointAgreement;
 }

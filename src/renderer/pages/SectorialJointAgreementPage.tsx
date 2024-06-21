@@ -7,7 +7,7 @@ const ConventionCollectivePage:React.FC =()=> {
   
   return (
     <Box>
-      <Heading>{labels.conventionCollective}</Heading>
+      <Heading>{labels.sectorialJointAgreement}</Heading>
       <ConventionCollectiveComponent />
     </Box>
   )
