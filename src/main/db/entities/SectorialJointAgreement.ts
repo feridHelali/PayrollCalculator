@@ -1,10 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { SalaryTable } from "./SalaryTable";
 
 @Entity("SectorialJointAgreement")
 export class SectorialJointAgreement {
-  @PrimaryGeneratedColumn({
-    type: "integer",
+  @PrimaryColumn({
+    type: "uuid",
     name: "sectorial_joint_AgreementID",
   })
   sectorialJointAgreementId!: number;

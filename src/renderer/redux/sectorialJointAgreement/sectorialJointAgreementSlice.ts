@@ -26,9 +26,9 @@ export const fetchAgreements = createAsyncThunk<sectorialJointAgreementProps[]>(
   }
 );
 
-export const fetchAgreementById = createAsyncThunk<sectorialJointAgreementProps, number>(
+export const fetchAgreementById = createAsyncThunk<sectorialJointAgreementProps, string>(
   'agreements/fetchAgreementById',
-  async (sectorialJointAgreementId: number) => {
+  async (sectorialJointAgreementId: string) => {
     return await window.electronAPI.fetchAgreementById(sectorialJointAgreementId);
   }
 )
@@ -47,9 +47,9 @@ export const updateAgreement = createAsyncThunk<sectorialJointAgreementProps, se
   }
 );
 
-export const deleteAgreement = createAsyncThunk<number, number>(
+export const deleteAgreement = createAsyncThunk<string, string>(
   'agreements/deleteAgreement',
-  async (id: number) => {
+  async (id: string) => {
     await window.electronAPI.deleteAgreement(id);
     return id;
   }
@@ -97,7 +97,7 @@ const sectorialJointAgreementSlice = createSlice({
           state.agreements[index] = action.payload;
         }
       })
-      .addCase(deleteAgreement.fulfilled, (state, action: PayloadAction<number>) => {
+      .addCase(deleteAgreement.fulfilled, (state, action: PayloadAction<string>) => {
         state.agreements = state.agreements.filter(agreement => agreement.sectorialJointAgreementId !== action.payload);
       });
   },

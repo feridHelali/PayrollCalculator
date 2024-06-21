@@ -1,6 +1,6 @@
 export interface sectorialJointAgreementProps  {
-    sectorialJointAgreementId: number
+    sectorialJointAgreementId: string
     agreementName: string
     description: string
-    agreementApplicationPeriods?:[]
+    agreementApplicationTables?:[]
 }

@@ -8,6 +8,7 @@ import {
   Box,
   Button,
   HStack,
+  Text
 } from '@chakra-ui/react';
 import type { RootState, AppDispatch } from '../../redux/store';
 import { sectorialJointAgreementProps } from '../../../types/sectorialAgreementProps';
@@ -22,7 +23,7 @@ import { useNavigate } from 'react-router-dom';
 const SectorialJointAgreementList: React.FC = () => {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useAppDispatch();
-  const agreements = useAppSelector((state: RootState) => state.agreements.agreements);
+  const agreements: sectorialJointAgreementProps[] = useAppSelector((state: RootState) => state.agreements.agreements);
   const agreementStatus = useAppSelector((state: RootState) => state.agreements.status);
   const error = useAppSelector((state: RootState) => state.agreements.error);
 
@@ -33,11 +34,11 @@ const SectorialJointAgreementList: React.FC = () => {
     }
   }, [agreementStatus, dispatch]);
 
-  const handleEdit = (sectorialJointAgreementId: number) => {
+  const handleEdit = (sectorialJointAgreementId: string) => {
     navigate(`/agreement-form/${sectorialJointAgreementId}`);
 };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     dispatch(deleteAgreement(id));
   };
 
@@ -66,6 +67,7 @@ const SectorialJointAgreementList: React.FC = () => {
               ))}
             </Tbody>
           </Table>
+          {error && <Text colorScheme='red'>Error: {error}</Text>}
     </Box>
   );
 };

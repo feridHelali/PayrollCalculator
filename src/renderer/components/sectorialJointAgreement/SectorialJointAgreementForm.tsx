@@ -7,13 +7,14 @@ import { AppDispatch, RootState } from '../../redux/store';
 import { createAgreement, fetchAgreementById, updateAgreement } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import AlfaSpinner from '../../shared/AlfaSpinner';
+import SalaryTableForm from './SalaryTableForm';
 
 
 const initialAgreement: sectorialJointAgreementProps = {
-    sectorialJointAgreementId: 0,
+    sectorialJointAgreementId: '',
     agreementName: '',
     description: '',
-    agreementApplicationPeriods: [],
+    agreementApplicationTables: [],
 }
 const SectorialJointAgreementForm: React.FC = () => {
     const navigate = useNavigate();
@@ -22,12 +23,13 @@ const SectorialJointAgreementForm: React.FC = () => {
     const agreementStatus = useAppSelector((state: RootState) => state.agreements.status);
     const currentAgreement = useAppSelector((state: RootState) => state.agreements.currentAgreement);
     const error = useAppSelector((state: RootState) => state.agreements.error);
+    const mode =useAppSelector((state: RootState) => state.agreements.mode);
     const [newAgreement, setNewAgreement] = useState<sectorialJointAgreementProps>(initialAgreement);
 
 
     useEffect(() => {
         if (sectorialJointAgreementId) {
-            dispatch(fetchAgreementById(parseInt(sectorialJointAgreementId!)))
+            dispatch(fetchAgreementById(sectorialJointAgreementId!))
             
         } else {
             setNewAgreement(initialAgreement);
@@ -44,7 +46,7 @@ const SectorialJointAgreementForm: React.FC = () => {
 
     const handleCreate = () => {
         if (newAgreement.agreementName.trim()) {
-            dispatch(createAgreement({ sectorialJointAgreementId: 0, agreementName: newAgreement.agreementName, description: newAgreement.description, agreementApplicationPeriods: [] }))
+            dispatch(createAgreement({ sectorialJointAgreementId: '', agreementName: newAgreement.agreementName, description: newAgreement.description, agreementApplicationTables: [] }))
                 .then(() => navigate('/agreements'));
 
         }
@@ -62,8 +64,8 @@ const SectorialJointAgreementForm: React.FC = () => {
 
     return (
         <Box>
-            <pre><code>{JSON.stringify(newAgreement, null, 2)}</code></pre>
-            <pre><code>{JSON.stringify(currentAgreement, null, 2)}</code></pre>
+            {/* <pre><code>{JSON.stringify(newAgreement, null, 2)}</code></pre>
+            <pre><code>{JSON.stringify(currentAgreement, null, 2)}</code></pre> */}
             <VStack spacing={4}>
                 <Heading>{labels.sectorialJointAgreement}</Heading>
                 <FormControl>
@@ -93,6 +95,8 @@ const SectorialJointAgreementForm: React.FC = () => {
             </HStack>
             {agreementStatus === 'loading' && <AlfaSpinner />}
             {error && <Text colorScheme='red'>Error: {error}</Text>}
+
+           <SalaryTableForm sectorialJointAgreementId={sectorialJointAgreementId}/>        
         </Box >
 
     );

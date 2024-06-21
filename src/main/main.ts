@@ -3,6 +3,7 @@ import path from 'path';
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions, ipcMain } from 'electron';
 import initializeDatabase from './db/initializeDatabase';
 import { SecrorialJointAgreementService } from './services/SectorialJointAgreementService';
+import { SalaryTableService } from './services/SalaryTableService';
 
 
 
@@ -48,6 +49,8 @@ app.on('ready', async () => {
     await initializeDatabase();
 
     const agreementService = new SecrorialJointAgreementService();
+    const salaryTableService = new SalaryTableService();
+    
 
     // Register IPC handlers only after the data source is initialized
     ipcMain.handle('fetch-agreements', async () => {
@@ -69,6 +72,23 @@ app.on('ready', async () => {
     ipcMain.handle('delete-agreement', async (event, id) => {
       await agreementService.deleteSectorialJointAgreement(id);
       return id;
+    });
+
+    ipcMain.handle('fetch-salary-tables', async () => {
+      return await salaryTableService.findAll();
+    });
+
+    ipcMain.handle('create-salary-table', async (event, salaryTable) => {
+      return await salaryTableService.create(salaryTable);
+    });
+
+    ipcMain.handle('update-salary-table', async (event, salaryTable) => {
+      return await salaryTableService.update(salaryTable.salaryTableId, salaryTable);
+    });
+
+    ipcMain.handle('delete-salary-table', async (event, id) => {
+      await salaryTableService.delete(id);
+      return id;  
     });
 
     createWindow();
