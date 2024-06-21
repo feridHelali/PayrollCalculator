@@ -6,7 +6,7 @@ export const labels = {
     sectorialJointAgreement: 'الاتفقيات المشتركة',
     sectorialJointAgreementName:'اسم الاتفاقية القطاعية المشتركة',
     descriptionSectorialJointAgreement: "بيانات على الاتفاقية القطاعية المشتركة",
-    addSectorialJointAgreement: 'اضافة الاتفاقية',
+    addSectorialJointAgreement: 'اضافة اتفاقية',
     category: 'فئة',
     degree:'مرتبة',
     cancel:'الغاء',
