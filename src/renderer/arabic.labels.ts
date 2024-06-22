@@ -22,5 +22,14 @@ export const labels = {
     sectorialJointAgreementApplicationPeriods:"مدة التطبيق في الاتفاقيات القطاعية المشتركة",
     affairs:"القظايا",
     affair:"القضية",
+    salaryTableList:"قائمة جداول الاجور",
+    addSalaryTable:"اضافة جدول الاجور",
+    salaryTableNumber:"رقم الجدول الاجور",
+    salaryType:"نوع الجدول الاجور",
+    concernedEmployee:"موظف معين",
+    selectAgreement:"حدد الاتفاقية",
+    salaryTableForm:"نموذج جدول الاجور",
+    beginningDateOfApplication:"تاريخ بدئة التطبيق",
+    endDateOfApplication:"تاريخ نهاية التطبيق",
 
   };

@@ -1,16 +1,16 @@
 import React from 'react'
 import { Box, Heading } from '@chakra-ui/react';
 import { labels } from '../arabic.labels';
-import ConventionCollectiveComponent from '../components/sectorialJointAgreement/SectorialJointAgreementList';
+import SectorialAgreementList from '../components/sectorialJointAgreement/SectorialJointAgreementList';
 
-const ConventionCollectivePage:React.FC =()=> {
+const SectorialJointAgreementPage:React.FC =()=> {
   
   return (
     <Box>
       <Heading>{labels.sectorialJointAgreement}</Heading>
-      <ConventionCollectiveComponent />
+      <SectorialAgreementList />
     </Box>
   )
 }
 
-export default ConventionCollectivePage
+export default SectorialJointAgreementPage

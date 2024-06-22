@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, VStack, Link } from '@chakra-ui/react';
+import { Box, VStack, Link, StepSeparator } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { labels } from '../arabic.labels';
 import { FaHome, FaBriefcase, FaFileContract, FaPlusSquare } from 'react-icons/fa';
@@ -19,6 +19,14 @@ const SideNav: React.FC = () => {
         <Link as={RouterLink} to="/agreement-form" display={"flex"} alignItems={"flex-start"}>
           <FaPlusSquare style={{ marginLeft: '10px' }} /> {labels.addSectorialJointAgreement}
         </Link>
+        
+        <Link as={RouterLink} to="/salary-table-form" display={"flex"} alignItems={"flex-start"}>
+          <FaPlusSquare style={{ marginLeft: '10px' }} /> {labels.addSalaryTable}
+        </Link>
+        <Link as={RouterLink} to="/salary-tables" display={"flex"} alignItems={"flex-start"}>
+          <FaBriefcase style={{ marginLeft: '10px' }} /> {labels.salaryTableList}
+        </Link>
+
       </VStack>
     </Box>
   );

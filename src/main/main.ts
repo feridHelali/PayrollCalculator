@@ -75,8 +75,16 @@ app.on('ready', async () => {
       return id;
     });
 
-    ipcMain.handle('fetch-salary-tables', async () => {
+    ipcMain.handle('fetch-all-salary-tables', async () => {
       return await salaryTableService.findAll();
+    });
+
+    ipcMain.handle('fetch-salary-table-by-id', async (event, id) => {
+      return await salaryTableService.findById(id);
+    });
+
+    ipcMain.handle('fetch-salary-tables-by-agreement-id', async (event, agreementId) => {
+      return await salaryTableService.getSalaryTablesByAgreementId(agreementId);
     });
 
     ipcMain.handle('create-salary-table', async (event, salaryTable) => {

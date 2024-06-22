@@ -3,20 +3,41 @@ import { SalaryTableProps } from '../../../types/salaryTableProps';
 
 interface SalaryTablesState {
   salaryTables: SalaryTableProps[];
+  salaryTablesForGivenAgreement: SalaryTableProps[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
+  mode: 'create' | 'update';
+  currentSalaryTable: SalaryTableProps | null;
 }
 
 const initialState: SalaryTablesState = {
   salaryTables: [],
+  salaryTablesForGivenAgreement: [],
   status: 'idle',
   error: null,
+  mode: 'create',
+  currentSalaryTable: null,
 };
 
-export const fetchSalaryTables = createAsyncThunk<SalaryTableProps[],number>(
-  'salaryTables/fetchSalaryTables',
-  async (id:number) => {
-    return await window.electronAPI.fetchSalaryTable(id);
+export const fetchAllSalaryTables = createAsyncThunk<SalaryTableProps>(
+  'salaryTables/fetchAllSalaryTables',
+  async () => {
+    return await window.electronAPI.fetchAllSalaryTables();
+  }
+  
+)
+
+export const fetchSalaryTableById = createAsyncThunk<SalaryTableProps, number>(
+  'salaryTables/fetchSalaryTableById',
+  async (salaryTableId: number) => {
+    return await window.electronAPI.fetchSalaryTableById(salaryTableId);
+  } 
+)
+
+export const fetchSalaryTablesByAgreementId = createAsyncThunk<SalaryTableProps[],number>(
+  'salaryTables/fetchSalaryTablesByAgreementId',
+  async (agreementId:number) => {
+    return await window.electronAPI.fetchSalaryTablesByAgreementId(agreementId);
   }
 );
 
@@ -47,14 +68,36 @@ const salaryTableSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchSalaryTables.pending, (state) => {
+      .addCase(fetchSalaryTablesByAgreementId.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(fetchSalaryTables.fulfilled, (state, action: PayloadAction<SalaryTableProps[]>) => {
+      .addCase(fetchSalaryTablesByAgreementId.fulfilled, (state, action: PayloadAction<SalaryTableProps[]>) => {
+        state.status = 'succeeded';
+        state.salaryTablesForGivenAgreement = action.payload;
+      })
+      .addCase(fetchSalaryTablesByAgreementId.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message ?? null;
+      })
+      .addCase(fetchAllSalaryTables.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchAllSalaryTables.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message ?? null;
+      })
+      .addCase(fetchAllSalaryTables.fulfilled, (state, action: PayloadAction<any>) => {
         state.status = 'succeeded';
         state.salaryTables = action.payload;
       })
-      .addCase(fetchSalaryTables.rejected, (state, action) => {
+      .addCase(fetchSalaryTableById.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchSalaryTableById.fulfilled, (state, action: PayloadAction<SalaryTableProps>) => {
+        state.status = 'succeeded';
+        state.currentSalaryTable = action.payload;
+      })
+      .addCase(fetchSalaryTableById.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message ?? null;
       })

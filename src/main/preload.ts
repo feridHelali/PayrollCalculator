@@ -1,4 +1,3 @@
-import { fetchSalaryTables } from "../renderer/redux/sectorialJointAgreement/salaryTableSlice";
 import { sectorialJointAgreementProps } from "../types/sectorialAgreementProps";
 
 const { contextBridge, ipcRenderer } = require('electron');
@@ -9,7 +8,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   createAgreement: (agreement:sectorialJointAgreementProps) => ipcRenderer.invoke('create-agreement', agreement),
   updateAgreement: (agreement:sectorialJointAgreementProps) => ipcRenderer.invoke('update-agreement', agreement),
   deleteAgreement: (id:number) => ipcRenderer.invoke('delete-agreement', id),
-  fetchSalaryTables: () => ipcRenderer.invoke('fetch-salary-tables'),
+  fetchAllSalaryTables: () => ipcRenderer.invoke('fetch-all-salary-tables'),
+  fetchSalaryTableById: (id: number) => ipcRenderer.invoke('fetch-salary-table-by-id', id),
+  fetchSalaryTablesByAgreementId: (agreementId: number) => ipcRenderer.invoke('fetch-salary-tables-by-agreement-id', agreementId),
   createSalaryTable: (salaryTable: any) => ipcRenderer.invoke('create-salary-table', salaryTable),
   updateSalaryTable: (salaryTable: any) => ipcRenderer.invoke('update-salary-table', salaryTable),
   deleteSalaryTable: (id: number) => ipcRenderer.invoke('delete-salary-table', id),

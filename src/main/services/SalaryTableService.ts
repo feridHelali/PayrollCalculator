@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { FindOptionsWhere, Repository } from "typeorm";
 import AppDataSource from "../../main/typeorm.config";
 import { SalaryTable } from "../db/entities/SalaryTable";
 
@@ -17,6 +17,10 @@ export class SalaryTableService {
         return this.repository.findOne({ where: { salaryTableId: id }, relations: ["salaryTableCells", "agreement"] });
     }
 
+    async getSalaryTablesByAgreementId(agreementId: number): Promise<SalaryTable[]> {
+        const where: FindOptionsWhere<SalaryTable> = { agreement: { sectorialJointAgreementId: agreementId } };
+        return await this.repository.find({ where });
+    }
     async create(salaryTableData: Partial<SalaryTable>): Promise<SalaryTable> {
         return this.repository.save(salaryTableData);
     }

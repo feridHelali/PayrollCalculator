@@ -7,6 +7,7 @@ import { AppDispatch, RootState } from '../../redux/store';
 import { createAgreement, fetchAgreementById, switchToUpdateMode,switchToCreateMode, updateAgreement } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import AlfaSpinner from '../../shared/AlfaSpinner';
+import { SalaryTableProps } from '../../../types/salaryTableProps';
 
 const initialAgreement: sectorialJointAgreementProps = {
     sectorialJointAgreementId: 0,
@@ -64,16 +65,9 @@ const SectorialJointAgreementForm: React.FC = () => {
 
 
     return (
-        <Box>
-            <pre><code>
-                new agreement :
-                {JSON.stringify(newAgreement, null, 2)}
-            </code></pre>
-            <hr />
-            <pre><code>
-                currentAgreement :
-                {JSON.stringify(currentAgreement, null, 2)}
-            </code></pre>
+        <Box p={5} m={5} bgColor={'gray.100'} borderRadius={5}>
+              {agreementStatus === 'loading' && <AlfaSpinner />}
+              {error && <Text colorScheme='red'>Error: {error}</Text>}
             <VStack spacing={4}>
                 <Heading> {mode === 'update' ? labels.update : labels.create} {labels.sectorialJointAgreement}</Heading>
                 <FormControl>
@@ -91,17 +85,27 @@ const SectorialJointAgreementForm: React.FC = () => {
                 </FormControl>
             </VStack>
             <HStack spacing={4} mt={4} justifyContent='flex-end' p={4}>
-                <Button onClick={ mode === 'update' ? handleUpdate : handleCreate}>
+                <Button onClick={ mode === 'update' ? handleUpdate : handleCreate} colorScheme='blue' shadow='md' isDisabled={!isNewAgreementValid(newAgreement)}>
                     {mode === 'update' ? labels.update : labels.save}
                 </Button>
                
             </HStack>
-            {agreementStatus === 'loading' && <AlfaSpinner />}
-            {error && <Text colorScheme='red'>Error: {error}</Text>}
+          
         </Box >
 
     );
 }
 
 export default SectorialJointAgreementForm;
+
+function isNewAgreementValid(newAgreement: sectorialJointAgreementProps): boolean {
+    if(!newAgreement) {
+        return false;
+    }
+    if(!newAgreement.agreementName.trim()) {
+        return false;
+    }
+    return true;    
+}
+
 

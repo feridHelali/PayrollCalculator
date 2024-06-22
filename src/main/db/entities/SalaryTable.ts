@@ -26,8 +26,8 @@ export class SalaryTable {
   @Column("text", { name: "consernedEmployee" })
   consernedEmployee!: string;
 
-  @Column("date", { name: "biggining_date_of_application", nullable: false })
-  bigginingDateOfApplication!: Date;
+  @Column("date", { name: "beginning_date_of_application", nullable: false })
+  beginningDateOfApplication!: Date;
 
   @Column("date", { name: "end_date_of_application", nullable: true })
   endDateOfApplication!: Date | null;
@@ -59,7 +59,7 @@ export class SalaryTable {
 
   // Method to lookup salary for a given employee within a specific period
   getSalaryForEmployee(category: string, degree: number, workingAge: number, date: Date): number | null {
-    if (date >= this.bigginingDateOfApplication && (!this.endDateOfApplication || date <= this.endDateOfApplication)) {
+    if (date >= this.beginningDateOfApplication && (!this.endDateOfApplication || date <= this.endDateOfApplication)) {
       const cell = this.salaryTableCells.find(cell =>
         cell.professionalCategory === category &&
         cell.professionalDegree === degree &&

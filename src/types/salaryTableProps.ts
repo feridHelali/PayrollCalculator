@@ -6,13 +6,14 @@ export interface SalaryTableProps {
     numeroTable: number;
     type: string;
     consernedEmployee: string;
-    bigginingDateOfApplication: Date;
+    beginningDateOfApplication: Date;
     endDateOfApplication: Date | null;
     degrees: number[];
     workingAges: number[];
     categories: string[];
-    salaryTableCells: SalaryTableCell[];
-    agreement: sectorialJointAgreementProps;
+    salaryTableCells?: SalaryTableCell[];
+    agreement?: sectorialJointAgreementProps;
+    agreementId?: number;
 }
 
 export interface SalaryTableCell {
