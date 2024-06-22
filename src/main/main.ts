@@ -4,6 +4,7 @@ import { app, BrowserWindow, Menu, MenuItemConstructorOptions, ipcMain } from 'e
 import initializeDatabase from './db/initializeDatabase';
 import { SecrorialJointAgreementService } from './services/SectorialJointAgreementService';
 import { SalaryTableService } from './services/SalaryTableService';
+import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 
 
 
@@ -50,7 +51,7 @@ app.on('ready', async () => {
 
     const agreementService = new SecrorialJointAgreementService();
     const salaryTableService = new SalaryTableService();
-    
+
 
     // Register IPC handlers only after the data source is initialized
     ipcMain.handle('fetch-agreements', async () => {
@@ -88,7 +89,7 @@ app.on('ready', async () => {
 
     ipcMain.handle('delete-salary-table', async (event, id) => {
       await salaryTableService.delete(id);
-      return id;  
+      return id;
     });
 
     createWindow();
@@ -96,6 +97,18 @@ app.on('ready', async () => {
     console.error('Error during app initialization:', err);
   }
 });
+
+
+
+app.whenReady().then(() => {
+  installExtension(REDUX_DEVTOOLS)
+    .then((name) => console.log(`Added Extension:  ${name}`))
+    .catch((err) => console.log('An error occurred: ', err));
+
+  installExtension(REACT_DEVELOPER_TOOLS)
+    .then((name) => console.log(`Added Extension:  ${name}`))
+    .catch((err) => console.log('An error occurred: ', err));
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

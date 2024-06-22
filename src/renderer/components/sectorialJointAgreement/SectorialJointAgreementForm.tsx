@@ -64,8 +64,8 @@ const SectorialJointAgreementForm: React.FC = () => {
 
     return (
         <Box>
-            {/* <pre><code>{JSON.stringify(newAgreement, null, 2)}</code></pre>
-            <pre><code>{JSON.stringify(currentAgreement, null, 2)}</code></pre> */}
+            <pre><code>{JSON.stringify(newAgreement, null, 2)}</code></pre>
+            <pre><code>{JSON.stringify(currentAgreement, null, 2)}</code></pre>
             <VStack spacing={4}>
                 <Heading>{labels.sectorialJointAgreement}</Heading>
                 <FormControl>
@@ -94,9 +94,7 @@ const SectorialJointAgreementForm: React.FC = () => {
                 )}
             </HStack>
             {agreementStatus === 'loading' && <AlfaSpinner />}
-            {error && <Text colorScheme='red'>Error: {error}</Text>}
-
-           <SalaryTableForm sectorialJointAgreementId={sectorialJointAgreementId}/>        
+            {error && <Text colorScheme='red'>Error: {error}</Text>}          
         </Box >
 
     );
