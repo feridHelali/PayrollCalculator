@@ -2,7 +2,7 @@ import { UUID } from "crypto";
 import { sectorialJointAgreementProps } from "./sectorialAgreementProps";
 
 export interface SalaryTableProps {
-    salaryTableId: UUID;
+    salaryTableId?: number;
     numeroTable: number;
     type: string;
     consernedEmployee: string;

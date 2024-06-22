@@ -1,7 +1,6 @@
 import { Repository } from "typeorm";
 import AppDataSource from "../../main/typeorm.config";
 import { SalaryTable } from "../db/entities/SalaryTable";
-import { UUID } from "crypto";
 
 export class SalaryTableService {
     private repository: Repository<SalaryTable>;
@@ -14,7 +13,7 @@ export class SalaryTableService {
         return this.repository.find({ relations: ["salaryTableCells", "agreement"] });
     }
 
-    async findById(id: UUID): Promise<SalaryTable | undefined | null> {
+    async findById(id: number): Promise<SalaryTable | undefined | null> {
         return this.repository.findOne({ where: { salaryTableId: id }, relations: ["salaryTableCells", "agreement"] });
     }
 
@@ -22,7 +21,7 @@ export class SalaryTableService {
         return this.repository.save(salaryTableData);
     }
 
-    async update(id: UUID, salaryTableData: Partial<SalaryTable>): Promise<SalaryTable | undefined | null> {
+    async update(id: number, salaryTableData: Partial<SalaryTable>): Promise<SalaryTable | undefined | null> {
         await this.repository.update(id, salaryTableData);
         return this.findById(id);
     }

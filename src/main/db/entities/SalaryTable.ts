@@ -4,18 +4,18 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 import { SalaryTableCell } from "./SalaryTableCell";
 import { SectorialJointAgreement } from "./SectorialJointAgreement";
 
 @Entity("SalaryTable")
 export class SalaryTable {
-  @PrimaryColumn({
-    type: "uuid",
+  @PrimaryGeneratedColumn({
+    type: "integer",
     name: "salaryTableID",
   })
-  salaryTableId!: string;
+  salaryTableId!: number;
 
   @Column("integer", { name: "numero_table" })
   numeroTable!: number;

@@ -3,14 +3,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { SalaryTable } from "./SalaryTable";
 
 @Entity("SalaryTableCell")
 export class SalaryTableCell {
-  @PrimaryColumn({ type: "uuid", name: "id" })
+  @PrimaryGeneratedColumn({ type: "integer", name: "id" })
   id!: number;
 
   @Column("text", { name: "professionalCategory" })

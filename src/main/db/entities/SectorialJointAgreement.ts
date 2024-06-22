@@ -3,8 +3,8 @@ import { SalaryTable } from "./SalaryTable";
 
 @Entity("SectorialJointAgreement")
 export class SectorialJointAgreement {
-  @PrimaryColumn({
-    type: "uuid",
+  @PrimaryGeneratedColumn({
+    type: "integer",
     name: "sectorial_joint_AgreementID",
   })
   sectorialJointAgreementId!: number;

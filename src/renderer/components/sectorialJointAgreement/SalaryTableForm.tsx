@@ -77,7 +77,7 @@ const SalaryTableInput = ({ degrees, categories, workingAges, onSave }: any): Re
     );
 };
 
-const SalaryTableForm = ({sectorialJointAgreementId}: {sectorialJointAgreementId: string}) => {
+const SalaryTableForm = ({sectorialJointAgreementId}: {sectorialJointAgreementId: number}) => {
    
     const dispatch: AppDispatch = useAppDispatch();
     const salaryTableStatus = useAppSelector((state: RootState) => state.salaryTables.status);

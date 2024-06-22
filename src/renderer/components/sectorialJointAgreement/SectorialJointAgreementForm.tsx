@@ -7,11 +7,9 @@ import { AppDispatch, RootState } from '../../redux/store';
 import { createAgreement, fetchAgreementById, updateAgreement } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import AlfaSpinner from '../../shared/AlfaSpinner';
-import SalaryTableForm from './SalaryTableForm';
-
 
 const initialAgreement: sectorialJointAgreementProps = {
-    sectorialJointAgreementId: '',
+    sectorialJointAgreementId: 0,
     agreementName: '',
     description: '',
     agreementApplicationTables: [],
@@ -46,7 +44,7 @@ const SectorialJointAgreementForm: React.FC = () => {
 
     const handleCreate = () => {
         if (newAgreement.agreementName.trim()) {
-            dispatch(createAgreement({ sectorialJointAgreementId: '', agreementName: newAgreement.agreementName, description: newAgreement.description, agreementApplicationTables: [] }))
+            dispatch(createAgreement({ agreementName: newAgreement.agreementName, description: newAgreement.description}))
                 .then(() => navigate('/agreements'));
 
         }

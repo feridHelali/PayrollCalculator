@@ -34,11 +34,11 @@ const SectorialJointAgreementList: React.FC = () => {
     }
   }, [agreementStatus, dispatch]);
 
-  const handleEdit = (sectorialJointAgreementId: string) => {
+  const handleEdit = (sectorialJointAgreementId: any) => {
     navigate(`/agreement-form/${sectorialJointAgreementId}`);
 };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: any) => {
     dispatch(deleteAgreement(id));
   };
 

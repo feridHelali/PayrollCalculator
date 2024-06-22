@@ -13,9 +13,9 @@ const initialState: SalaryTablesState = {
   error: null,
 };
 
-export const fetchSalaryTables = createAsyncThunk<SalaryTableProps[],string>(
+export const fetchSalaryTables = createAsyncThunk<SalaryTableProps[],number>(
   'salaryTables/fetchSalaryTables',
-  async (id:string) => {
+  async (id:number) => {
     return await window.electronAPI.fetchSalaryTable(id);
   }
 );
@@ -34,9 +34,9 @@ export const updateSalaryTable = createAsyncThunk<SalaryTableProps, Partial<Sala
   }     
 )
 
-export const deleteSalaryTable = createAsyncThunk<SalaryTableProps, string>(
+export const deleteSalaryTable = createAsyncThunk<SalaryTableProps, number>(
   'salaryTables/deleteSalaryTable',
-  async (salaryTableId: string) => {
+  async (salaryTableId: number) => {
     return await window.electronAPI.deleteSalaryTable(salaryTableId);
   }
 )
