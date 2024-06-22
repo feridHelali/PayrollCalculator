@@ -67,7 +67,7 @@ app.on('ready', async () => {
     });
 
     ipcMain.handle('update-agreement', async (event, agreement) => {
-      return await agreementService.updateSectorialJointAgreement(agreement.id, agreement);
+      return await agreementService.updateSectorialJointAgreement(agreement.sectorialJointAgreementId, agreement);
     });
 
     ipcMain.handle('delete-agreement', async (event, id) => {

@@ -4,7 +4,7 @@ import { labels } from '../../arabic.labels';
 import { sectorialJointAgreementProps } from '../../../types/sectorialAgreementProps';
 import { useAppDispatch, useAppSelector } from '../../redux/redux.hooks';
 import { AppDispatch, RootState } from '../../redux/store';
-import { createAgreement, fetchAgreementById, updateAgreement } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
+import { createAgreement, fetchAgreementById, switchToUpdateMode,switchToCreateMode, updateAgreement } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import AlfaSpinner from '../../shared/AlfaSpinner';
 
@@ -21,15 +21,17 @@ const SectorialJointAgreementForm: React.FC = () => {
     const agreementStatus = useAppSelector((state: RootState) => state.agreements.status);
     const currentAgreement = useAppSelector((state: RootState) => state.agreements.currentAgreement);
     const error = useAppSelector((state: RootState) => state.agreements.error);
-    const mode =useAppSelector((state: RootState) => state.agreements.mode);
+    const mode = useAppSelector((state: RootState) => state.agreements.mode);
     const [newAgreement, setNewAgreement] = useState<sectorialJointAgreementProps>(initialAgreement);
 
 
     useEffect(() => {
         if (sectorialJointAgreementId) {
+            dispatch(switchToUpdateMode())
             dispatch(fetchAgreementById(sectorialJointAgreementId!))
-            
+
         } else {
+            dispatch(switchToCreateMode())
             setNewAgreement(initialAgreement);
         }
 
@@ -38,13 +40,14 @@ const SectorialJointAgreementForm: React.FC = () => {
 
     useEffect(() => {
         if (currentAgreement) {
+            dispatch(switchToUpdateMode())
             setNewAgreement(currentAgreement);
         }
     }, [currentAgreement]);
 
     const handleCreate = () => {
-        if (newAgreement.agreementName.trim()) {
-            dispatch(createAgreement({ agreementName: newAgreement.agreementName, description: newAgreement.description}))
+        if (newAgreement.agreementName.trim() && mode === 'create') {
+            dispatch(createAgreement({ agreementName: newAgreement.agreementName, description: newAgreement.description }))
                 .then(() => navigate('/agreements'));
 
         }
@@ -52,9 +55,9 @@ const SectorialJointAgreementForm: React.FC = () => {
 
     const handleUpdate = () => {
         if (currentAgreement && newAgreement.agreementName.trim()) {
-            dispatch(updateAgreement({ ...newAgreement, agreementName: newAgreement.agreementName, description: newAgreement.description}))
-            .then(() => navigate('/agreements'));
-            
+            dispatch(updateAgreement({ ...newAgreement, agreementName: newAgreement.agreementName, description: newAgreement.description }))
+                .then(() => navigate('/agreements'));
+
         }
     };
 
@@ -62,11 +65,19 @@ const SectorialJointAgreementForm: React.FC = () => {
 
     return (
         <Box>
-            <pre><code>{JSON.stringify(newAgreement, null, 2)}</code></pre>
-            <pre><code>{JSON.stringify(currentAgreement, null, 2)}</code></pre>
+            <pre><code>
+                new agreement :
+                {JSON.stringify(newAgreement, null, 2)}
+            </code></pre>
+            <hr />
+            <pre><code>
+                currentAgreement :
+                {JSON.stringify(currentAgreement, null, 2)}
+            </code></pre>
             <VStack spacing={4}>
-                <Heading>{labels.sectorialJointAgreement}</Heading>
+                <Heading> {mode === 'update' ? labels.update : labels.create} {labels.sectorialJointAgreement}</Heading>
                 <FormControl>
+                    {mode === 'update' && <FormLabel>#{currentAgreement?.sectorialJointAgreementId}</FormLabel>}
                     <FormLabel>{labels.sectorialJointAgreementName}</FormLabel>
                     <Input
                         value={newAgreement.agreementName}
@@ -79,23 +90,18 @@ const SectorialJointAgreementForm: React.FC = () => {
                         onChange={(e) => setNewAgreement(prev => { return { ...prev, description: e.target.value } })} />
                 </FormControl>
             </VStack>
-            <HStack spacing={4}>
-                <Button onClick={currentAgreement ? handleUpdate : handleCreate}>
-                    {currentAgreement ? labels.update : labels.create}
+            <HStack spacing={4} mt={4} justifyContent='flex-end' p={4}>
+                <Button onClick={ mode === 'update' ? handleUpdate : handleCreate}>
+                    {mode === 'update' ? labels.update : labels.save}
                 </Button>
-                {currentAgreement && (
-                    <Button onClick={() => {
-                        setNewAgreement(initialAgreement);
-                    }}>
-                        {labels.cancel}
-                    </Button>
-                )}
+               
             </HStack>
             {agreementStatus === 'loading' && <AlfaSpinner />}
-            {error && <Text colorScheme='red'>Error: {error}</Text>}          
+            {error && <Text colorScheme='red'>Error: {error}</Text>}
         </Box >
 
     );
 }
 
 export default SectorialJointAgreementForm;
+

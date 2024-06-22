@@ -58,7 +58,14 @@ export const deleteAgreement = createAsyncThunk<number, number>(
 const sectorialJointAgreementSlice = createSlice({
   name: 'agreements',
   initialState,
-  reducers: {},
+  reducers: {
+    switchToUpdateMode: (state) => {
+      state.mode = 'update';
+    },
+    switchToCreateMode: (state) => {
+      state.mode = 'create';
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAgreements.pending, (state) => {
@@ -104,3 +111,4 @@ const sectorialJointAgreementSlice = createSlice({
 });
 
 export default sectorialJointAgreementSlice.reducer;
+export const { switchToCreateMode, switchToUpdateMode } = sectorialJointAgreementSlice.actions;
