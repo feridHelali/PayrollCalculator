@@ -9,6 +9,10 @@ const StatusBar: React.FC = () => {
 
   return (
     <Box
+      flex={1}
+      alignContent={"center"}
+      justifyContent={"center"}
+      h={"2rem"}
       position="fixed"
       bottom="0"
       width="100%"
