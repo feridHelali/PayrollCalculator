@@ -67,7 +67,7 @@ const SalaryTablesList: React.FC = () => {
               <Td>{salaryTable.type}</Td>
               <Td>{salaryTable.consernedEmployee}</Td>
               <Td>{new Date(salaryTable.beginningDateOfApplication).toLocaleDateString()}</Td>
-              <Td>{new Date(salaryTable.endDateOfApplication ? salaryTable.endDateOfApplication : new Date('0000-00-00'))?.toLocaleDateString()}</Td>
+              <Td>{salaryTable.endDateOfApplication ? new Date(salaryTable.endDateOfApplication).toLocaleDateString() : 'N/A'}</Td>
               <Td>
                 <HStack spacing={4}>
                   <Button onClick={() => handleEdit(salaryTable.salaryTableId)} colorScheme='teal' shadow={'md'}>{labels.update}</Button>

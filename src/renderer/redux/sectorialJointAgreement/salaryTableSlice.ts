@@ -44,7 +44,8 @@ export const fetchSalaryTablesByAgreementId = createAsyncThunk<SalaryTableProps[
 export const createSalaryTable = createAsyncThunk<SalaryTableProps, Partial<SalaryTableProps>>(
   'salaryTables/createSalaryTable',
   async (salaryTable: Partial<SalaryTableProps>) => {
-    return await window.electronAPI.createSalaryTable(salaryTable);
+    const result = await window.electronAPI.createSalaryTable(salaryTable);
+    return result;
   }
 );
 

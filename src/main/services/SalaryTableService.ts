@@ -22,8 +22,17 @@ export class SalaryTableService {
         return await this.repository.find({ where });
     }
     async create(salaryTableData: Partial<SalaryTable>): Promise<SalaryTable> {
-            return await this.repository.save({...salaryTableData,agreement:{sectorialJointAgreementId:salaryTableData.agreementId}});
-         
+        const newSalaryTable = await this.repository.save({
+            ...salaryTableData,
+            agreement: { sectorialJointAgreementId: salaryTableData.agreementId }
+        });
+
+        // Fetch the fully populated SalaryTable including its relations
+        return this.repository.findOne({
+            where: { salaryTableId: newSalaryTable.salaryTableId },
+            relations: ["salaryTableCells", "agreement"],
+        }) as Promise<SalaryTable>;
+
     }
 
     async update(id: number, salaryTableData: Partial<SalaryTable>): Promise<SalaryTable | undefined | null> {
@@ -32,8 +41,8 @@ export class SalaryTableService {
     }
 
     async delete(id: string): Promise<void> {
-        console.log(`%cAttempting to delete SalaryTable with id: ${id}`,"background: red; color: white;font-weight: bold");
-        const result=await this.repository.delete(id);
+        console.log(`%cAttempting to delete SalaryTable with id: ${id}`, "background: red; color: white;font-weight: bold");
+        const result = await this.repository.delete(id);
         console.log(`Delete result:`, result);
     }
 }

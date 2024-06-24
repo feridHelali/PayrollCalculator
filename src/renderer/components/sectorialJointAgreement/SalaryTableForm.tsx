@@ -93,7 +93,6 @@ const SalaryTableForm = () => {
     const salaryTableStatus = useAppSelector((state: RootState) => state.salaryTables.status);
     const error = useAppSelector((state: RootState) => state.salaryTables.error);
     const agreements = useAppSelector((state: RootState) => state.agreements.agreements);
-    const status = useAppSelector((state: RootState) => state.salaryTables.status);
     const mode = useAppSelector((state: RootState) => state.salaryTables.mode);
     const currentSalaryTable = useAppSelector((state: RootState) => state.salaryTables.currentSalaryTable);
 
@@ -116,16 +115,19 @@ const SalaryTableForm = () => {
     });
 
     useEffect(() => {
-        if (status === 'idle') {
+        if (salaryTableStatus === 'idle') {
             dispatch(fetchAgreements());
         }
-    }, [status, dispatch]);
+    }, [salaryTableStatus, dispatch]);
+
+    
 
     useEffect(() => {
-        if (salaryTableStatus === 'idle' && salaryTableId) {
+        if (salaryTableId  && mode === 'update') {
             dispatch(fetchSalaryTableById(parseInt(salaryTableId)));
+            setNewSalaryTable(currentSalaryTable);
         }
-    }, [salaryTableStatus, dispatch]);
+    }, [salaryTableStatus,mode,salaryTableId,dispatch]);
 
     const handleCreate = () => {
         if (newSalaryTable.agreementId && newSalaryTable.type && newSalaryTable.consernedEmployee) {
