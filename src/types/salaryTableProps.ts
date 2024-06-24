@@ -3,7 +3,7 @@ import { sectorialJointAgreementProps } from "./sectorialAgreementProps";
 
 export interface SalaryTableProps {
     salaryTableId?: number;
-    numeroTable: number;
+    numeroTable: string;
     type: string;
     consernedEmployee: string;
     beginningDateOfApplication: Date;

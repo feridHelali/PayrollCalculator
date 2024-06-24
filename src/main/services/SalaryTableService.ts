@@ -22,15 +22,18 @@ export class SalaryTableService {
         return await this.repository.find({ where });
     }
     async create(salaryTableData: Partial<SalaryTable>): Promise<SalaryTable> {
-        return this.repository.save(salaryTableData);
+            return await this.repository.save({...salaryTableData,agreement:{sectorialJointAgreementId:salaryTableData.agreementId}});
+         
     }
 
     async update(id: number, salaryTableData: Partial<SalaryTable>): Promise<SalaryTable | undefined | null> {
         await this.repository.update(id, salaryTableData);
-        return this.findById(id);
+        return await this.findById(id);
     }
 
     async delete(id: string): Promise<void> {
-        await this.repository.delete(id);
+        console.log(`%cAttempting to delete SalaryTable with id: ${id}`,"background: red; color: white;font-weight: bold");
+        const result=await this.repository.delete(id);
+        console.log(`Delete result:`, result);
     }
 }

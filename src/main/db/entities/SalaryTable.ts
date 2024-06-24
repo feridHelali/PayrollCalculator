@@ -17,8 +17,8 @@ export class SalaryTable {
   })
   salaryTableId!: number;
 
-  @Column("integer", { name: "numero_table" })
-  numeroTable!: number;
+  @Column("text", { name: "numero_table" })
+  numeroTable!: string;
 
   @Column("text", { name: "type" })
   type!: string; // Horaire, Mensuelle
@@ -50,12 +50,16 @@ export class SalaryTable {
 
   @ManyToOne(
     () => SectorialJointAgreement,
-    (sectorialJointAgreement) => sectorialJointAgreement.salaryTables
+    (sectorialJointAgreement) => sectorialJointAgreement.salaryTables,
+    { onDelete: 'CASCADE' }
   )
   @JoinColumn([
-    { name: "agreementID", referencedColumnName: "sectorialJointAgreementId" },
+    { name: "agreementID"},
   ])
   agreement!: SectorialJointAgreement;
+
+  @Column({ type: "integer", name: "agreementID", nullable: false })
+  agreementId!: number;
 
   // Method to lookup salary for a given employee within a specific period
   getSalaryForEmployee(category: string, degree: number, workingAge: number, date: Date): number | null {

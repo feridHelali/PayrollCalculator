@@ -11,7 +11,7 @@ import { FormControl, FormLabel, Select, VStack, } from '@chakra-ui/react';
 
 import AlfaSpinner from '../../shared/AlfaSpinner';
 import { SalaryTableProps } from '../../../types/salaryTableProps';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { labels } from '../../arabic.labels';
 import { fetchAgreements } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
 
@@ -87,6 +87,7 @@ const SalaryTableInput = ({ degrees, categories, workingAges, onSave }: any): Re
 };
 
 const SalaryTableForm = () => {
+    const navigate = useNavigate();
     const { salaryTableId } = useParams();
     const dispatch: AppDispatch = useAppDispatch();
     const salaryTableStatus = useAppSelector((state: RootState) => state.salaryTables.status);
@@ -104,7 +105,7 @@ const SalaryTableForm = () => {
 
     const [newSalaryTable, setNewSalaryTable]: [Partial<SalaryTableProps>, any] = useState({
         agreementId: -1,
-        numeroTable: 0,
+        numeroTable:'',
         type: '',
         consernedEmployee: '',
         beginningDateOfApplication: new Date(),
@@ -130,7 +131,7 @@ const SalaryTableForm = () => {
         if (newSalaryTable.agreementId && newSalaryTable.type && newSalaryTable.consernedEmployee) {
             dispatch(createSalaryTable(newSalaryTable))
                 .then(() => {
-                    // Handle post creation actions here (e.g., redirect, reset form)
+                    navigate('/salary-tables')
                 });
         }
     };
@@ -138,6 +139,7 @@ const SalaryTableForm = () => {
 
     const handleSave = async (salaries: { [s: string]: unknown; } | ArrayLike<unknown>) => {
         const salaryTable = {
+            ...newSalaryTable,
             degrees,
             workingAges,
             categories,
@@ -153,17 +155,17 @@ const SalaryTableForm = () => {
                 })
             ),
         };
-
-        console.log('salaryTable', salaryTable);
         
-        await dispatch(createSalaryTable(salaryTable));
+        await dispatch(createSalaryTable(salaryTable)).then(() => {
+            navigate('/salary-tables')
+        });
     };
 
 
     return (
         <>
             <Box m={4} p={4} bgColor={'gray.100'} borderRadius={5}>
-                <Heading mb={5} alignContent={'center'} fontSize={'2xl'}>{labels.salaryTableForm}</Heading>
+                <Heading mb={5} alignContent={'center'} fontSize={'2xl'}>{labels.salaryTableForm} {mode==='create' ? labels.create : labels.update}</Heading>
                 {status === 'loading' && <AlfaSpinner />}
                 {error && <Text color="red">{labels.error}: {error}</Text>}
                 <VStack spacing={4} w={"80%"} m={4} p={4}>
@@ -184,7 +186,7 @@ const SalaryTableForm = () => {
                     <FormControl>
                         <FormLabel>{labels.salaryTableNumber}</FormLabel>
                         <Input
-                            type="number"
+                            type="text"
                             value={newSalaryTable.numeroTable}
                             onChange={(e) => setNewSalaryTable({ ...newSalaryTable, numeroTable: Number(e.target.value) })}
                         />

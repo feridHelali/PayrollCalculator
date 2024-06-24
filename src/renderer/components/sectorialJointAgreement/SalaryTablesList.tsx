@@ -16,7 +16,8 @@ import { useAppDispatch, useAppSelector } from '../../redux/redux.hooks';
 import { useNavigate } from 'react-router-dom';
 import { SalaryTableProps } from '../../../types/salaryTableProps';
 import { deleteSalaryTable, fetchAllSalaryTables } from '../../redux/sectorialJointAgreement/salaryTableSlice';
-import { sectorialJointAgreementProps } from '../../../types/sectorialAgreementProps';
+import { fetchAgreements } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
+
 
 
 
@@ -26,15 +27,17 @@ const SalaryTablesList: React.FC = () => {
   const salaryTables: SalaryTableProps[] = useAppSelector((state: RootState) => state.salaryTables.salaryTables);
   const salaryTablesStatus = useAppSelector((state: RootState) => state.salaryTables.status);
   const error = useAppSelector((state: RootState) => state.salaryTables.error);
+  
 
+  
   useEffect(() => {
     if (salaryTablesStatus === 'idle') {
       dispatch(fetchAllSalaryTables());
     }
   }, [salaryTablesStatus, dispatch]);
 
-  const handleEdit = (sectorialJointAgreementId: any) => {
-    navigate(`/salary-table-form/${sectorialJointAgreementId}`);
+  const handleEdit = (salaryTableId: any) => {
+    navigate(`/salary-table-form/${salaryTableId}`);
   };
 
   const handleDelete = (salaryTableId: any) => {
@@ -63,12 +66,12 @@ const SalaryTablesList: React.FC = () => {
               <Td>{salaryTable.numeroTable}</Td>
               <Td>{salaryTable.type}</Td>
               <Td>{salaryTable.consernedEmployee}</Td>
-              <Td>{salaryTable.beginningDateOfApplication.toDateString()}</Td>
-              <Td>{salaryTable.endDateOfApplication?.toDateString()}</Td>
+              <Td>{new Date(salaryTable.beginningDateOfApplication).toLocaleDateString()}</Td>
+              <Td>{new Date(salaryTable.endDateOfApplication ? salaryTable.endDateOfApplication : new Date('0000-00-00'))?.toLocaleDateString()}</Td>
               <Td>
                 <HStack spacing={4}>
-                  <Button onClick={() => handleEdit(salaryTable.salaryTableId)}>{labels.update}</Button>
-                  <Button onClick={() => handleDelete(salaryTable.salaryTableId)}>{labels.delete}</Button>
+                  <Button onClick={() => handleEdit(salaryTable.salaryTableId)} colorScheme='teal' shadow={'md'}>{labels.update}</Button>
+                  <Button onClick={() => handleDelete(salaryTable.salaryTableId)} colorScheme='red' shadow={'md'}>{labels.delete}</Button>
                 </HStack>
               </Td>
             </Tr>
