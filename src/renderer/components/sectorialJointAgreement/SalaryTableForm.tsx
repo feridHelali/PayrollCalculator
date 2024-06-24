@@ -15,6 +15,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { labels } from '../../arabic.labels';
 import { fetchAgreements, switchToCreateMode, switchToUpdateMode } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
 import { salaryTypes } from '../../../types/salaryTypes';
+import { clearStatus, setStatus } from '../../redux/common/statusSlice';
 
 const SalaryTableInput = ({ degrees, categories, workingAges, onSave }: any): React.JSX.Element => {
     const [salaries, setSalaries] = useState(
@@ -45,13 +46,13 @@ const SalaryTableInput = ({ degrees, categories, workingAges, onSave }: any): Re
 
     return (
         <Box>
-            <Heading mb={4}>Input Salary Table</Heading>
+            <Heading mb={4}>{labels.salaryTableForm}</Heading>
             <Table variant="simple">
                 <Thead>
                     <Tr>
-                        <Th>Professional Category</Th>
+                        <Th>{labels.degree}</Th>
                         {degrees.map((degree: number) => (
-                            <Th key={degree}>Degree {degree}</Th>
+                            <Th key={degree}>{labels.degree} {degree}</Th>
                         ))}
                     </Tr>
                 </Thead>
@@ -63,7 +64,7 @@ const SalaryTableInput = ({ degrees, categories, workingAges, onSave }: any): Re
                                 <Td key={degree}>
                                     {workingAges.map((age: number) => (
                                         <Box key={age} mb={2}>
-                                            <label>Age {age}</label>
+                                            <label>{labels.workingAge} {age}</label>
                                             <Input
                                                 type="number"
                                                 value={salaries[category][`${degree}-${age}`]}
@@ -99,6 +100,7 @@ const SalaryTableForm = () => {
 
 
 
+
     const degrees = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     const categories = ['I', 'II', 'III', 'IV', 'V'];
     const workingAges = [1, 2, 2, 2, 3, 3, 3, 3, 4, 4];
@@ -118,6 +120,7 @@ const SalaryTableForm = () => {
     const [newSalaryTable, setNewSalaryTable]: [Partial<SalaryTableProps>, any] = useState(initialSalaryTable);
 
     useEffect(() => {
+        dispatch(setStatus(labels.idle));
         if (salaryTableStatus === 'idle') {
             dispatch(fetchAgreements());
         }
@@ -138,7 +141,6 @@ const SalaryTableForm = () => {
 
     useEffect(() => {
         if (currentSalaryTable) {
-            dispatch(switchToUpdateMode())
             setNewSalaryTable(
                 {
                     ...currentSalaryTable,
@@ -152,6 +154,17 @@ const SalaryTableForm = () => {
     const handleCreate = () => {
         if (newSalaryTable.agreementId && newSalaryTable.type && newSalaryTable.consernedEmployee) {
             dispatch(createSalaryTable(newSalaryTable))
+                .then(() => {
+                    if (salaryTableStatus === 'succeeded')
+                        dispatch(setStatus(`${labels.salaryTableForm} - ${labels.created} - ${labels.successfully}`));
+                    if (salaryTableStatus === 'failed')
+                        dispatch(setStatus(`${labels.salaryTableForm}  - ${labels.created} - ${labels.failed}`));
+                    setTimeout(() => {
+                        dispatch(clearStatus());
+                    }, 9000);
+
+
+                })
                 .then(() => {
                     navigate('/salary-tables')
                 });
@@ -213,7 +226,7 @@ const SalaryTableForm = () => {
                             onChange={(e) => setNewSalaryTable({ ...newSalaryTable, numeroTable: Number(e.target.value) })}
                         />
                     </FormControl>
-                     <FormControl>
+                    <FormControl>
                         <FormLabel>{labels.salaryType}</FormLabel>
                         <Select
                             placeholder={`${labels.selectSalaryType}`}
@@ -221,12 +234,12 @@ const SalaryTableForm = () => {
                             onChange={(e) => setNewSalaryTable({ ...newSalaryTable, type: e.target.value })}
                         >
                             {salaryTypes.map((salaryType) => (
-                                
+
                                 <option key={salaryType} value={salaryType}>
                                     {salaryType}
                                 </option>
                             ))}
-                            
+
                         </Select>
                     </FormControl>
                     <FormControl>
@@ -281,7 +294,7 @@ function isSalaryTableFormValid(salaryTable: any): boolean {
     if (!salaryTable) {
         return false;
     }
-    if (!salaryTable.numeroTable || !salaryTable.type || !salaryTable.consernedEmployee || !salaryTable.beginningDateOfApplication ) {
+    if (!salaryTable.numeroTable || !salaryTable.type || !salaryTable.consernedEmployee || !salaryTable.beginningDateOfApplication) {
         return false;
     }
 

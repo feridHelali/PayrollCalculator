@@ -9,6 +9,7 @@ import SectorialJointAgreementForm from './components/sectorialJointAgreement/Se
 import SectorialJointAgreementPage from './pages/SectorialJointAgreementPage';
 import SalaryTableForm from './components/sectorialJointAgreement/SalaryTableForm';
 import SalaryTablesList from './components/sectorialJointAgreement/SalaryTablesList';
+import StatusBar from './components/sectorialJointAgreement/StatusBar';
 
 const App: React.FC = () => {
   return (
@@ -28,6 +29,7 @@ const App: React.FC = () => {
             <Route path="/" element={<HomePage />} />
             
           </Routes>
+          <StatusBar />
         </Box>
       </Flex>
     </Router>
