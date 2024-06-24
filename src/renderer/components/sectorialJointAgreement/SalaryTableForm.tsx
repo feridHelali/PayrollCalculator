@@ -14,6 +14,7 @@ import { SalaryTableProps } from '../../../types/salaryTableProps';
 import { useNavigate, useParams } from 'react-router-dom';
 import { labels } from '../../arabic.labels';
 import { fetchAgreements, switchToCreateMode, switchToUpdateMode } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
+import { salaryTypes } from '../../../types/salaryTypes';
 
 const SalaryTableInput = ({ degrees, categories, workingAges, onSave }: any): React.JSX.Element => {
     const [salaries, setSalaries] = useState(
@@ -212,12 +213,21 @@ const SalaryTableForm = () => {
                             onChange={(e) => setNewSalaryTable({ ...newSalaryTable, numeroTable: Number(e.target.value) })}
                         />
                     </FormControl>
-                    <FormControl>
+                     <FormControl>
                         <FormLabel>{labels.salaryType}</FormLabel>
-                        <Input
+                        <Select
+                            placeholder={`${labels.salaryType}`}
                             value={newSalaryTable.type}
                             onChange={(e) => setNewSalaryTable({ ...newSalaryTable, type: e.target.value })}
-                        />
+                        >
+                            {salaryTypes.map((salaryType) => (
+                                
+                                <option key={salaryType} value={salaryType}>
+                                    {salaryType}
+                                </option>
+                            ))}
+                            
+                        </Select>
                     </FormControl>
                     <FormControl>
                         <FormLabel>{labels.concernedEmployee}</FormLabel>
