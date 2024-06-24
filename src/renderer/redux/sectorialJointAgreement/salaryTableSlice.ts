@@ -66,7 +66,14 @@ export const deleteSalaryTable = createAsyncThunk<SalaryTableProps, number>(
 const salaryTableSlice = createSlice({
   name: 'salaryTables',
   initialState,
-  reducers: {},
+  reducers: {
+    switchToUpdateMode: (state) => {
+      state.mode = 'update';
+    },
+    switchToCreateMode: (state) => {
+      state.mode = 'create';
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchSalaryTablesByAgreementId.pending, (state) => {

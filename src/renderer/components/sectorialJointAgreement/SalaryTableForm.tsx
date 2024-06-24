@@ -13,7 +13,7 @@ import AlfaSpinner from '../../shared/AlfaSpinner';
 import { SalaryTableProps } from '../../../types/salaryTableProps';
 import { useNavigate, useParams } from 'react-router-dom';
 import { labels } from '../../arabic.labels';
-import { fetchAgreements } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
+import { fetchAgreements, switchToCreateMode, switchToUpdateMode } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
 
 const SalaryTableInput = ({ degrees, categories, workingAges, onSave }: any): React.JSX.Element => {
     const [salaries, setSalaries] = useState(
@@ -102,7 +102,7 @@ const SalaryTableForm = () => {
     const categories = ['I', 'II', 'III', 'IV', 'V'];
     const workingAges = [1, 2, 2, 2, 3, 3, 3, 3, 4, 4];
 
-    const [newSalaryTable, setNewSalaryTable]: [Partial<SalaryTableProps>, any] = useState({
+    const initialSalaryTable: SalaryTableProps = {
         agreementId: -1,
         numeroTable:'',
         type: '',
@@ -112,7 +112,9 @@ const SalaryTableForm = () => {
         degrees: [],
         workingAges: [],
         categories: []
-    });
+    };
+
+    const [newSalaryTable, setNewSalaryTable]: [Partial<SalaryTableProps>, any] = useState(initialSalaryTable);
 
     useEffect(() => {
         if (salaryTableStatus === 'idle') {
@@ -123,11 +125,22 @@ const SalaryTableForm = () => {
     
 
     useEffect(() => {
-        if (salaryTableId  && mode === 'update') {
+        if (salaryTableId) {
+            dispatch(switchToUpdateMode())
             dispatch(fetchSalaryTableById(parseInt(salaryTableId)));
+            
+        }else{
+            dispatch(switchToCreateMode())
+            setNewSalaryTable({initialSalaryTable})
+        }
+    }, [salaryTableId,dispatch]);
+
+    useEffect(() => {
+        if (currentSalaryTable) {
+            dispatch(switchToUpdateMode())
             setNewSalaryTable(currentSalaryTable);
         }
-    }, [salaryTableStatus,mode,salaryTableId,dispatch]);
+    }, [currentSalaryTable]);
 
     const handleCreate = () => {
         if (newSalaryTable.agreementId && newSalaryTable.type && newSalaryTable.consernedEmployee) {
