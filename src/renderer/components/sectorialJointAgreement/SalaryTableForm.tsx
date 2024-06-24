@@ -81,7 +81,7 @@ const SalaryTableInput = ({ degrees, categories, workingAges, onSave }: any): Re
             </Table>
 
             <Button leftIcon={<FaSave />} onClick={handleSave} colorScheme="blue" mt={4}>
-                Save
+                {labels.save}
             </Button>
         </Box>
     );
@@ -216,7 +216,7 @@ const SalaryTableForm = () => {
                      <FormControl>
                         <FormLabel>{labels.salaryType}</FormLabel>
                         <Select
-                            placeholder={`${labels.salaryType}`}
+                            placeholder={`${labels.selectSalaryType}`}
                             value={newSalaryTable.type}
                             onChange={(e) => setNewSalaryTable({ ...newSalaryTable, type: e.target.value })}
                         >
@@ -281,7 +281,7 @@ function isSalaryTableFormValid(salaryTable: any): boolean {
     if (!salaryTable) {
         return false;
     }
-    if (!salaryTable.numeroTable || !salaryTable.type || !salaryTable.consernedEmployee || !salaryTable.beginningDateOfApplication || !salaryTable.endDateOfApplication) {
+    if (!salaryTable.numeroTable || !salaryTable.type || !salaryTable.consernedEmployee || !salaryTable.beginningDateOfApplication ) {
         return false;
     }
 

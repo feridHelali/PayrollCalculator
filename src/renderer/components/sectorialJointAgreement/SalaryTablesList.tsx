@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { SalaryTableProps } from '../../../types/salaryTableProps';
 import { deleteSalaryTable, fetchAllSalaryTables } from '../../redux/sectorialJointAgreement/salaryTableSlice';
 import { fetchAgreements } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
+import AlfaSpinner from '../../shared/AlfaSpinner';
 
 
 
@@ -47,6 +48,8 @@ const SalaryTablesList: React.FC = () => {
   return (
     <Box p={5} m={5} bgColor={'gray.100'} borderRadius={5}>
       <Heading mb={5} alignContent={'center'} fontSize={'2xl'}>{labels.salaryTableList}</Heading>
+      {error && <Text colorScheme='red'>Error: {error}</Text>}
+      {salaryTablesStatus === 'loading' && <AlfaSpinner />}
       <Table variant="striped">
         <Thead>
           <Tr>
@@ -78,7 +81,7 @@ const SalaryTablesList: React.FC = () => {
           ))}
         </Tbody>
       </Table>
-      {error && <Text colorScheme='red'>Error: {error}</Text>}
+      
     </Box>
   );
 };
