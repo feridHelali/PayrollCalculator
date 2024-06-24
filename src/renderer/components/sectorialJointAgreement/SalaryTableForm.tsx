@@ -88,7 +88,7 @@ const SalaryTableInput = ({ degrees, categories, workingAges, onSave }: any): Re
 
 const SalaryTableForm = () => {
     const navigate = useNavigate();
-    const { salaryTableId } = useParams();
+    const { salaryTableId } = useParams<{ salaryTableId: string }>();
     const dispatch: AppDispatch = useAppDispatch();
     const salaryTableStatus = useAppSelector((state: RootState) => state.salaryTables.status);
     const error = useAppSelector((state: RootState) => state.salaryTables.error);
@@ -104,11 +104,11 @@ const SalaryTableForm = () => {
 
     const initialSalaryTable: SalaryTableProps = {
         agreementId: -1,
-        numeroTable:'',
+        numeroTable: '',
         type: '',
         consernedEmployee: '',
-        beginningDateOfApplication: new Date(),
-        endDateOfApplication: new Date(),
+        beginningDateOfApplication: '',
+        endDateOfApplication: '',
         degrees: [],
         workingAges: [],
         categories: []
@@ -122,23 +122,29 @@ const SalaryTableForm = () => {
         }
     }, [salaryTableStatus, dispatch]);
 
-    
+
 
     useEffect(() => {
         if (salaryTableId) {
             dispatch(switchToUpdateMode())
             dispatch(fetchSalaryTableById(parseInt(salaryTableId)));
-            
-        }else{
+
+        } else {
             dispatch(switchToCreateMode())
-            setNewSalaryTable({initialSalaryTable})
+            setNewSalaryTable({ initialSalaryTable })
         }
-    }, [salaryTableId,dispatch]);
+    }, [salaryTableId, dispatch]);
 
     useEffect(() => {
         if (currentSalaryTable) {
             dispatch(switchToUpdateMode())
-            setNewSalaryTable(currentSalaryTable);
+            setNewSalaryTable(
+                {
+                    ...currentSalaryTable,
+                    beginningDateOfApplication: new Date(currentSalaryTable.beginningDateOfApplication),
+                    endDateOfApplication: currentSalaryTable.endDateOfApplication ? new Date(currentSalaryTable.endDateOfApplication) : ''
+                }
+            );
         }
     }, [currentSalaryTable]);
 
@@ -170,7 +176,7 @@ const SalaryTableForm = () => {
                 })
             ),
         };
-        
+
         await dispatch(createSalaryTable(salaryTable)).then(() => {
             navigate('/salary-tables')
         });
@@ -180,9 +186,9 @@ const SalaryTableForm = () => {
     return (
         <>
             <Box m={4} p={4} bgColor={'gray.100'} borderRadius={5}>
-                <Heading mb={5} alignContent={'center'} fontSize={'2xl'}>{labels.salaryTableForm} {mode==='create' ? labels.create : labels.update}</Heading>
-                {status === 'loading' && <AlfaSpinner />}
-                {error && <Text color="red">{labels.error}: {error}</Text>}
+                <Heading mb={5} alignContent={'center'} fontSize={'2xl'}>{labels.salaryTableForm} {mode === 'create' ? labels.create : labels.update}</Heading>
+                {salaryTableStatus === 'loading' && <AlfaSpinner />}
+                {error && <Text colorScheme="red">{labels.error}: {error}</Text>}
                 <VStack spacing={4} w={"80%"} m={4} p={4}>
                     <FormControl>
                         <FormLabel>{labels.selectAgreement}</FormLabel>
@@ -226,7 +232,7 @@ const SalaryTableForm = () => {
                             w={"60%"}
                             alignContent={"right"}
                             type="date"
-                            value={newSalaryTable.beginningDateOfApplication?.toISOString().split('T')[0]}
+                            value={newSalaryTable.beginningDateOfApplication ? new Date(newSalaryTable.beginningDateOfApplication).toISOString().split('T')[0] : ''}
                             onChange={(e) => setNewSalaryTable({ ...newSalaryTable, beginningDateOfApplication: new Date(e.target.value) })}
                         />
                     </FormControl>
@@ -236,7 +242,7 @@ const SalaryTableForm = () => {
                             w={"60%"}
                             alignContent={"right"}
                             type="date"
-                            value={newSalaryTable.endDateOfApplication?.toISOString().split('T')[0] || ''}
+                            value={newSalaryTable.endDateOfApplication ? new Date(newSalaryTable.endDateOfApplication).toISOString().split('T')[0] : ''}
                             onChange={(e) => setNewSalaryTable({ ...newSalaryTable, endDateOfApplication: e.target.value ? new Date(e.target.value) : null })}
                         />
                     </FormControl>
@@ -245,7 +251,7 @@ const SalaryTableForm = () => {
                         {labels.create}
                     </Button>
                 </VStack>
-               
+
             </Box>
             <SalaryTableInput
                 degrees={degrees}
@@ -265,7 +271,7 @@ function isSalaryTableFormValid(salaryTable: any): boolean {
     if (!salaryTable) {
         return false;
     }
-    if(!salaryTable.numeroTable || !salaryTable.type || !salaryTable.consernedEmployee || !salaryTable.beginningDateOfApplication || !salaryTable.endDateOfApplication) {
+    if (!salaryTable.numeroTable || !salaryTable.type || !salaryTable.consernedEmployee || !salaryTable.beginningDateOfApplication || !salaryTable.endDateOfApplication) {
         return false;
     }
 

@@ -6,8 +6,8 @@ export interface SalaryTableProps {
     numeroTable: string;
     type: string;
     consernedEmployee: string;
-    beginningDateOfApplication: Date;
-    endDateOfApplication: Date | null;
+    beginningDateOfApplication: string;
+    endDateOfApplication: string | null;
     degrees: number[];
     workingAges: number[];
     categories: string[];
