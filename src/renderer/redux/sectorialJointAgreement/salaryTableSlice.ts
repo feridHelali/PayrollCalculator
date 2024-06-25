@@ -118,3 +118,4 @@ const salaryTableSlice = createSlice({
 });
 
 export default salaryTableSlice.reducer;
+export const { switchToCreateMode, switchToUpdateMode } = salaryTableSlice.actions;

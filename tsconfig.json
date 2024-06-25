@@ -12,7 +12,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "jsx": "react",
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["@types/jest", "@types/react", "@types/react-dom", "@types/node","jest","node"],
   },
   "include": ["src/**/*", "global.d.ts"],
   "exclude": ["node_modules", "dist"]

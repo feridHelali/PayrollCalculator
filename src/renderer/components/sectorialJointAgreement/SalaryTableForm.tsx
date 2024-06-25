@@ -44,7 +44,7 @@ const SalaryTableForm = () => {
   const [newSalaryTable, setNewSalaryTable]: [Partial<SalaryTableProps>, any] = useState(initialSalaryTable);
 
   useEffect(() => {
-    dispatch(setStatus(labels.idle));
+    dispatch(setStatus(salaryTableStatus));
     if (salaryTableStatus === 'idle') {
       dispatch(fetchAgreements());
     }
@@ -73,7 +73,10 @@ const SalaryTableForm = () => {
   }, [currentSalaryTable]);
 
   const handleCreate = () => {
-    if (newSalaryTable.agreementId && newSalaryTable.type && newSalaryTable.consernedEmployee) {
+    if (newSalaryTable.agreementId && newSalaryTable.type
+      && newSalaryTable.consernedEmployee && newSalaryTable.degrees
+      && newSalaryTable.workingAges && newSalaryTable.categories
+      && newSalaryTable.beginningDateOfApplication) {
       dispatch(createSalaryTable(newSalaryTable))
         .then(() => {
           if (salaryTableStatus === 'succeeded')
@@ -91,7 +94,11 @@ const SalaryTableForm = () => {
   };
 
   const handleUpdate = () => {
-    if (currentSalaryTable && newSalaryTable.agreementId && newSalaryTable.type && newSalaryTable.consernedEmployee) {
+    if (currentSalaryTable 
+      && newSalaryTable.agreementId && newSalaryTable.type 
+      && newSalaryTable.consernedEmployee && newSalaryTable.degrees 
+      && newSalaryTable.workingAges && newSalaryTable.categories 
+      && newSalaryTable.beginningDateOfApplication) {
       dispatch(updateSalaryTable({ ...newSalaryTable, salaryTableId: currentSalaryTable.salaryTableId }))
         .then(() => {
           if (salaryTableStatus === 'succeeded') {
@@ -216,8 +223,8 @@ const SalaryTableForm = () => {
               onChange={(e) => setNewSalaryTable({ ...newSalaryTable, endDateOfApplication: e.target.value })}
             />
           </FormControl>
-          <Button onClick={handleAddCategory} colorScheme="green">{labels.addCategory}</Button>
-          <Button onClick={handleAddDegreeAndAgeOfWork} colorScheme="green">{labels.addDegree}</Button>
+          <Button onClick={handleAddCategory} colorScheme="green" isDisabled={!allowAddCategory}>{labels.addCategory}</Button>
+          <Button onClick={handleAddDegreeAndAgeOfWork} colorScheme="green" isDisabled={!allowAddDegreeAndAgeOfWork}>{labels.addDegree}</Button>
           <Button colorScheme="blue" shadow="md" onClick={mode === 'create' ? handleCreate : handleUpdate} isDisabled={!isSalaryTableFormValid(newSalaryTable)}>
             {labels.create}
           </Button>
@@ -244,6 +251,21 @@ function isSalaryTableFormValid(salaryTable: any): boolean {
   if (!salaryTable.numeroTable || !salaryTable.type || !salaryTable.consernedEmployee
     || !salaryTable.beginningDateOfApplication || !salaryTable.degrees
     || !salaryTable.categories || !salaryTable.workingAges) {
+    return false;
+  }
+
+  return true;
+}
+
+function allowAddCategory(salaryTable: any): boolean {
+  if (salaryTable.agreementId === -1 || salaryTable.numeroTable === "" || salaryTable.type === "" || salaryTable.consernedEmployee === "" || salaryTable.beginningDateOfApplication !== "") {
+    return false;
+  }
+
+  return true;
+}
+function allowAddDegreeAndAgeOfWork(salaryTable: any): boolean {
+  if (salaryTable.agreementId === -1 || salaryTable.numeroTable === "" || salaryTable.type === "" || salaryTable.consernedEmployee === "" || salaryTable.beginningDateOfApplication !== "") {
     return false;
   }
 
