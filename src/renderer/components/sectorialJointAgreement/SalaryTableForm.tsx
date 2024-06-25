@@ -58,7 +58,7 @@ const SalaryTableForm = () => {
       dispatch(switchToCreateMode())
       setNewSalaryTable(initialSalaryTable); // Reset new salary table on mode switch
     }
-  }, [salaryTableId, dispatch, initialSalaryTable]);
+  }, [salaryTableId, dispatch, mode]);
 
   useEffect(() => {
     if (currentSalaryTable) {
