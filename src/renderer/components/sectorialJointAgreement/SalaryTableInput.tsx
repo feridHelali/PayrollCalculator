@@ -38,9 +38,7 @@ const SalaryTableInput = ({ headers, categories, onSave }: any): React.JSX.Eleme
     }));
   };
 
-  const handleSave = () => {
-    onSave(salaries);
-  };
+
 
   return (
     <Box>
@@ -74,7 +72,7 @@ const SalaryTableInput = ({ headers, categories, onSave }: any): React.JSX.Eleme
         </Tbody>
       </Table>
 
-      <Button leftIcon={<FaSave />} onClick={handleSave} colorScheme="blue" mt={4}>
+      <Button leftIcon={<FaSave />} onClick={(e)=>onSave(salaries)} colorScheme="blue" mt={4}>
         {labels.save}
       </Button>
     </Box>

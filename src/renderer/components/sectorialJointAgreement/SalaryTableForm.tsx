@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import {
   Button, Input, Box, Heading, Text, FormControl, FormLabel, Select, VStack,
 } from '@chakra-ui/react';
-import { createSalaryTable, fetchSalaryTableById, updateSalaryTable } from '../../redux/sectorialJointAgreement/salaryTableSlice';
+import { FaSave } from 'react-icons/fa';
+import { createSalaryTable, fetchSalaryTableById, updateSalaryTable,switchToCreateMode,switchToUpdateMode } from '../../redux/sectorialJointAgreement/salaryTableSlice';
 import { AppDispatch, RootState } from '../../redux/store';
 import { useAppDispatch, useAppSelector } from '../../redux/redux.hooks';
 import AlfaSpinner from '../../shared/AlfaSpinner';
 import { SalaryTableProps } from '../../../types/salaryTableProps';
 import { useNavigate, useParams } from 'react-router-dom';
 import { labels } from '../../arabic.labels';
-import { fetchAgreements, switchToCreateMode, switchToUpdateMode } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
+import { fetchAgreements} from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
 import { salaryTypes } from '../../../types/salaryTypes';
 import { clearStatus, setStatus } from '../../redux/common/statusSlice';
 import SalaryTableInput from './SalaryTableInput';
@@ -25,7 +26,7 @@ const SalaryTableForm = () => {
   const currentSalaryTable = useAppSelector((state: RootState) => state.salaryTables.currentSalaryTable);
 
   const [degrees, setDegrees] = useState<number[]>([1]); // Default initial degree
-  const [categories, setCategories] = useState<string[]>(['Category 1']); // Default initial category
+  const [categories, setCategories] = useState<string[]>([`1 - ${labels.category}`]); // Default initial category
   const [workingAges, setWorkingAges] = useState<number[]>([1]); // Default initial working age
   const [headers, setHeaders] = useState<{ degree: number, ageOfWork: number }[]>([{ degree: 1, ageOfWork: 1 }]); // Default initial header
 
@@ -52,69 +53,67 @@ const SalaryTableForm = () => {
 
   useEffect(() => {
     if (salaryTableId) {
-      dispatch(switchToUpdateMode())
+      dispatch(switchToUpdateMode());
       dispatch(fetchSalaryTableById(parseInt(salaryTableId)));
     } else {
-      dispatch(switchToCreateMode())
+      dispatch(switchToCreateMode());
       setNewSalaryTable(initialSalaryTable); // Reset new salary table on mode switch
     }
-  }, [salaryTableId, dispatch, mode]);
+  }, [salaryTableId, dispatch]);
 
   useEffect(() => {
     if (currentSalaryTable) {
-      setNewSalaryTable(
-        {
-          ...currentSalaryTable,
-          beginningDateOfApplication: new Date(currentSalaryTable.beginningDateOfApplication),
-          endDateOfApplication: currentSalaryTable.endDateOfApplication ? new Date(currentSalaryTable.endDateOfApplication) : ''
-        }
-      );
+      setNewSalaryTable({
+        ...currentSalaryTable,
+        beginningDateOfApplication: new Date(currentSalaryTable.beginningDateOfApplication),
+        endDateOfApplication: currentSalaryTable.endDateOfApplication ? new Date(currentSalaryTable.endDateOfApplication) : ''
+      });
     }
   }, [currentSalaryTable]);
 
+  const handleCreateOrUpdate = () => {
+    if (mode === 'create') {
+      handleCreate();
+    } else if (mode === 'update') {
+      handleUpdate();
+    }
+  };
+
   const handleCreate = () => {
-    if (newSalaryTable.agreementId && newSalaryTable.type
-      && newSalaryTable.consernedEmployee && newSalaryTable.degrees
-      && newSalaryTable.workingAges && newSalaryTable.categories
-      && newSalaryTable.beginningDateOfApplication) {
+    if (isSalaryTableFormValid(newSalaryTable)) {
       dispatch(createSalaryTable(newSalaryTable))
         .then(() => {
-          if (salaryTableStatus === 'succeeded')
+          if (salaryTableStatus === 'succeeded') {
             dispatch(setStatus(`${labels.salaryTableForm} - ${labels.created} - ${labels.successfully}`));
-          if (salaryTableStatus === 'failed')
-            dispatch(setStatus(`${labels.salaryTableForm}  - ${labels.created} - ${labels.failed}`));
+            navigate('/salary-tables');
+          }
+          if (salaryTableStatus === 'failed') {
+            dispatch(setStatus(`${labels.salaryTableForm} - ${labels.created} - ${labels.failed}`));
+          }
           setTimeout(() => {
             dispatch(clearStatus());
           }, 9000);
-        })
-        .then(() => {
-          navigate('/salary-tables')
         });
     }
   };
 
   const handleUpdate = () => {
-    if (currentSalaryTable 
-      && newSalaryTable.agreementId && newSalaryTable.type 
-      && newSalaryTable.consernedEmployee && newSalaryTable.degrees 
-      && newSalaryTable.workingAges && newSalaryTable.categories 
-      && newSalaryTable.beginningDateOfApplication) {
+    if (currentSalaryTable && isSalaryTableFormValid(newSalaryTable)) {
       dispatch(updateSalaryTable({ ...newSalaryTable, salaryTableId: currentSalaryTable.salaryTableId }))
         .then(() => {
           if (salaryTableStatus === 'succeeded') {
             dispatch(setStatus(`${labels.salaryTableForm} - ${labels.updated} - ${labels.successfully}`));
-            navigate('/salary-tables')
-            setTimeout(() => {
-              dispatch(clearStatus());
-            }, 10000);
+            navigate('/salary-tables');
           }
-          if (salaryTableStatus === 'failed')
-            dispatch(setStatus(`${labels.salaryTableForm}  - ${labels.updated} - ${labels.failed}`));
-
-        })
-
+          if (salaryTableStatus === 'failed') {
+            dispatch(setStatus(`${labels.salaryTableForm} - ${labels.updated} - ${labels.failed}`));
+          }
+          setTimeout(() => {
+            dispatch(clearStatus());
+          }, 9000);
+        });
     }
-  }
+  };
 
   const handleSave = async (salaries: { [s: string]: unknown; } | ArrayLike<unknown>) => {
     const salaryTable = {
@@ -149,13 +148,26 @@ const SalaryTableForm = () => {
   };
 
   const handleAddCategory = () => {
-    const newCategory = `Category ${categories.length + 1}`;
+    const newCategory = `${categories.length + 1} ${labels.category}`;
     setCategories([...categories, newCategory]);
+  };
+
+  const isSalaryTableFormValid = (salaryTable: Partial<SalaryTableProps>): boolean => {
+    return (
+      !!salaryTable.agreementId &&
+      !!salaryTable.numeroTable &&
+      !!salaryTable.type &&
+      !!salaryTable.consernedEmployee &&
+      !!salaryTable.beginningDateOfApplication &&
+      !!salaryTable.degrees &&
+      !!salaryTable.categories &&
+      !!salaryTable.workingAges
+    );
   };
 
   return (
     <>
-      <Box m={4} p={4} bgColor={'gray.100'} borderRadius={5}>
+      <Box m={4} p={4} >
         <Heading mb={5} alignContent={'center'} fontSize={'2xl'}>{labels.salaryTableForm} {mode === 'create' ? labels.create : labels.update}</Heading>
         {salaryTableStatus === 'loading' && <AlfaSpinner />}
         {error && <Text colorScheme="red">{labels.error}: {error}</Text>}
@@ -166,6 +178,7 @@ const SalaryTableForm = () => {
               placeholder={`${labels.selectAgreement}`}
               value={newSalaryTable.agreementId}
               onChange={(e) => setNewSalaryTable({ ...newSalaryTable, agreementId: Number(e.target.value) })}
+              isDisabled={mode === 'update'}
             >
               {agreements.map((agreement) => (
                 <option key={agreement.sectorialJointAgreementId} value={agreement.sectorialJointAgreementId}>
@@ -180,6 +193,7 @@ const SalaryTableForm = () => {
               type="text"
               value={newSalaryTable.numeroTable}
               onChange={(e) => setNewSalaryTable({ ...newSalaryTable, numeroTable: e.target.value })}
+              isDisabled={mode === 'update'}
             />
           </FormControl>
           <FormControl>
@@ -188,6 +202,7 @@ const SalaryTableForm = () => {
               placeholder={`${labels.selectSalaryType}`}
               value={newSalaryTable.type}
               onChange={(e) => setNewSalaryTable({ ...newSalaryTable, type: e.target.value })}
+              isDisabled={mode === 'update'}
             >
               {salaryTypes.map((salaryType) => (
                 <option key={salaryType} value={salaryType}>
@@ -201,6 +216,7 @@ const SalaryTableForm = () => {
             <Input
               value={newSalaryTable.consernedEmployee}
               onChange={(e) => setNewSalaryTable({ ...newSalaryTable, consernedEmployee: e.target.value })}
+              isDisabled={mode === 'update'}
             />
           </FormControl>
           <FormControl>
@@ -211,51 +227,76 @@ const SalaryTableForm = () => {
               type="date"
               value={newSalaryTable.beginningDateOfApplication ? new Date(newSalaryTable.beginningDateOfApplication).toISOString().split('T')[0] : ''}
               onChange={(e) => setNewSalaryTable({ ...newSalaryTable, beginningDateOfApplication: e.target.value })}
+              isDisabled={mode === 'update'}
             />
           </FormControl>
           <FormControl>
             <FormLabel>{labels.endDateOfApplication}</FormLabel>
             <Input
               w={"60%"}
-              alignContent={"right"}
               type="date"
               value={newSalaryTable.endDateOfApplication ? new Date(newSalaryTable.endDateOfApplication).toISOString().split('T')[0] : ''}
               onChange={(e) => setNewSalaryTable({ ...newSalaryTable, endDateOfApplication: e.target.value })}
+              isDisabled={mode === 'update'}
             />
           </FormControl>
-          <Button onClick={handleAddCategory} colorScheme="green" isDisabled={!allowAddCategory}>{labels.addCategory}</Button>
-          <Button onClick={handleAddDegreeAndAgeOfWork} colorScheme="green" isDisabled={!allowAddDegreeAndAgeOfWork}>{labels.addDegree}</Button>
-          <Button colorScheme="blue" shadow="md" onClick={mode === 'create' ? handleCreate : handleUpdate} isDisabled={!isSalaryTableFormValid(newSalaryTable)}>
-            {labels.create}
-          </Button>
+
+          {mode === 'create' && (
+            <>
+              <SalaryTableInput
+                degrees={degrees}
+                categories={categories}
+                workingAges={workingAges}
+                headers={headers}
+                onSave={handleSave}
+                onAddDegreeAndAgeOfWork={handleAddDegreeAndAgeOfWork}
+                onAddCategory={handleAddCategory}
+              />
+              <Button
+                leftIcon={<FaSave />}
+                colorScheme="teal"
+                onClick={handleCreateOrUpdate}
+              >
+                {labels.create}
+              </Button>
+            </>
+          )}
+
+          {mode==='create' && isSalaryTableFormValid(newSalaryTable) ? (
+            <>
+               <Button onClick={handleAddCategory} colorScheme="green" isDisabled={!allowAddCategory}>{labels.addCategory}</Button>
+               <Button onClick={handleAddDegreeAndAgeOfWork} colorScheme="green" isDisabled={!allowAddDegreeAndAgeOfWork}>{labels.addDegree}</Button>
+            </>
+          ):(
+            <>
+              <Button onClick={handleCreateOrUpdate} colorScheme="teal" isDisabled={!isSalaryTableFormValid(newSalaryTable)}>{labels.addCategory}</Button>       
+            </>
+          ) }
+
+
+          {mode === 'update' && currentSalaryTable && (
+            <>
+              <Box mt={4}>
+                {/* Display the actual salary table matrix here */}
+                {/* You will need to implement the display based on your data structure */}
+                {/* Example structure: degrees, working ages, categories */}
+              </Box>
+              <Button
+                leftIcon={<FaSave />}
+                colorScheme="blue"
+                onClick={handleCreateOrUpdate}
+              >
+                {labels.update}
+              </Button>
+            </>
+          )}
         </VStack>
       </Box>
-      {headers.length > 0 && categories.length > 0 && (
-        <SalaryTableInput
-          headers={headers}
-          categories={categories}
-          onSave={handleSave}
-        />
-      )}
-      {error && <Text colorScheme='red'>Error: {error}</Text>}
     </>
   );
 };
 
 export default SalaryTableForm;
-
-function isSalaryTableFormValid(salaryTable: any): boolean {
-  if (!salaryTable) {
-    return false;
-  }
-  if (!salaryTable.numeroTable || !salaryTable.type || !salaryTable.consernedEmployee
-    || !salaryTable.beginningDateOfApplication || !salaryTable.degrees
-    || !salaryTable.categories || !salaryTable.workingAges) {
-    return false;
-  }
-
-  return true;
-}
 
 function allowAddCategory(salaryTable: any): boolean {
   if (salaryTable.agreementId === -1 || salaryTable.numeroTable === "" || salaryTable.type === "" || salaryTable.consernedEmployee === "" || salaryTable.beginningDateOfApplication !== "") {
