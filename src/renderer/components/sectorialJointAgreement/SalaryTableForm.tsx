@@ -18,7 +18,7 @@ const SalaryTableForm = () => {
   const navigate = useNavigate();
   const { salaryTableId } = useParams<{ salaryTableId: string }>();
   const dispatch: AppDispatch = useAppDispatch();
-  const salaryTableStatus = useAppSelector((state: RootState) => state.salaryTables.status);
+  const salaryTableStatus = useAppSelector((state: RootState) => state.salaryTables.status) || 'idle';
   const error = useAppSelector((state: RootState) => state.salaryTables.error);
   const agreements = useAppSelector((state: RootState) => state.agreements.agreements);
   const mode = useAppSelector((state: RootState) => state.salaryTables.mode);
