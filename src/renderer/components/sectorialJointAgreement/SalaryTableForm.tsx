@@ -13,7 +13,8 @@ import { labels } from '../../arabic.labels';
 import { fetchAgreements} from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
 import { salaryTypes } from '../../../types/salaryTypes';
 import { clearStatus, setStatus } from '../../redux/common/statusSlice';
-import SalaryTableInput from './SalaryTableInput';
+import SalaryTableStructure from './SalaryTableStructure';
+import {v4 as uuid} from 'uuid';
 
 const SalaryTableForm = () => {
   const navigate = useNavigate();
@@ -25,10 +26,7 @@ const SalaryTableForm = () => {
   const mode = useAppSelector((state: RootState) => state.salaryTables.mode);
   const currentSalaryTable = useAppSelector((state: RootState) => state.salaryTables.currentSalaryTable);
 
-  const [degrees, setDegrees] = useState<number[]>([1]); // Default initial degree
-  const [categories, setCategories] = useState<string[]>([`1 - ${labels.category}`]); // Default initial category
-  const [workingAges, setWorkingAges] = useState<number[]>([1]); // Default initial working age
-  const [headers, setHeaders] = useState<{ degree: number, ageOfWork: number }[]>([{ degree: 1, ageOfWork: 1 }]); // Default initial header
+  
 
   const initialSalaryTable: SalaryTableProps = {
     agreementId: -1,
@@ -37,8 +35,7 @@ const SalaryTableForm = () => {
     consernedEmployee: '',
     beginningDateOfApplication: '',
     endDateOfApplication: '',
-    degrees: [],
-    workingAges: [],
+    degrees: [{key: uuid(),degree: 1, ageOfWork: 1}],
     categories: []
   };
 
@@ -118,9 +115,6 @@ const SalaryTableForm = () => {
   const handleSave = async (salaries: { [s: string]: unknown; } | ArrayLike<unknown>) => {
     const salaryTable = {
       ...newSalaryTable,
-      degrees,
-      workingAges,
-      categories,
       salaries: Object.entries(salaries).flatMap(([category, degreeAges]) =>
         Object.entries(degreeAges as object).map(([degreeAge, salary]) => {
           const [degree, age] = degreeAge.split('-').map(Number);
@@ -139,18 +133,7 @@ const SalaryTableForm = () => {
     });
   };
 
-  const handleAddDegreeAndAgeOfWork = () => {
-    const newDegree = degrees.length + 1;
-    const newAgeOfWork = workingAges.length + 1;
-    setDegrees([...degrees, newDegree]);
-    setWorkingAges([...workingAges, newAgeOfWork]);
-    setHeaders([...headers, { degree: newDegree, ageOfWork: newAgeOfWork }]);
-  };
-
-  const handleAddCategory = () => {
-    const newCategory = `${categories.length + 1} ${labels.category}`;
-    setCategories([...categories, newCategory]);
-  };
+ 
 
   const isSalaryTableFormValid = (salaryTable: Partial<SalaryTableProps>): boolean => {
     return (
@@ -158,16 +141,13 @@ const SalaryTableForm = () => {
       !!salaryTable.numeroTable &&
       !!salaryTable.type &&
       !!salaryTable.consernedEmployee &&
-      !!salaryTable.beginningDateOfApplication &&
-      !!salaryTable.degrees &&
-      !!salaryTable.categories &&
-      !!salaryTable.workingAges
+      !!salaryTable.beginningDateOfApplication 
     );
   };
 
   return (
     <>
-      <Box m={4} p={4} >
+      <Box m={2} p={2} >
         <Heading mb={5} alignContent={'center'} fontSize={'2xl'}>{labels.salaryTableForm} {mode === 'create' ? labels.create : labels.update}</Heading>
         {salaryTableStatus === 'loading' && <AlfaSpinner />}
         {error && <Text colorScheme="red">{labels.error}: {error}</Text>}
@@ -243,14 +223,8 @@ const SalaryTableForm = () => {
 
           {mode === 'create' && (
             <>
-              <SalaryTableInput
-                degrees={degrees}
-                categories={categories}
-                workingAges={workingAges}
-                headers={headers}
-                onSave={handleSave}
-                onAddDegreeAndAgeOfWork={handleAddDegreeAndAgeOfWork}
-                onAddCategory={handleAddCategory}
+              <SalaryTableStructure
+                salaryTable={newSalaryTable}
               />
               <Button
                 leftIcon={<FaSave />}
@@ -261,17 +235,6 @@ const SalaryTableForm = () => {
               </Button>
             </>
           )}
-
-          {mode==='create' && isSalaryTableFormValid(newSalaryTable) ? (
-            <>
-               <Button onClick={handleAddCategory} colorScheme="green" isDisabled={!allowAddCategory}>{labels.addCategory}</Button>
-               <Button onClick={handleAddDegreeAndAgeOfWork} colorScheme="green" isDisabled={!allowAddDegreeAndAgeOfWork}>{labels.addDegree}</Button>
-            </>
-          ):(
-            <>
-              <Button onClick={handleCreateOrUpdate} colorScheme="teal" isDisabled={!isSalaryTableFormValid(newSalaryTable)}>{labels.addCategory}</Button>       
-            </>
-          ) }
 
 
           {mode === 'update' && currentSalaryTable && (
@@ -298,17 +261,3 @@ const SalaryTableForm = () => {
 
 export default SalaryTableForm;
 
-function allowAddCategory(salaryTable: any): boolean {
-  if (salaryTable.agreementId === -1 || salaryTable.numeroTable === "" || salaryTable.type === "" || salaryTable.consernedEmployee === "" || salaryTable.beginningDateOfApplication !== "") {
-    return false;
-  }
-
-  return true;
-}
-function allowAddDegreeAndAgeOfWork(salaryTable: any): boolean {
-  if (salaryTable.agreementId === -1 || salaryTable.numeroTable === "" || salaryTable.type === "" || salaryTable.consernedEmployee === "" || salaryTable.beginningDateOfApplication !== "") {
-    return false;
-  }
-
-  return true;
-}

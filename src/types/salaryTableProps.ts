@@ -1,4 +1,5 @@
-import { UUID } from "crypto";
+
+import { v4 as uuid } from 'uuid';
 import { sectorialJointAgreementProps } from "./sectorialAgreementProps";
 
 export interface SalaryTableProps {
@@ -8,12 +9,22 @@ export interface SalaryTableProps {
     consernedEmployee: string;
     beginningDateOfApplication: string;
     endDateOfApplication: string | null;
-    degrees: number[];
-    workingAges: number[];
+    degrees: ProfessionalDegree[];
     categories: string[];
     salaryTableCells?: SalaryTableCell[];
     agreement?: sectorialJointAgreementProps;
     agreementId?: number;
+}
+
+export interface ProfessionalDegree{
+    key: string;
+    degree: number;
+    ageOfWork: number;
+}
+
+export interface ProfessionalCategory {
+    key: string;
+    label: string;
 }
 
 export interface SalaryTableCell {
@@ -21,7 +32,7 @@ export interface SalaryTableCell {
     professionalCategory: string;
     prefessionalSubCategory?: string | null;
     professionalDegree: number;
-    workingAge: number;
+    ageOfWork: number;
     salary: number;
     salaryTable: SalaryTableProps;
 }
