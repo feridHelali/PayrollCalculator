@@ -30,9 +30,8 @@ const SalaryTableForm = () => {
   const [categories, setCategories] = useState<ProfessionalCategory[]>([{ key: uuid().toString(), label: `1 - ${labels.category}` }]); // Default initial category
   const [headers, setHeaders] = useState<ProfessionalDegree[]>([{ key: uuid().toString(), degree: 1, ageOfWork: 1 }]);
   const handleAddDegreeAndAgeOfWork = () => {
-    const newHeadersLength = headers.length + 1;
-    const newDegree = newHeadersLength + 1;
-    const newAgeOfWork = newHeadersLength + 1;
+    const newDegree = headers.length + 1;
+    const newAgeOfWork = 0;
     setHeaders([...headers, { key: uuid().toString(), degree: newDegree, ageOfWork: newAgeOfWork }]);
   };
 
