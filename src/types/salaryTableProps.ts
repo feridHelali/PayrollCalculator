@@ -10,7 +10,7 @@ export interface SalaryTableProps {
     beginningDateOfApplication: string;
     endDateOfApplication: string | null;
     degrees: ProfessionalDegree[];
-    categories: string[];
+    categories: ProfessionalCategory[];
     salaryTableCells?: SalaryTableCell[];
     agreement?: sectorialJointAgreementProps;
     agreementId?: number;

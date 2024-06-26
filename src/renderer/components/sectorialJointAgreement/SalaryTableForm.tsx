@@ -3,18 +3,18 @@ import {
   Button, Input, Box, Heading, Text, FormControl, FormLabel, Select, VStack,
 } from '@chakra-ui/react';
 import { FaSave } from 'react-icons/fa';
-import { createSalaryTable, fetchSalaryTableById, updateSalaryTable,switchToCreateMode,switchToUpdateMode } from '../../redux/sectorialJointAgreement/salaryTableSlice';
+import { createSalaryTable, fetchSalaryTableById, updateSalaryTable, switchToCreateMode, switchToUpdateMode } from '../../redux/sectorialJointAgreement/salaryTableSlice';
 import { AppDispatch, RootState } from '../../redux/store';
 import { useAppDispatch, useAppSelector } from '../../redux/redux.hooks';
 import AlfaSpinner from '../../shared/AlfaSpinner';
-import { SalaryTableProps } from '../../../types/salaryTableProps';
+import { ProfessionalCategory, ProfessionalDegree, SalaryTableProps } from '../../../types/salaryTableProps';
 import { useNavigate, useParams } from 'react-router-dom';
 import { labels } from '../../arabic.labels';
-import { fetchAgreements} from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
+import { fetchAgreements } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
 import { salaryTypes } from '../../../types/salaryTypes';
 import { clearStatus, setStatus } from '../../redux/common/statusSlice';
 import SalaryTableStructure from './SalaryTableStructure';
-import {v4 as uuid} from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 const SalaryTableForm = () => {
   const navigate = useNavigate();
@@ -26,7 +26,60 @@ const SalaryTableForm = () => {
   const mode = useAppSelector((state: RootState) => state.salaryTables.mode);
   const currentSalaryTable = useAppSelector((state: RootState) => state.salaryTables.currentSalaryTable);
 
-  
+  //for slaryTAbleStructure
+  const [categories, setCategories] = useState<ProfessionalCategory[]>([{ key: uuid().toString(), label: `1 - ${labels.category}` }]); // Default initial category
+  const [headers, setHeaders] = useState<ProfessionalDegree[]>([{ key: uuid().toString(), degree: 1, ageOfWork: 1 }]);
+  const handleAddDegreeAndAgeOfWork = () => {
+    const newHeadersLength = headers.length + 1;
+    const newDegree = newHeadersLength + 1;
+    const newAgeOfWork = newHeadersLength + 1;
+    setHeaders([...headers, { key: uuid().toString(), degree: newDegree, ageOfWork: newAgeOfWork }]);
+  };
+
+  const handleAddCategory = () => {
+    const newCategory = { key: uuid().toString(), label: `${categories.length + 1} - ${labels.category}` };
+    setCategories([...categories, newCategory]);
+  }; // Default initial header
+
+  const handleRemoveDegreeAndAgeOfWork = () => {
+    if (headers.length > 1) {
+      const newHeaders = [...headers];
+      newHeaders.pop();
+      setHeaders(newHeaders);
+    }
+  }
+
+  const handleRemoveCategory = () => {
+    if (categories.length > 1) {
+      const newCategories = [...categories];
+      newCategories.pop();
+      setCategories(newCategories);
+    }
+  }
+
+  const handleChangeDegreeAndAgeOfWork = (key: any, ageOfWork: any) => {
+    const newHeaders = headers.map((header: any) => {
+      if (header.key === key) {
+        header.ageOfWork = ageOfWork;
+      }
+      return header;
+    });
+    setHeaders(newHeaders);
+  };
+
+  const handleChangeCategoryLabel = (categoryKey: any, label: any) => {
+
+    const newCategories = categories.map((category: ProfessionalCategory) => {
+      if (category.key === categoryKey) {
+        category.label = label;
+      }
+      return category;
+    });
+
+    setCategories(newCategories);
+  };
+
+
 
   const initialSalaryTable: SalaryTableProps = {
     agreementId: -1,
@@ -35,8 +88,8 @@ const SalaryTableForm = () => {
     consernedEmployee: '',
     beginningDateOfApplication: '',
     endDateOfApplication: '',
-    degrees: [{key: uuid(),degree: 1, ageOfWork: 1}],
-    categories: []
+    degrees: [{ key: uuid(), degree: 1, ageOfWork: 1 }],
+    categories: [{ key: uuid(), label: `1 - ${labels.category}` }],
   };
 
   const [newSalaryTable, setNewSalaryTable]: [Partial<SalaryTableProps>, any] = useState(initialSalaryTable);
@@ -77,8 +130,8 @@ const SalaryTableForm = () => {
   };
 
   const handleCreate = () => {
-    if (isSalaryTableFormValid(newSalaryTable)) {
-      dispatch(createSalaryTable(newSalaryTable))
+    if (isSalaryTableStructureReadyToBeSaved(newSalaryTable)) {
+      dispatch(createSalaryTable({...newSalaryTable,degrees: headers, categories: categories}))
         .then(() => {
           if (salaryTableStatus === 'succeeded') {
             dispatch(setStatus(`${labels.salaryTableForm} - ${labels.created} - ${labels.successfully}`));
@@ -95,7 +148,7 @@ const SalaryTableForm = () => {
   };
 
   const handleUpdate = () => {
-    if (currentSalaryTable && isSalaryTableFormValid(newSalaryTable)) {
+    if (currentSalaryTable && isSalaryTableStructureReadyToBeSaved(newSalaryTable)) {
       dispatch(updateSalaryTable({ ...newSalaryTable, salaryTableId: currentSalaryTable.salaryTableId }))
         .then(() => {
           if (salaryTableStatus === 'succeeded') {
@@ -133,17 +186,9 @@ const SalaryTableForm = () => {
     });
   };
 
- 
 
-  const isSalaryTableFormValid = (salaryTable: Partial<SalaryTableProps>): boolean => {
-    return (
-      !!salaryTable.agreementId &&
-      !!salaryTable.numeroTable &&
-      !!salaryTable.type &&
-      !!salaryTable.consernedEmployee &&
-      !!salaryTable.beginningDateOfApplication 
-    );
-  };
+
+
 
   return (
     <>
@@ -225,6 +270,14 @@ const SalaryTableForm = () => {
             <>
               <SalaryTableStructure
                 salaryTable={newSalaryTable}
+                headers={headers}
+                categories={categories}
+                handleAddCategory={handleAddCategory}
+                handleRemoveCategory={handleRemoveCategory}
+                handleAddDegreeAndAgeOfWork={handleAddDegreeAndAgeOfWork}
+                handleRemoveDegreeAndAgeOfWork={handleRemoveDegreeAndAgeOfWork}
+                handleChangeCategoryLabel={handleChangeCategoryLabel}
+                handleChangeDegreeAndAgeOfWork={handleChangeDegreeAndAgeOfWork}
               />
               <Button
                 leftIcon={<FaSave />}
@@ -261,3 +314,12 @@ const SalaryTableForm = () => {
 
 export default SalaryTableForm;
 
+const isSalaryTableStructureReadyToBeSaved = (salaryTable: Partial<SalaryTableProps>): boolean => {
+  return (
+    !!salaryTable.agreementId &&
+    !!salaryTable.numeroTable &&
+    !!salaryTable.type &&
+    !!salaryTable.consernedEmployee &&
+    !!salaryTable.beginningDateOfApplication
+  );
+};
