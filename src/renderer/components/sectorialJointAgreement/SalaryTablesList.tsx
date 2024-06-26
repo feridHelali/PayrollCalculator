@@ -16,7 +16,6 @@ import { useAppDispatch, useAppSelector } from '../../redux/redux.hooks';
 import { useNavigate } from 'react-router-dom';
 import { SalaryTableProps } from '../../../types/salaryTableProps';
 import { deleteSalaryTable, fetchAllSalaryTables } from '../../redux/sectorialJointAgreement/salaryTableSlice';
-import { fetchAgreements } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
 import AlfaSpinner from '../../shared/AlfaSpinner';
 
 

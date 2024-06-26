@@ -3,7 +3,9 @@ import {
   Button, Input, Box, Heading, Text, FormControl, FormLabel, Select, VStack,
 } from '@chakra-ui/react';
 import { FaSave } from 'react-icons/fa';
-import { createSalaryTable, fetchSalaryTableById, updateSalaryTable, switchToCreateMode, switchToUpdateMode } from '../../redux/sectorialJointAgreement/salaryTableSlice';
+import {
+  createSalaryTable, fetchSalaryTableById, updateSalaryTable, switchToCreateMode, switchToUpdateMode
+} from '../../redux/sectorialJointAgreement/salaryTableSlice';
 import { AppDispatch, RootState } from '../../redux/store';
 import { useAppDispatch, useAppSelector } from '../../redux/redux.hooks';
 import AlfaSpinner from '../../shared/AlfaSpinner';
@@ -15,6 +17,7 @@ import { salaryTypes } from '../../../types/salaryTypes';
 import { clearStatus, setStatus } from '../../redux/common/statusSlice';
 import SalaryTableStructure from './SalaryTableStructure';
 import { v4 as uuid } from 'uuid';
+import SalaryTableSheet from './SalaryTableSheet';
 
 const SalaryTableForm = () => {
   const navigate = useNavigate();
@@ -26,9 +29,51 @@ const SalaryTableForm = () => {
   const mode = useAppSelector((state: RootState) => state.salaryTables.mode);
   const currentSalaryTable = useAppSelector((state: RootState) => state.salaryTables.currentSalaryTable);
 
-  //for slaryTAbleStructure
+
   const [categories, setCategories] = useState<ProfessionalCategory[]>([{ key: uuid().toString(), label: `1 - ${labels.category}` }]); // Default initial category
   const [headers, setHeaders] = useState<ProfessionalDegree[]>([{ key: uuid().toString(), degree: 1, ageOfWork: 1 }]);
+  const [salaries, setSalaries] = useState<Record<string, Record<string, number>>>({});
+
+  useEffect(() => {
+    dispatch(setStatus(salaryTableStatus));
+    if (agreements.length <= 0) {
+      dispatch(fetchAgreements());
+    }
+  }, [salaryTableStatus, dispatch, agreements.length]);
+
+  useEffect(() => {
+    if (salaryTableId) {
+      dispatch(switchToUpdateMode());
+      dispatch(fetchSalaryTableById(parseInt(salaryTableId)));
+    } else {
+      dispatch(switchToCreateMode());
+      setNewSalaryTable(initialSalaryTable); // Reset new salary table on mode switch
+    }
+  }, [salaryTableId, dispatch]);
+
+  useEffect(() => {
+    if (currentSalaryTable) {
+      setNewSalaryTable({
+        ...currentSalaryTable,
+        beginningDateOfApplication: new Date(currentSalaryTable.beginningDateOfApplication),
+        endDateOfApplication: currentSalaryTable.endDateOfApplication ? new Date(currentSalaryTable.endDateOfApplication) : ''
+      });
+      setCategories(currentSalaryTable.categories);
+      setHeaders(currentSalaryTable.degrees);
+      // Populate salaries from the current salary table cells
+      
+      const salaryData: Record<string, Record<string, number>> = {};
+
+      currentSalaryTable.salaryTableCells?.forEach(cell => {
+        if (!salaryData[cell.professionalCategory]) {
+          salaryData[cell.professionalCategory] = {};
+        }
+        salaryData[cell.professionalCategory][`${cell.professionalDegree}-${cell.ageOfWork}`] = cell.salary;
+      });
+      setSalaries(salaryData);
+
+    }
+  }, [currentSalaryTable]);
   const handleAddDegreeAndAgeOfWork = () => {
     const newDegree = headers.length + 1;
     const newAgeOfWork = 0;
@@ -38,7 +83,7 @@ const SalaryTableForm = () => {
   const handleAddCategory = () => {
     const newCategory = { key: uuid().toString(), label: `${categories.length + 1} - ${labels.category}` };
     setCategories([...categories, newCategory]);
-  }; // Default initial header
+  };
 
   const handleRemoveDegreeAndAgeOfWork = () => {
     if (headers.length > 1) {
@@ -93,32 +138,7 @@ const SalaryTableForm = () => {
 
   const [newSalaryTable, setNewSalaryTable]: [Partial<SalaryTableProps>, any] = useState(initialSalaryTable);
 
-  useEffect(() => {
-    dispatch(setStatus(salaryTableStatus));
-    if (salaryTableStatus === 'idle') {
-      dispatch(fetchAgreements());
-    }
-  }, [salaryTableStatus, dispatch]);
 
-  useEffect(() => {
-    if (salaryTableId) {
-      dispatch(switchToUpdateMode());
-      dispatch(fetchSalaryTableById(parseInt(salaryTableId)));
-    } else {
-      dispatch(switchToCreateMode());
-      setNewSalaryTable(initialSalaryTable); // Reset new salary table on mode switch
-    }
-  }, [salaryTableId, dispatch]);
-
-  useEffect(() => {
-    if (currentSalaryTable) {
-      setNewSalaryTable({
-        ...currentSalaryTable,
-        beginningDateOfApplication: new Date(currentSalaryTable.beginningDateOfApplication),
-        endDateOfApplication: currentSalaryTable.endDateOfApplication ? new Date(currentSalaryTable.endDateOfApplication) : ''
-      });
-    }
-  }, [currentSalaryTable]);
 
   const handleCreateOrUpdate = () => {
     if (mode === 'create') {
@@ -130,10 +150,10 @@ const SalaryTableForm = () => {
 
   const handleCreate = () => {
     if (isSalaryTableStructureReadyToBeSaved(newSalaryTable)) {
-      dispatch(createSalaryTable({...newSalaryTable,degrees: headers, categories: categories}))
+      dispatch(createSalaryTable({ ...newSalaryTable, degrees: headers, categories: categories }))
         .then(() => {
           if (salaryTableStatus === 'succeeded') {
-            dispatch(setStatus(`${labels.salaryTableForm} - ${labels.created} - ${labels.successfully}`));
+            dispatch(setStatus(`${labels.salaryTableForm} - ${labels.created} - ${labels.successfully}`))
             navigate('/salary-tables');
           }
           if (salaryTableStatus === 'failed') {
@@ -164,25 +184,34 @@ const SalaryTableForm = () => {
     }
   };
 
-  const handleSave = async (salaries: { [s: string]: unknown; } | ArrayLike<unknown>) => {
+  const handleSaveSalaries = (salaries: Record<string, Record<string, number>>) => {
+    // Update the salary table with the new salary values
+    handleSave(salaries);
+  };
+  const handleSave = async (salaries: Record<string, Record<string, number>>) => {
     const salaryTable = {
       ...newSalaryTable,
       salaries: Object.entries(salaries).flatMap(([category, degreeAges]) =>
-        Object.entries(degreeAges as object).map(([degreeAge, salary]) => {
+        Object.entries(degreeAges).map(([degreeAge, salary]) => {
           const [degree, age] = degreeAge.split('-').map(Number);
           return {
             professionalCategory: category,
-            professionalDegree: degree,
-            workingAge: age,
-            salary: parseFloat(salary as string),
+            professionalDegree: { degree, ageOfWork: age },
+            salary: salary,
           };
         })
       ),
     };
 
-    await dispatch(createSalaryTable(salaryTable)).then(() => {
-      navigate('/salary-tables')
-    });
+    await Promise.all([
+      dispatch(updateSalaryTable(salaryTable)).then(() => {
+        navigate('/salary-tables')
+      }),
+      dispatch(setStatus(`${labels.salaryTableForm} - ${labels.updated} - ${labels.successfully}`)),
+      setTimeout(() => {
+        dispatch(clearStatus());
+      }, 9000)
+    ]);
   };
 
 
@@ -192,6 +221,7 @@ const SalaryTableForm = () => {
   return (
     <>
       <Box m={2} p={2} >
+        <pre><code>{JSON.stringify(salaries, null, 2)}</code></pre>
         <Heading mb={5} alignContent={'center'} fontSize={'2xl'}>{labels.salaryTableForm} {mode === 'create' ? labels.create : labels.update}</Heading>
         {salaryTableStatus === 'loading' && <AlfaSpinner />}
         {error && <Text colorScheme="red">{labels.error}: {error}</Text>}
@@ -261,7 +291,7 @@ const SalaryTableForm = () => {
               type="date"
               value={newSalaryTable.endDateOfApplication ? new Date(newSalaryTable.endDateOfApplication).toISOString().split('T')[0] : ''}
               onChange={(e) => setNewSalaryTable({ ...newSalaryTable, endDateOfApplication: e.target.value })}
-              isDisabled={mode === 'update'}
+
             />
           </FormControl>
 
@@ -292,9 +322,12 @@ const SalaryTableForm = () => {
           {mode === 'update' && currentSalaryTable && (
             <>
               <Box mt={4}>
-                {/* Display the actual salary table matrix here */}
-                {/* You will need to implement the display based on your data structure */}
-                {/* Example structure: degrees, working ages, categories */}
+                <SalaryTableSheet
+                  headers={headers}
+                  categories={categories}
+                  initialSalaries={salaries}
+                  onSave={handleSaveSalaries}
+                />
               </Box>
               <Button
                 leftIcon={<FaSave />}
