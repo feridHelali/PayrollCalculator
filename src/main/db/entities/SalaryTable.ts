@@ -33,13 +33,10 @@ export class SalaryTable {
   endDateOfApplication!: Date | null;
 
   @Column("json", { name: "degrees" })
-  degrees!: number[];
-
-  @Column("json", { name: "workingAges" })
-  workingAges!: number[];
+  degrees!: {key: string, degree: number, ageOfWork: number}[];
 
   @Column("json", { name: "categories" })
-  categories!: string[];
+  categories!: {key: string, label: string}[];
 
   @OneToMany(
     () => SalaryTableCell,
@@ -61,23 +58,5 @@ export class SalaryTable {
   @Column({ type: "integer", name: "agreementID", nullable: false })
   agreementId!: number;
 
-  // Method to lookup salary for a given employee within a specific period
-  getSalaryForEmployee(category: string, degree: number, workingAge: number, date: Date): number | null {
-    if (date >= this.beginningDateOfApplication && (!this.endDateOfApplication || date <= this.endDateOfApplication)) {
-      const cell = this.salaryTableCells.find(cell =>
-        cell.professionalCategory === category &&
-        cell.professionalDegree === degree &&
-        cell.workingAge === workingAge
-      );
-      return cell ? cell.salary : null;
-    }
-    return null;
-  }
 
-  // Method to update degree based on working age
-  updateDegree(workingAge: number): void {
-    this.salaryTableCells.forEach(cell => {
-      cell.professionalDegree += Math.floor(workingAge / 5); // Example: increase degree every 5 years
-    });
-  }
 }

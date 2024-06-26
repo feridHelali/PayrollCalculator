@@ -18,11 +18,8 @@ export class SalaryTableCell {
   @Column("text", { name: "prefessionalSubCategory", nullable: true })
   prefessionalSubCategory!: string | null;
 
-  @Column("integer", { name: "ProfessionalDegree" })
-  professionalDegree!: number;
-
-  @Column("integer", { name: "WorkingAge" })
-  workingAge!: number;
+  @Column("json", { name: "ProfessionalDegree" })
+  professionalDegree!: { degree: number, ageOfWork: number};
 
   @Column("real", { name: "salary" })
   salary!: number;
