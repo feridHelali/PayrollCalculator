@@ -6,17 +6,17 @@ import { ProfessionalCategory, ProfessionalDegree, SalaryTableProps } from '../.
 import { v4 as uuid } from 'uuid';
 
 const SalaryTableStructure = ({ salaryTable }: { salaryTable: Partial<SalaryTableProps> }): React.JSX.Element => {
-  const [categories, setCategories] = useState<ProfessionalCategory[]>([{key: uuid().toString(),label:`1 - ${labels.category}`}]); // Default initial category
+  const [categories, setCategories] = useState<ProfessionalCategory[]>([{ key: uuid().toString(), label: `1 - ${labels.category}` }]); // Default initial category
   const [headers, setHeaders] = useState<ProfessionalDegree[]>([{ key: uuid().toString(), degree: 1, ageOfWork: 1 }]);
   const handleAddDegreeAndAgeOfWork = () => {
     const newHeadersLength = headers.length + 1;
     const newDegree = newHeadersLength + 1;
     const newAgeOfWork = newHeadersLength + 1;
-    setHeaders([...headers, { key:uuid().toString(),degree: newDegree, ageOfWork: newAgeOfWork }]);
+    setHeaders([...headers, { key: uuid().toString(), degree: newDegree, ageOfWork: newAgeOfWork }]);
   };
 
   const handleAddCategory = () => {
-    const newCategory = { key: uuid().toString(), label:`${categories.length + 1} - ${labels.category}`};
+    const newCategory = { key: uuid().toString(), label: `${categories.length + 1} - ${labels.category}` };
     setCategories([...categories, newCategory]);
   }; // Default initial header
 
@@ -47,8 +47,8 @@ const SalaryTableStructure = ({ salaryTable }: { salaryTable: Partial<SalaryTabl
   };
 
   const handleChangeCategoryLabel = (categoryKey: any, label: any) => {
-    
-     const newCategories=categories.map((category: ProfessionalCategory) => {
+
+    const newCategories = categories.map((category: ProfessionalCategory) => {
       if (category.key === categoryKey) {
         category.label = label;
       }
@@ -92,22 +92,28 @@ const SalaryTableStructure = ({ salaryTable }: { salaryTable: Partial<SalaryTabl
           </Box>
         ))}
       </HStack>
+      {isNewSalaryTableValid(salaryTable) && (
+        <>
+          <VStack mt={4}>
+            <HStack>
+              <Button onClick={handleAddCategory} colorScheme="green" >{labels.addCategory}</Button>
+              <Button onClick={handleRemoveCategory} colorScheme="red" >{labels.removeCategory}</Button>
+            </HStack>
+            <HStack>
+              <Button onClick={handleAddDegreeAndAgeOfWork} colorScheme="green">{labels.addDegree}</Button>
+              <Button onClick={handleRemoveDegreeAndAgeOfWork} colorScheme="red">{labels.removeDegree}</Button>
+            </HStack>
+          </VStack>
 
-      <VStack mt={4}>
-        <HStack>
-          <Button onClick={handleAddCategory} colorScheme="green" >{labels.addCategory}</Button>
-          <Button onClick={handleRemoveCategory} colorScheme="red" >{labels.removeCategory}</Button>
-        </HStack>
-        <HStack>
-          <Button onClick={handleAddDegreeAndAgeOfWork} colorScheme="green">{labels.addDegree}</Button>
-          <Button onClick={handleRemoveDegreeAndAgeOfWork} colorScheme="red">{labels.removeDegree}</Button>
-        </HStack>
-      </VStack>
 
+          <Button leftIcon={<FaSave />} onClick={() => { }} colorScheme="blue" mt={4}>
+            {labels.save}
+          </Button>
 
-      <Button leftIcon={<FaSave />} onClick={() => { }} colorScheme="blue" mt={4}>
-        {labels.save}
-      </Button>
+        </>
+
+      )}
+
       <code>{JSON.stringify(categories, null, 2)}</code>
       <hr />
       <code>{JSON.stringify(headers, null, 2)}</code>
@@ -117,3 +123,11 @@ const SalaryTableStructure = ({ salaryTable }: { salaryTable: Partial<SalaryTabl
 
 export default SalaryTableStructure;
 
+function isNewSalaryTableValid(salaryTable: Partial<SalaryTableProps>): boolean {
+
+  return !!salaryTable.agreementId &&
+    !!salaryTable.numeroTable &&
+    !!salaryTable.type &&
+    !!salaryTable.consernedEmployee &&
+    !!salaryTable.beginningDateOfApplication;
+}
