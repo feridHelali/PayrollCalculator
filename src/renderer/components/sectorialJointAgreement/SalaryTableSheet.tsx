@@ -25,12 +25,21 @@ const SalaryTableSheet: FC<SalaryTableSheetProps> = ({ headers, categories, init
   };
 
   return (
-    <Box mt={4} p={4} fontSize={'xs'} bgColor={'gray.100'} borderRadius={5} w={'100vw'} h={'60vh'} overflow={'scroll'}>
+    <Box 
+    mt={4}
+    p={4}
+    fontSize={'xs'}
+    bgColor={'gray.100'}
+    borderRadius={5}
+    width={'calc(100vw - 220px)'}
+    height={'60vh'}
+    overflow={'auto'}
+    ml="200px"  // Adjust this if the width of your sidenav changes
+    dir='rtl'>
       <Table variant="simple">
         <Thead>
-          <Tr h={10}>
-            <Th>{labels.category}</Th>
-
+          <Tr fontSize={'xs'}>
+            <Th h={"70px"}>{labels.category}</Th>
             {headers.map((header) => (
               <Th key={header.key}>
                 {labels.degree} {header.degree} <br />{labels.ageOfWork}: {header.ageOfWork}
@@ -41,13 +50,14 @@ const SalaryTableSheet: FC<SalaryTableSheetProps> = ({ headers, categories, init
         <Tbody>
           {categories.map((category) => (
             <Tr key={category.key}>
-              <Td w={"30%"}>{category.label}</Td>
+              <Td w={"70px"}>{category.label}</Td>
               {headers.map((header) => (
                 <Td key={header.key}>
                   <input
                     type="number"
                     value={salaries[category.key]?.[header.key] || ''}
                     onChange={(e) => handleSalaryChange(category.key, header.key, e.target.value)}
+                    style={{ width: '80%' }}
                   />
                 </Td>
               ))}

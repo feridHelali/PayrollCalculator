@@ -220,15 +220,16 @@ const SalaryTableForm = () => {
 
   return (
     <>
-      <Box m={2} p={2} >
+      <Box dir='rtl' marginLeft={"210px"} p={4} display="flex" flexDirection="column" alignItems="center">
         <pre><code>{JSON.stringify(salaries, null, 2)}</code></pre>
-        <Heading mb={5} alignContent={'center'} fontSize={'2xl'}>{labels.salaryTableForm} {mode === 'create' ? labels.create : labels.update}</Heading>
+        <Heading mb={5} alignContent={'center'} fontSize={'2xl'} >{labels.salaryTableForm} {mode === 'create' ? labels.create : labels.update}</Heading>
         {salaryTableStatus === 'loading' && <AlfaSpinner />}
-        {error && <Text colorScheme="red">{labels.error}: {error}</Text>}
-        <VStack spacing={4} w={"80%"} m={4} p={4}>
-          <FormControl>
+        {error && <Text color="red.500">{labels.error}: {error}</Text>}
+        <VStack spacing={4} w={"100%"}>
+          <FormControl id="agreementId" isRequired>
             <FormLabel>{labels.selectAgreement}</FormLabel>
             <Select
+              name="agreementId"
               placeholder={`${labels.selectAgreement}`}
               value={newSalaryTable.agreementId}
               onChange={(e) => setNewSalaryTable({ ...newSalaryTable, agreementId: Number(e.target.value) })}
@@ -241,18 +242,20 @@ const SalaryTableForm = () => {
               ))}
             </Select>
           </FormControl>
-          <FormControl>
+          <FormControl id="numeroTable" isRequired>
             <FormLabel>{labels.salaryTableNumber}</FormLabel>
             <Input
+              name="numeroTable"
               type="text"
               value={newSalaryTable.numeroTable}
               onChange={(e) => setNewSalaryTable({ ...newSalaryTable, numeroTable: e.target.value })}
               isDisabled={mode === 'update'}
             />
           </FormControl>
-          <FormControl>
+          <FormControl id="type" isRequired>
             <FormLabel>{labels.salaryType}</FormLabel>
             <Select
+              name="type"
               placeholder={`${labels.selectSalaryType}`}
               value={newSalaryTable.type}
               onChange={(e) => setNewSalaryTable({ ...newSalaryTable, type: e.target.value })}
@@ -265,17 +268,19 @@ const SalaryTableForm = () => {
               ))}
             </Select>
           </FormControl>
-          <FormControl>
+          <FormControl id="consernedEmployee" isRequired>
             <FormLabel>{labels.concernedEmployee}</FormLabel>
             <Input
+              name="consernedEmployee"
               value={newSalaryTable.consernedEmployee}
               onChange={(e) => setNewSalaryTable({ ...newSalaryTable, consernedEmployee: e.target.value })}
               isDisabled={mode === 'update'}
             />
           </FormControl>
-          <FormControl>
+          <FormControl id="beginningDateOfApplication" isRequired>
             <FormLabel>{labels.beginningDateOfApplication}</FormLabel>
             <Input
+              name="beginningDateOfApplication"
               w={"60%"}
               alignContent={"right"}
               type="date"
@@ -284,9 +289,10 @@ const SalaryTableForm = () => {
               isDisabled={mode === 'update'}
             />
           </FormControl>
-          <FormControl>
+          <FormControl id="endDateOfApplication">
             <FormLabel>{labels.endDateOfApplication}</FormLabel>
             <Input
+              name="endDateOfApplication"
               w={"60%"}
               type="date"
               value={newSalaryTable.endDateOfApplication ? new Date(newSalaryTable.endDateOfApplication).toISOString().split('T')[0] : ''}
