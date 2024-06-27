@@ -28,7 +28,7 @@ const SalaryTableSheet: FC<SalaryTableSheetProps> = ({ headers, categories, init
     <Box mt={4} p={4} fontSize={'xs'} bgColor={'gray.100'} borderRadius={5} w={'100vw'} h={'60vh'} overflow={'scroll'}>
       <Table variant="simple">
         <Thead>
-          <Tr>
+          <Tr h={10}>
             <Th>{labels.category}</Th>
 
             {headers.map((header) => (
@@ -41,7 +41,7 @@ const SalaryTableSheet: FC<SalaryTableSheetProps> = ({ headers, categories, init
         <Tbody>
           {categories.map((category) => (
             <Tr key={category.key}>
-              <Td>{category.label}</Td>
+              <Td w={"30%"}>{category.label}</Td>
               {headers.map((header) => (
                 <Td key={header.key}>
                   <input
