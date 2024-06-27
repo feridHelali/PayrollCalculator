@@ -77,9 +77,6 @@ const SalaryTableStructure = ({
 
       )}
 
-      <code>{JSON.stringify(categories, null, 2)}</code>
-      <hr />
-      <code>{JSON.stringify(headers, null, 2)}</code>
     </Box>
   );
 };
