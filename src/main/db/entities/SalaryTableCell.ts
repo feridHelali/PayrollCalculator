@@ -26,7 +26,7 @@ export class SalaryTableCell {
 
   @ManyToOne(() => SalaryTable, (salaryTable) => salaryTable.salaryTableCells)
   @JoinColumn([
-    { name: "SalaryTableId", referencedColumnName: "salaryTableId" },
+    { name: "salaryTableId", referencedColumnName: "salaryTableId" },
   ])
   salaryTable!: SalaryTable;
 }

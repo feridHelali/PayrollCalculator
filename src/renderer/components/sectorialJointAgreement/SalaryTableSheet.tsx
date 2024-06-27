@@ -7,18 +7,18 @@ import { labels } from '../../arabic.labels';
 interface SalaryTableSheetProps {
   headers: ProfessionalDegree[];
   categories: ProfessionalCategory[];
-  initialSalaries: Record<string, Record<string, number>>;
-  onSave: (salaries: Record<string, Record<string, number>>) => void;
+  initialSalaryTableCells: Record<string, Record<string, number>>;
+  onSave: (salaryTableCells: Record<string, Record<string, number>>) => void;
 }
 
-const SalaryTableSheet: FC<SalaryTableSheetProps> = ({ headers, categories, initialSalaries, onSave }) => {
-  const [salaries, setSalaries] = useState(initialSalaries);
+const SalaryTableSheet: FC<SalaryTableSheetProps> = ({ headers, categories, initialSalaryTableCells: initialSalaries, onSave }) => {
+  const [salaryTableCells, setSalaries] = useState(initialSalaries);
 
   const handleSalaryChange = (categoryKey: string, degreeKey: string, value: string) => {
-    setSalaries((prevSalaries) => ({
-      ...prevSalaries,
+    setSalaries((prevSalaryTableCells) => ({
+      ...prevSalaryTableCells,
       [categoryKey]: {
-        ...prevSalaries[categoryKey],
+        ...prevSalaryTableCells[categoryKey],
         [degreeKey]: parseFloat(value) || 0,
       },
     }));
@@ -55,7 +55,7 @@ const SalaryTableSheet: FC<SalaryTableSheetProps> = ({ headers, categories, init
                 <Td key={header.key}>
                   <input
                     type="number"
-                    value={salaries[category.key]?.[header.key] || ''}
+                    value={salaryTableCells[category.key]?.[header.key] || ''}
                     onChange={(e) => handleSalaryChange(category.key, header.key, e.target.value)}
                     style={{ width: '80%' }}
                   />
@@ -66,7 +66,7 @@ const SalaryTableSheet: FC<SalaryTableSheetProps> = ({ headers, categories, init
         </Tbody>
       </Table>
       <VStack mt={4}>
-        <Button leftIcon={<FaSave />} colorScheme="blue" onClick={() => onSave(salaries)}>
+        <Button leftIcon={<FaSave />} colorScheme="blue" onClick={() => onSave(salaryTableCells)}>
           {labels.save}
         </Button>
       </VStack>

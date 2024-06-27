@@ -28,11 +28,9 @@ export interface ProfessionalCategory {
 }
 
 export interface SalaryTableCell {
-    id: number;
     professionalCategory: string;
-    prefessionalSubCategory?: string | null;
-    professionalDegree: number;
-    ageOfWork: number;
+    professionalSubCategory?: string | null;
+    professionalDegree: string;
     salary: number;
-    salaryTable: SalaryTableProps;
+    salaryTableId?: number;
 }

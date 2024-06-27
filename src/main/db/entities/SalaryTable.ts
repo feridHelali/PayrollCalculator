@@ -41,7 +41,7 @@ export class SalaryTable {
   @OneToMany(
     () => SalaryTableCell,
     (salaryTableCell) => salaryTableCell.salaryTable,
-    { cascade: true }
+    { cascade: true ,eager: true}
   )
   salaryTableCells!: SalaryTableCell[];
 

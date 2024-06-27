@@ -19,6 +19,17 @@ import SalaryTableStructure from './SalaryTableStructure';
 import { v4 as uuid } from 'uuid';
 import SalaryTableSheet from './SalaryTableSheet';
 
+const initialSalaryTable: SalaryTableProps = {
+  agreementId: -1,
+  numeroTable: '',
+  type: '',
+  consernedEmployee: '',
+  beginningDateOfApplication: '',
+  endDateOfApplication: '',
+  degrees: [{ key: uuid(), degree: 1, ageOfWork: 1 }],
+  categories: [{ key: uuid(), label: `1 - ${labels.category}` }],
+};
+
 const SalaryTableForm = () => {
   const navigate = useNavigate();
   const { salaryTableId } = useParams<{ salaryTableId: string }>();
@@ -32,7 +43,8 @@ const SalaryTableForm = () => {
 
   const [categories, setCategories] = useState<ProfessionalCategory[]>([{ key: uuid().toString(), label: `1 - ${labels.category}` }]); // Default initial category
   const [headers, setHeaders] = useState<ProfessionalDegree[]>([{ key: uuid().toString(), degree: 1, ageOfWork: 1 }]);
-  const [salaries, setSalaries] = useState<Record<string, Record<string, number>>>({});
+  const [salaryTableCells, setSalaryTableCells] = useState<Record<string, Record<string, number>>>({});
+  const [newSalaryTable, setNewSalaryTable]: [Partial<SalaryTableProps>, any] = useState(initialSalaryTable);
 
   useEffect(() => {
     dispatch(setStatus(salaryTableStatus));
@@ -52,7 +64,7 @@ const SalaryTableForm = () => {
   }, [salaryTableId, dispatch]);
 
   useEffect(() => {
-    if (currentSalaryTable) {
+    if (currentSalaryTable && mode === 'update') {
       setNewSalaryTable({
         ...currentSalaryTable,
         beginningDateOfApplication: new Date(currentSalaryTable.beginningDateOfApplication),
@@ -61,16 +73,15 @@ const SalaryTableForm = () => {
       setCategories(currentSalaryTable.categories);
       setHeaders(currentSalaryTable.degrees);
       // Populate salaries from the current salary table cells
-      
       const salaryData: Record<string, Record<string, number>> = {};
 
       currentSalaryTable.salaryTableCells?.forEach(cell => {
         if (!salaryData[cell.professionalCategory]) {
           salaryData[cell.professionalCategory] = {};
         }
-        salaryData[cell.professionalCategory][`${cell.professionalDegree}-${cell.ageOfWork}`] = cell.salary;
+        salaryData[cell.professionalCategory][cell.professionalDegree] = cell.salary;
       });
-      setSalaries(salaryData);
+      setSalaryTableCells(salaryData);
 
     }
   }, [currentSalaryTable]);
@@ -112,7 +123,6 @@ const SalaryTableForm = () => {
   };
 
   const handleChangeCategoryLabel = (categoryKey: any, label: any) => {
-
     const newCategories = categories.map((category: ProfessionalCategory) => {
       if (category.key === categoryKey) {
         category.label = label;
@@ -122,23 +132,6 @@ const SalaryTableForm = () => {
 
     setCategories(newCategories);
   };
-
-
-
-  const initialSalaryTable: SalaryTableProps = {
-    agreementId: -1,
-    numeroTable: '',
-    type: '',
-    consernedEmployee: '',
-    beginningDateOfApplication: '',
-    endDateOfApplication: '',
-    degrees: [{ key: uuid(), degree: 1, ageOfWork: 1 }],
-    categories: [{ key: uuid(), label: `1 - ${labels.category}` }],
-  };
-
-  const [newSalaryTable, setNewSalaryTable]: [Partial<SalaryTableProps>, any] = useState(initialSalaryTable);
-
-
 
   const handleCreateOrUpdate = () => {
     if (mode === 'create') {
@@ -167,8 +160,8 @@ const SalaryTableForm = () => {
   };
 
   const handleUpdate = () => {
-    if (currentSalaryTable && isSalaryTableStructureReadyToBeSaved(newSalaryTable)) {
-      dispatch(updateSalaryTable({ ...newSalaryTable, salaryTableId: currentSalaryTable.salaryTableId }))
+    if (currentSalaryTable && isSalaryTableStructureReadyToBeSaved(currentSalaryTable)) {
+      dispatch(updateSalaryTable({ ...currentSalaryTable, salaryTableId: currentSalaryTable.salaryTableId }))
         .then(() => {
           if (salaryTableStatus === 'succeeded') {
             dispatch(setStatus(`${labels.salaryTableForm} - ${labels.updated} - ${labels.successfully}`));
@@ -189,31 +182,27 @@ const SalaryTableForm = () => {
     handleSave(salaries);
   };
   const handleSave = async (salaries: Record<string, Record<string, number>>) => {
-    const salaryTable = {
-      ...newSalaryTable,
-      salaries: Object.entries(salaries).flatMap(([category, degreeAges]) =>
-        Object.entries(degreeAges).map(([degreeAge, salary]) => {
-          const [degree, age] = degreeAge.split('-').map(Number);
+    const salaryTable: Partial<SalaryTableProps> = {
+      ...currentSalaryTable,
+      salaryTableCells: Object.entries(salaries).flatMap(([category, degreeAges]) =>
+        Object.entries(degreeAges).map(([degree, salary]) => {
           return {
             professionalCategory: category,
-            professionalDegree: { degree, ageOfWork: age },
+            professionalDegree: degree,
             salary: salary,
           };
         })
       ),
     };
 
-    await Promise.all([
-      dispatch(updateSalaryTable(salaryTable)).then(() => {
-        navigate('/salary-tables')
-      }),
-      dispatch(setStatus(`${labels.salaryTableForm} - ${labels.updated} - ${labels.successfully}`)),
+    dispatch(updateSalaryTable(salaryTable)).then(() => {
+      navigate('/salary-tables');
+      dispatch(setStatus(`${labels.salaryTableForm} - ${labels.updated} - ${labels.successfully}`));
       setTimeout(() => {
         dispatch(clearStatus());
-      }, 9000)
-    ]);
+      }, 9000);
+    })
   };
-
 
 
 
@@ -221,7 +210,7 @@ const SalaryTableForm = () => {
   return (
     <>
       <Box dir='rtl' marginLeft={"210px"} p={4} display="flex" flexDirection="column" alignItems="center">
-        <pre><code>{JSON.stringify(salaries, null, 2)}</code></pre>
+        <pre dir='ltr'><code>{JSON.stringify(salaryTableCells, null, 2)}</code></pre>
         <Heading mb={5} alignContent={'center'} fontSize={'2xl'} >{labels.salaryTableForm} {mode === 'create' ? labels.create : labels.update}</Heading>
         {salaryTableStatus === 'loading' && <AlfaSpinner />}
         {error && <Text color="red.500">{labels.error}: {error}</Text>}
@@ -331,7 +320,7 @@ const SalaryTableForm = () => {
                 <SalaryTableSheet
                   headers={headers}
                   categories={categories}
-                  initialSalaries={salaries}
+                  initialSalaryTableCells={salaryTableCells}
                   onSave={handleSaveSalaries}
                 />
               </Box>
