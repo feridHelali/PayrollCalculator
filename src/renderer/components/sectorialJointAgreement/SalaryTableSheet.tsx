@@ -7,15 +7,15 @@ import { labels } from '../../arabic.labels';
 interface SalaryTableSheetProps {
   headers: ProfessionalDegree[];
   categories: ProfessionalCategory[];
-  initialSalaryTableCells: Record<string, Record<string, number>>;
+  salaryTableCells: Record<string, Record<string, number>>;
   onSave: (salaryTableCells: Record<string, Record<string, number>>) => void;
 }
 
-const SalaryTableSheet: FC<SalaryTableSheetProps> = ({ headers, categories, initialSalaryTableCells: initialSalaries, onSave }) => {
-  const [salaryTableCells, setSalaries] = useState(initialSalaries);
+const SalaryTableSheet: FC<SalaryTableSheetProps> = ({ headers, categories, salaryTableCells: intialSalaryTableCells, onSave }) => {
+  const [salaryTableCells, setSalaryTableCells] = useState(intialSalaryTableCells);
 
   const handleSalaryChange = (categoryKey: string, degreeKey: string, value: string) => {
-    setSalaries((prevSalaryTableCells) => ({
+    setSalaryTableCells((prevSalaryTableCells) => ({
       ...prevSalaryTableCells,
       [categoryKey]: {
         ...prevSalaryTableCells[categoryKey],

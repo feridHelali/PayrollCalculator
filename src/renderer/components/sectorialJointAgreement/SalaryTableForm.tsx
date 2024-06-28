@@ -210,7 +210,6 @@ const SalaryTableForm = () => {
   return (
     <>
       <Box dir='rtl' marginLeft={"210px"} p={4} display="flex" flexDirection="column" alignItems="center">
-        <pre dir='ltr'><code>{JSON.stringify(salaryTableCells, null, 2)}</code></pre>
         <Heading mb={5} alignContent={'center'} fontSize={'2xl'} >{labels.salaryTableForm} {mode === 'create' ? labels.create : labels.update}</Heading>
         {salaryTableStatus === 'loading' && <AlfaSpinner />}
         {error && <Text color="red.500">{labels.error}: {error}</Text>}
@@ -320,7 +319,7 @@ const SalaryTableForm = () => {
                 <SalaryTableSheet
                   headers={headers}
                   categories={categories}
-                  initialSalaryTableCells={salaryTableCells}
+                  salaryTableCells={salaryTableCells}
                   onSave={handleSaveSalaries}
                 />
               </Box>
