@@ -11,9 +11,27 @@ interface SalaryTableSheetProps {
   onSave: (salaryTableCells: Record<string, Record<string, number>>) => void;
 }
 
-const SalaryTableSheet: FC<SalaryTableSheetProps> = ({ headers, categories, salaryTableCells: intialSalaryTableCells, onSave }) => {
-  const [salaryTableCells, setSalaryTableCells] = useState(intialSalaryTableCells);
+interface Header {
+  key: string;
+  degree: number;
+  ageOfWork: number;
+}
 
+interface Category {
+  key: string;
+  label: string;
+}
+
+
+type RowData = {
+  category: string;
+  [key: string]: number | string;
+};
+
+const SalaryTableSheet: FC<SalaryTableSheetProps> = ({ headers, categories, salaryTableCells: intialSalaryTableCells, onSave }) => {
+  console.dir(intialSalaryTableCells, 'SalaryTableSheet');
+  const [salaryTableCells, setSalaryTableCells] = useState(intialSalaryTableCells);
+ console.log(salaryTableCells, 'SalaryTableSheet');
   const handleSalaryChange = (categoryKey: string, degreeKey: string, value: string) => {
     setSalaryTableCells((prevSalaryTableCells) => ({
       ...prevSalaryTableCells,
