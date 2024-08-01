@@ -13,7 +13,6 @@
 - The `SalaryTableForm` component is used to create or update a salary table entry. It initializes necessary state variables and manages form inputs and selections.
 - The `SalaryTableInput` component generates a table based on the provided headers (degrees and ages of work) and categories, allowing users to input salaries corresponding to each category, degree, and age of work combination.
 
-This setup should fit your requirement of generating salary table headers and rows based on degrees and ages of work for inputting salaries. Adjustments can be made based on additional requirements or specific UI/UX preferences.
 
 ## Implementing SalaryTableSheet
 To implement the SalaryTableSheet component and integrate it with the rest of your application, you will need to create a matrix-like structure where salaries can be input based on degrees as headers and categories as rows. Additionally, a save button will be required to update the whole SalaryTable, including the matrix values.
