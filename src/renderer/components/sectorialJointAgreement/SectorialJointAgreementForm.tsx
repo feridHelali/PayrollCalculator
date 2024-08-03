@@ -7,7 +7,7 @@ import { AppDispatch, RootState } from '../../redux/store';
 import { createAgreement, fetchAgreementById, switchToUpdateMode,switchToCreateMode, updateAgreement } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import AlfaSpinner from '../../shared/AlfaSpinner';
-import { SalaryTableProps } from '../../../types/salaryTableProps';
+
 
 const initialAgreement: sectorialJointAgreementProps = {
     sectorialJointAgreementId: 0,

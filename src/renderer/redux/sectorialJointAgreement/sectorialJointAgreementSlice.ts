@@ -64,6 +64,7 @@ const sectorialJointAgreementSlice = createSlice({
     },
     switchToCreateMode: (state) => {
       state.mode = 'create';
+      state.currentAgreement = null;
     }
   },
   extraReducers: (builder) => {
@@ -98,14 +99,26 @@ const sectorialJointAgreementSlice = createSlice({
         state.error = null;
         state.mode = 'create';
       })
+      .addCase(createAgreement.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message ?? null;
+      })
       .addCase(updateAgreement.fulfilled, (state, action: PayloadAction<sectorialJointAgreementProps>) => {
         const index = state.agreements.findIndex(agreement => agreement.sectorialJointAgreementId === action.payload.sectorialJointAgreementId);
         if (index >= 0) {
           state.agreements[index] = action.payload;
         }
       })
+      .addCase(updateAgreement.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message ?? null;
+      })
       .addCase(deleteAgreement.fulfilled, (state, action: PayloadAction<number>) => {
         state.agreements = state.agreements.filter(agreement => agreement.sectorialJointAgreementId !== action.payload);
+      })
+      .addCase(deleteAgreement.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message ?? null;
       });
   },
 });
