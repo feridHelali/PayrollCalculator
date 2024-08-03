@@ -2,9 +2,10 @@ import 'reflect-metadata';
 import path from 'path';
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions, ipcMain } from 'electron';
 import initializeDatabase from './db/initializeDatabase';
-import { SecrorialJointAgreementService } from './services/SectorialJointAgreementService';
+
 import { SalaryTableService } from './services/SalaryTableService';
 import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
+import { SectorialJointAgreementService } from './services/SectorialJointAgreementService';
 
 
 
@@ -49,7 +50,7 @@ app.on('ready', async () => {
   try {
     await initializeDatabase();
 
-    const agreementService = new SecrorialJointAgreementService();
+    const agreementService = new SectorialJointAgreementService();
     const salaryTableService = new SalaryTableService();
 
 

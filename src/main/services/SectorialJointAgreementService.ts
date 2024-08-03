@@ -1,30 +1,40 @@
-import { SectorialJointAgreementRepository } from '../db/repositories/SectorialJointAgreementRepository';
+import { Repository } from 'typeorm';
+import AppDataSource from '../../main/typeorm.config';
 import { SectorialJointAgreement } from '../db/entities/SectorialJointAgreement';
 
-export class SecrorialJointAgreementService {
-  private repository: SectorialJointAgreementRepository;
+export class SectorialJointAgreementService {
+  private repository: Repository<SectorialJointAgreement>;
 
   constructor() {
-    this.repository = new SectorialJointAgreementRepository();
+    this.repository = AppDataSource.getRepository(SectorialJointAgreement);
   }
 
   async getAllSectorialJointAgreements(): Promise<SectorialJointAgreement[]> {
-    return this.repository.findAll();
+    return this.repository.find({
+      order: {
+        sectorialJointAgreementId: 'ASC',
+      },
+      relations: {
+        salaryTables: true,
+      }
+    });
   }
 
   async getSectorialJointAgreementById(id: number): Promise<SectorialJointAgreement | undefined> {
-    return this.repository.findById(id);
+    return this.repository.findOne({ where: { sectorialJointAgreementId: id }, relations: { salaryTables: true } }) as Promise<SectorialJointAgreement | undefined>;
   }
 
   async createSectorialJointAgreement(sectorialJointAgreementData: Partial<SectorialJointAgreement>): Promise<SectorialJointAgreement> {
-    return this.repository.create(sectorialJointAgreementData);
+    return this.repository.save(sectorialJointAgreementData);
   }
 
-  async updateSectorialJointAgreement(id: number, sectorialJointAgreementData: Partial<SectorialJointAgreement>): Promise<SectorialJointAgreement | undefined> {
-    return this.repository.update(id, sectorialJointAgreementData);
+  async updateSectorialJointAgreement(id: number, agreementData: Partial<SectorialJointAgreement>): Promise<SectorialJointAgreement | undefined> {
+    const { salaryTables, ...updateData } = agreementData;
+    await this.repository.update(id, updateData);
+    return this.getSectorialJointAgreementById(id);
   }
 
   async deleteSectorialJointAgreement(id: number): Promise<void> {
-    return this.repository.delete(id);
+    await this.repository.delete(id);
   }
 }
