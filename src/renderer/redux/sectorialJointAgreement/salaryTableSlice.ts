@@ -113,6 +113,27 @@ const salaryTableSlice = createSlice({
         state.salaryTables.push(action.payload);
         state.status = 'succeeded';
         state.error = null;
+      }).addCase(createSalaryTable.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message ?? null;
+      })
+      .addCase(updateSalaryTable.fulfilled, (state, action: PayloadAction<SalaryTableProps>) => {
+        state.status = 'succeeded';
+        state.error = null;
+        state.currentSalaryTable = action.payload;
+      })
+      .addCase(updateSalaryTable.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message ?? null;
+      })
+      .addCase(deleteSalaryTable.fulfilled, (state, action: PayloadAction<SalaryTableProps>) => {
+        state.status = 'succeeded';
+        state.error = null;
+        state.currentSalaryTable = action.payload;
+      })
+      .addCase(deleteSalaryTable.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message ?? null;
       });
   },
 });
