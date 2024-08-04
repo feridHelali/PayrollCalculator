@@ -1,3 +1,4 @@
+// ./src/rendrer/components/salaryTables/SalaryTableForm.tsx
 import React, { useState, useEffect } from 'react';
 import {
   Button, Input, Box, Heading, Text, FormControl, FormLabel, Select, VStack,
@@ -18,6 +19,7 @@ import { clearStatus, setStatus } from '../../redux/common/statusSlice';
 import SalaryTableStructure from './SalaryTableStructure';
 import { v4 as uuid } from 'uuid';
 import SalaryTableSheet from './SalaryTableSheet';
+import { SalaryTableProvider, useSalaryTableContext } from './contexts/SalaryTableContext'
 
 const initialSalaryTable: SalaryTableProps = {
   agreementId: -1,
@@ -30,7 +32,15 @@ const initialSalaryTable: SalaryTableProps = {
   categories: [{ key: uuid(), label: `1 - ${labels.category}` }],
 };
 
-const SalaryTableForm = () => {
+const SalaryTableForm: React.FC = () => {
+  return (
+    <SalaryTableProvider>
+      <SalaryTableFormContent />
+    </SalaryTableProvider>
+  )
+}
+
+const SalaryTableFormContent = () => {
   const navigate = useNavigate();
   const { salaryTableId } = useParams<{ salaryTableId: string }>();
   const dispatch: AppDispatch = useAppDispatch();
@@ -41,9 +51,7 @@ const SalaryTableForm = () => {
   const currentSalaryTable = useAppSelector((state: RootState) => state.salaryTables.currentSalaryTable);
 
 
-  const [categories, setCategories] = useState<ProfessionalCategory[]>([{ key: uuid().toString(), label: `1 - ${labels.category}` }]); // Default initial category
-  const [headers, setHeaders] = useState<ProfessionalDegree[]>([{ key: uuid().toString(), degree: 1, ageOfWork: 1 }]);
-  const [salaryTableCells, setSalaryTableCells] = useState<Record<string, Record<string, number>>>({});
+  const { categories, headers, salaryTableCells, setCategories, setHeaders, setSalaryTableCells } = useSalaryTableContext();
   const [newSalaryTable, setNewSalaryTable]: [Partial<SalaryTableProps>, any] = useState(initialSalaryTable);
 
   useEffect(() => {
@@ -85,53 +93,11 @@ const SalaryTableForm = () => {
 
     }
   }, [currentSalaryTable]);
-  const handleAddDegreeAndAgeOfWork = () => {
-    const newDegree = headers.length + 1;
-    const newAgeOfWork = 0;
-    setHeaders([...headers, { key: uuid().toString(), degree: newDegree, ageOfWork: newAgeOfWork }]);
-  };
 
-  const handleAddCategory = () => {
-    const newCategory = { key: uuid().toString(), label: `${categories.length + 1} - ${labels.category}` };
-    setCategories([...categories, newCategory]);
-  };
 
-  const handleRemoveDegreeAndAgeOfWork = () => {
-    if (headers.length > 1) {
-      const newHeaders = [...headers];
-      newHeaders.pop();
-      setHeaders(newHeaders);
-    }
-  }
 
-  const handleRemoveCategory = () => {
-    if (categories.length > 1) {
-      const newCategories = [...categories];
-      newCategories.pop();
-      setCategories(newCategories);
-    }
-  }
 
-  const handleChangeDegreeAndAgeOfWork = (key: any, ageOfWork: any) => {
-    const newHeaders = headers.map((header: any) => {
-      if (header.key === key) {
-        header.ageOfWork = ageOfWork;
-      }
-      return header;
-    });
-    setHeaders(newHeaders);
-  };
 
-  const handleChangeCategoryLabel = (categoryKey: any, label: any) => {
-    const newCategories = categories.map((category: ProfessionalCategory) => {
-      if (category.key === categoryKey) {
-        category.label = label;
-      }
-      return category;
-    });
-
-    setCategories(newCategories);
-  };
 
   const handleCreateOrUpdate = () => {
     if (mode === 'create') {
@@ -161,7 +127,20 @@ const SalaryTableForm = () => {
 
   const handleUpdate = () => {
     if (currentSalaryTable && isSalaryTableStructureReadyToBeSaved(currentSalaryTable)) {
-      dispatch(updateSalaryTable({ ...currentSalaryTable, salaryTableId: currentSalaryTable.salaryTableId }))
+      const salaryTable: Partial<SalaryTableProps> = {
+        ...currentSalaryTable,
+        salaryTableCells: Object.entries(salaryTableCells).flatMap(([category, degreeAges]) =>
+          Object.entries(degreeAges).map(([degree, salary]) => {
+            return {
+              professionalCategory: category,
+              professionalDegree: degree,
+              salary: salary,
+            };
+          })
+        ),
+      };
+  
+      dispatch(updateSalaryTable({ ...salaryTable, salaryTableId: currentSalaryTable.salaryTableId }))
         .then(() => {
           if (salaryTableStatus === 'succeeded') {
             dispatch(setStatus(`${labels.salaryTableForm} - ${labels.updated} - ${labels.successfully}`));
@@ -175,33 +154,6 @@ const SalaryTableForm = () => {
           }, 9000);
         });
     }
-  };
-
-  const handleSaveSalaries = (salaries: Record<string, Record<string, number>>) => {
-    // Update the salary table with the new salary values
-    handleSave(salaries);
-  };
-  const handleSave = async (salaries: Record<string, Record<string, number>>) => {
-    const salaryTable: Partial<SalaryTableProps> = {
-      ...currentSalaryTable,
-      salaryTableCells: Object.entries(salaries).flatMap(([category, degreeAges]) =>
-        Object.entries(degreeAges).map(([degree, salary]) => {
-          return {
-            professionalCategory: category,
-            professionalDegree: degree,
-            salary: salary,
-          };
-        })
-      ),
-    };
-
-    dispatch(updateSalaryTable(salaryTable)).then(() => {
-      navigate('/salary-tables');
-      dispatch(setStatus(`${labels.salaryTableForm} - ${labels.updated} - ${labels.successfully}`));
-      setTimeout(() => {
-        dispatch(clearStatus());
-      }, 9000);
-    })
   };
 
 
@@ -295,12 +247,48 @@ const SalaryTableForm = () => {
                 salaryTable={newSalaryTable}
                 headers={headers}
                 categories={categories}
-                handleAddCategory={handleAddCategory}
-                handleRemoveCategory={handleRemoveCategory}
-                handleAddDegreeAndAgeOfWork={handleAddDegreeAndAgeOfWork}
-                handleRemoveDegreeAndAgeOfWork={handleRemoveDegreeAndAgeOfWork}
-                handleChangeCategoryLabel={handleChangeCategoryLabel}
-                handleChangeDegreeAndAgeOfWork={handleChangeDegreeAndAgeOfWork}
+                handleAddCategory={() => {
+                  const newCategory = { key: uuid().toString(), label: `${categories.length + 1} - ${labels.category}` };
+                  setCategories([...categories, newCategory]);
+                }}
+                handleRemoveCategory={() => {
+                  if (categories.length > 1) {
+                    const newCategories = [...categories];
+                    newCategories.pop();
+                    setCategories(newCategories);
+                  }
+                }}
+                handleAddDegreeAndAgeOfWork={() => {
+                  const newDegree = headers.length + 1;
+                  const newAgeOfWork = 0;
+                  setHeaders([...headers, { key: uuid().toString(), degree: newDegree, ageOfWork: newAgeOfWork }]);
+                }}
+                handleRemoveDegreeAndAgeOfWork={() => {
+                  if (headers.length > 1) {
+                    const newHeaders = [...headers];
+                    newHeaders.pop();
+                    setHeaders(newHeaders);
+                  }
+                }}
+                handleChangeCategoryLabel={(categoryKey: any, label: any) => {
+                  const newCategories = categories.map((category: ProfessionalCategory) => {
+                    if (category.key === categoryKey) {
+                      category.label = label;
+                    }
+                    return category;
+                  });
+
+                  setCategories(newCategories);
+                }}
+              handleChangeDegreeAndAgeOfWork={(key: any, ageOfWork: any) => {
+                const newHeaders = headers.map((header: any) => {
+                  if (header.key === key) {
+                    header.ageOfWork = ageOfWork;
+                  }
+                  return header;
+                });
+                setHeaders(newHeaders);
+              }}
               />
               <Button
                 leftIcon={<FaSave />}
@@ -316,12 +304,7 @@ const SalaryTableForm = () => {
           {mode === 'update' && currentSalaryTable && (
             <>
               <Box mt={4}>
-                <SalaryTableSheet
-                  headers={headers}
-                  categories={categories}
-                  salaryTableCells={salaryTableCells}
-                  onSave={handleSaveSalaries}
-                />
+                <SalaryTableSheet />
               </Box>
               <Button
                 leftIcon={<FaSave />}

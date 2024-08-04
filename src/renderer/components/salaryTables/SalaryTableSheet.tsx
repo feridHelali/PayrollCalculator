@@ -3,13 +3,8 @@ import { Box, Button, Table, Tbody, Td, Th, Thead, Tr, VStack } from '@chakra-ui
 import { FaSave } from 'react-icons/fa';
 import { ProfessionalCategory, ProfessionalDegree } from '../../../types/salaryTableProps';
 import { labels } from '../../arabic.labels';
+import { useSalaryTableContext } from './contexts/SalaryTableContext';
 
-interface SalaryTableSheetProps {
-  headers: ProfessionalDegree[];
-  categories: ProfessionalCategory[];
-  salaryTableCells: Record<string, Record<string, number>>;
-  onSave: (salaryTableCells: Record<string, Record<string, number>>) => void;
-}
 
 interface Header {
   key: string;
@@ -28,10 +23,9 @@ type RowData = {
   [key: string]: number | string;
 };
 
-const SalaryTableSheet: FC<SalaryTableSheetProps> = ({ headers, categories, salaryTableCells: intialSalaryTableCells, onSave }) => {
-  console.dir(intialSalaryTableCells, 'SalaryTableSheet');
-  const [salaryTableCells, setSalaryTableCells] = useState(intialSalaryTableCells);
- console.log(salaryTableCells, 'SalaryTableSheet');
+const SalaryTableSheet: FC = () => {
+  
+  const { categories, headers, salaryTableCells, setSalaryTableCells } = useSalaryTableContext();
   const handleSalaryChange = (categoryKey: string, degreeKey: string, value: string) => {
     setSalaryTableCells((prevSalaryTableCells) => ({
       ...prevSalaryTableCells,
@@ -84,9 +78,9 @@ const SalaryTableSheet: FC<SalaryTableSheetProps> = ({ headers, categories, sala
         </Tbody>
       </Table>
       <VStack mt={4}>
-        <Button leftIcon={<FaSave />} colorScheme="blue" onClick={() => onSave(salaryTableCells)}>
+        {/* <Button leftIcon={<FaSave />} colorScheme="blue" onClick={() => onSave(salaryTableCells)}>
           {labels.save}
-        </Button>
+        </Button> */}
       </VStack>
     </Box>
   );
