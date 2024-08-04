@@ -5,7 +5,7 @@ import {
 import { FaSave } from 'react-icons/fa';
 import {
   createSalaryTable, fetchSalaryTableById, updateSalaryTable, switchToCreateMode, switchToUpdateMode
-} from '../../redux/sectorialJointAgreement/salaryTableSlice';
+} from '../../redux/sectorialJointAgreement/salaryTablesSlice';
 import { AppDispatch, RootState } from '../../redux/store';
 import { useAppDispatch, useAppSelector } from '../../redux/redux.hooks';
 import AlfaSpinner from '../../shared/AlfaSpinner';

@@ -7,9 +7,10 @@ import AffairPage from './pages/AffairPage';
 import './styles/rtl.css'; 
 import SectorialJointAgreementForm from './components/sectorialJointAgreement/SectorialJointAgreementForm';
 import SectorialJointAgreementPage from './pages/SectorialJointAgreementPage';
-import SalaryTableForm from './components/sectorialJointAgreement/SalaryTableForm';
-import SalaryTablesList from './components/sectorialJointAgreement/SalaryTablesList';
-import StatusBar from './components/sectorialJointAgreement/StatusBar';
+import SalaryTableForm from './components/salaryTables/SalaryTableForm';
+import SalaryTablesList from './components/salaryTables/SalaryTablesList';
+import StatusBar from './components/StatusBar';
+
 
 const App: React.FC = () => {
   return (

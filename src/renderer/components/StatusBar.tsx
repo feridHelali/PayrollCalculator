@@ -2,7 +2,7 @@
 import React from 'react';
 import { Box, Text } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
+import { RootState } from '../redux/store';
 
 const StatusBar: React.FC = () => {
   const statusMessage = useSelector((state: RootState) => state.status.message);

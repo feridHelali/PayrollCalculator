@@ -15,7 +15,7 @@ import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import { useAppDispatch, useAppSelector } from '../../redux/redux.hooks';
 import { useNavigate } from 'react-router-dom';
 import { SalaryTableProps } from '../../../types/salaryTableProps';
-import { deleteSalaryTable, fetchAllSalaryTables } from '../../redux/sectorialJointAgreement/salaryTableSlice';
+import { deleteSalaryTable, fetchAllSalaryTables } from '../../redux/sectorialJointAgreement/salaryTablesSlice';
 import AlfaSpinner from '../../shared/AlfaSpinner';
 
 

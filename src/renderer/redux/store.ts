@@ -1,7 +1,7 @@
 // store.ts
 import { configureStore } from '@reduxjs/toolkit';
 import sectorialJointAgreementReducer from './sectorialJointAgreement/sectorialJointAgreementSlice';
-import salaryTableReducer from './sectorialJointAgreement/salaryTableSlice';
+import salaryTableReducer from './sectorialJointAgreement/salaryTablesSlice';
 import statusReducer from './common/statusSlice';
 
 const store = configureStore({

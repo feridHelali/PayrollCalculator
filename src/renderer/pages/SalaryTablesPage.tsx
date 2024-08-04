@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Heading } from '@chakra-ui/react';
 import { labels } from '../arabic.labels';
-import SalaryTablesList from '../components/sectorialJointAgreement/SalaryTablesList';
+import SalaryTablesList from '../components/salaryTables/SalaryTablesList';
 
 const SalaryTablesPage:React.FC =()=> {
   
