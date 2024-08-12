@@ -60,12 +60,16 @@
   width: 80%;
   padding: 0.25rem;
   font-size: 0.75rem;
-  border: 1px solid #585858; /* Border for input fields inside cells */
+  border: 2px solid #585858; /* Thicker border for input fields inside cells */
   border-radius: 4px;
   text-align: right;
+  background-color: #ffffff; /* White background for input fields */
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2); /* Subtle shadow for focus */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
 }
 
 .salary-table-sheet__body-input:focus {
   outline: none;
   border-color: #3498db; /* Focus border color for input fields */
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.8); /* More intense shadow on focus */
 }
