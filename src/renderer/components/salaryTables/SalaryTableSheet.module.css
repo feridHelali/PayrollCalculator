@@ -1,0 +1,55 @@
+.salary-table-sheet__container {
+  margin-top: 4rem;
+  padding: 1rem;
+  font-size: 0.75rem;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  width: calc(100vw - 220px);
+  height: 60vh;
+  overflow: auto;
+  margin-left: 200px;
+  direction: rtl;
+}
+
+.salary-table-sheet__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.salary-table-sheet__header {
+  height: 70px;
+  text-align: center;
+  font-size: 0.75rem;
+  background-color: #e0e0e0;
+}
+
+.salary-table-sheet__header-cell {
+  padding: 0.5rem;
+}
+
+.salary-table-sheet__body-row {
+}
+
+.salary-table-sheet__body-row.salary-table-sheet__body-row--active {
+  background-color: #dfe6e9;
+}
+
+.salary-table-sheet__body-cell {
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.salary-table-sheet__body-input {
+  width: 80%;
+  padding: 0.25rem;
+  font-size: 0.75rem;
+  border: 1px solid #585858;
+  border-radius: 4px;
+  text-align: right;
+  
+}
+
+.salary-table-sheet__body-input:focus {
+  outline: none;
+  border-color: #3498db;
+}

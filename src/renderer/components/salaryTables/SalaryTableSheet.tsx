@@ -1,9 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Box, Button, Table, Tbody, Td, Th, Thead, Tr, VStack } from '@chakra-ui/react';
-import { FaSave } from 'react-icons/fa';
+//import { FaSave } from 'react-icons/fa';
 import { ProfessionalCategory, ProfessionalDegree } from '../../../types/salaryTableProps';
 import { labels } from '../../arabic.labels';
 import { useSalaryTableContext } from './contexts/SalaryTableContext';
+import  './SalaryTableSheet.module.css'
 
 
 interface Header {
@@ -37,34 +38,24 @@ const SalaryTableSheet: FC = () => {
   };
 
   return (
-    <Box 
-    mt={4}
-    p={4}
-    fontSize={'xs'}
-    bgColor={'gray.100'}
-    borderRadius={5}
-    width={'calc(100vw - 220px)'}
-    height={'60vh'}
-    overflow={'auto'}
-    ml="200px"  // Adjust this if the width of your sidenav changes
-    dir='rtl'>
-      <Table variant="simple">
-        <Thead>
-          <Tr fontSize={'xs'}>
-            <Th h={"70px"}>{labels.category}</Th>
+    <Box className='salary-table-sheet__container'>
+      <Table  className='salary-table-sheet__table'>
+        <Thead className='salary-table-sheet__header'>
+          <Tr>
+            <Th className='salary-table-sheet__header-cell'>{labels.category}</Th>
             {headers.map((header) => (
-              <Th key={header.key}>
+              <Th key={header.key}  className='salary-table-sheet__header-cell'>
                 {labels.degree} {header.degree} <br />{labels.ageOfWork}: {header.ageOfWork}
               </Th>
             ))}
           </Tr>
         </Thead>
-        <Tbody>
+        <Tbody className='salary-table-sheet__body'>
           {categories.map((category) => (
-            <Tr key={category.key}>
-              <Td w={"70px"}>{category.label}</Td>
+            <Tr key={category.key} className='salary-table-sheet__body-row'>
+              <Td className='salary-table-sheet__body-row-cell'>{category.label}</Td>
               {headers.map((header) => (
-                <Td key={header.key}>
+                <Td key={header.key} className='salary-table-sheet__body-row-cell'>
                   <input
                     type="number"
                     value={salaryTableCells[category.key]?.[header.key] || ''}
