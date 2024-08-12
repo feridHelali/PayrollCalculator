@@ -14,6 +14,7 @@
 .salary-table-sheet__table {
   width: 100%;
   border-collapse: collapse;
+  border: 1px solid #585858; /* Border around the entire table */
 }
 
 .salary-table-sheet__header {
@@ -21,13 +22,24 @@
   text-align: center;
   font-size: 0.75rem;
   background-color: #e0e0e0;
+  border-bottom: 2px solid #585858; /* Bottom border for the header row */
 }
 
 .salary-table-sheet__header-cell {
   padding: 0.5rem;
+  border-right: 1px solid #585858; /* Right border for header cells */
+}
+
+.salary-table-sheet__header-cell:last-child {
+  border-right: none; /* Remove the right border for the last header cell */
 }
 
 .salary-table-sheet__body-row {
+  border-bottom: 1px solid #ccc; /* Bottom border for body rows */
+}
+
+.salary-table-sheet__body-row:last-child {
+  border-bottom: none; /* Remove the bottom border for the last body row */
 }
 
 .salary-table-sheet__body-row.salary-table-sheet__body-row--active {
@@ -37,19 +49,23 @@
 .salary-table-sheet__body-cell {
   padding: 0.5rem;
   text-align: center;
+  border-right: 1px solid #ccc; /* Right border for body cells */
+}
+
+.salary-table-sheet__body-cell:last-child {
+  border-right: none; /* Remove the right border for the last body cell */
 }
 
 .salary-table-sheet__body-input {
   width: 80%;
   padding: 0.25rem;
   font-size: 0.75rem;
-  border: 1px solid #585858;
+  border: 1px solid #585858; /* Border for input fields inside cells */
   border-radius: 4px;
   text-align: right;
-  
 }
 
 .salary-table-sheet__body-input:focus {
   outline: none;
-  border-color: #3498db;
+  border-color: #3498db; /* Focus border color for input fields */
 }
