@@ -6,6 +6,7 @@ import initializeDatabase from './db/initializeDatabase';
 import { SalaryTableService } from './services/SalaryTableService';
 import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { SectorialJointAgreementService } from './services/SectorialJointAgreementService';
+import { AffairService } from './services/AffairService';
 
 
 
@@ -52,6 +53,7 @@ app.on('ready', async () => {
 
     const agreementService = new SectorialJointAgreementService();
     const salaryTableService = new SalaryTableService();
+    const affairService = new AffairService();
 
 
     // Register IPC handlers only after the data source is initialized
@@ -100,6 +102,29 @@ app.on('ready', async () => {
       await salaryTableService.delete(id);
       return id;
     });
+
+
+    ipcMain.handle('fetch-affairs', async () => {
+      return await affairService.getAllAffairs();
+    });
+
+    ipcMain.handle('fetch-affair-by-id', async (event, id) => {
+      return await affairService.getAffairById(id);
+    });
+
+    ipcMain.handle('create-affair', async (event, affair) => {
+      return await affairService.createAffair(affair);
+    });
+
+    ipcMain.handle('update-affair', async (event, affair) => {
+      return await affairService.updateAffair(affair.affairId, affair);
+    });
+
+    ipcMain.handle('delete-affair', async (event, id) => {
+      await affairService.deleteAffair(id);
+      return id;
+    });
+
 
     createWindow();
   } catch (err) {

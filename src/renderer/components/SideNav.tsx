@@ -12,7 +12,10 @@ const SideNav: React.FC = () => {
         </Link>
         <hr/>
         <Link as={RouterLink} to="/affairs" display={"flex"} alignItems={"flex-start"}>
-          <FaBriefcase style={{ marginLeft: '10px' }} />{labels.affair}
+          <FaBriefcase style={{ marginLeft: '10px' }} />{labels.affairList}
+        </Link>
+        <Link as={RouterLink} to="/affair-form" display={"flex"} alignItems={"flex-start"}>
+          <FaPlusSquare style={{ marginLeft: '10px' }} /> {labels.addAffair}
         </Link>
         <hr/>
         <Link as={RouterLink} to="/agreements" display={"flex"} alignItems={"flex-start"}>

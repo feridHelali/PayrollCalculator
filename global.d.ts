@@ -14,6 +14,11 @@ interface ElectronAPI {
   createSalaryTable: (salaryTable: any) => Promise<any>;
   updateSalaryTable: (salaryTable: any) => Promise<any>;
   deleteSalaryTable: (id: number) => Promise<any>;
+  fetchAffairs: () => Promise<any>;
+  fetchAffairById: (id: string) => Promise<any>;
+  createAffair: (affair: any) => Promise<any>;
+  updateAffair: (affair: any) => Promise<any>;
+  deleteAffair: (id: number) => Promise<any>;
 }
 export type MockElectronAPI = {
   fetchAllSalaryTables: jest.Mock<Promise<any>, any[]>;
@@ -27,6 +32,11 @@ export type MockElectronAPI = {
   createAgreement: jest.Mock<Promise<any>, [any]>;
   updateAgreement: jest.Mock<Promise<any>, [any]>;
   deleteAgreement: jest.Mock<Promise<any>, [number]>;
+  fetchAffairs: jest.Mock<Promise<any>, any[]>;
+  fetchAffairById: jest.Mock<Promise<any>, [number]>;
+  createAffair: jest.Mock<Promise<any>, [any]>;
+  updateAffair: jest.Mock<Promise<any>, [any]>;
+  deleteAffair: jest.Mock<Promise<any>, [number]>
 };
 
 

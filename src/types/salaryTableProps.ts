@@ -1,5 +1,5 @@
 
-import { v4 as uuid } from 'uuid';
+// src\types\salaryTableProps.ts
 import { sectorialJointAgreementProps } from "./sectorialAgreementProps";
 
 export interface SalaryTableProps {

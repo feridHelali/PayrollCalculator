@@ -10,6 +10,7 @@ import SectorialJointAgreementPage from './pages/SectorialJointAgreementPage';
 import SalaryTableFormContent from './components/salaryTables/SalaryTableForm';
 import SalaryTablesList from './components/salaryTables/SalaryTablesList';
 import StatusBar from './components/StatusBar';
+import AffairForm from './components/affair/AffairForm';
 
 
 const App: React.FC = () => {
@@ -27,6 +28,8 @@ const App: React.FC = () => {
             <Route path="/salary-tables" element={<SalaryTablesList />} />
             <Route path="/salary-tables/:sectorialJointAgreementId" element={<SalaryTablesList />} />
             <Route path="/affairs" element={<AffairPage />} />
+            <Route path="/affair-form" element={<AffairForm />} />
+            <Route path="/affair-form/:affairId" element={<AffairForm />} />
             <Route path="/" element={<HomePage />} />
             
           </Routes>

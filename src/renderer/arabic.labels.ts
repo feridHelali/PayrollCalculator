@@ -46,4 +46,27 @@ export const labels = {
   salaryTableForm: "نموذج جدول الاجور",
   beginningDateOfApplication: "تاريخ بدئة التطبيق",
   endDateOfApplication: "تاريخ نهاية التطبيق",
+
+  affairList: "قائمة القضايا",
+  addAffair: "اضافة قضية",
+  affairNumber: "رقم القضية",
+  affairTitle: "عنوان القضية",
+  affairDescription: "وصف القضية",
+  affairDate: "تاريخ القضية",
+  affairDepartment: "القضية المرفوعة",
+  
+  claimant: "المطالب",
+  professionalCategoryAtBegining: "الصنف الوظيفي في البدئة",
+  professionalDegreeAtBegining: "المرتبة في البدئة",
+  startDateOfWork: "تاريخ بدئة العمل",
+  endDateOfWork: "تاريخ نهاية العمل",
+
+
+  salaryPeriod: "فترة الرواتب",
+  currentProfessionalCategory: "الصنف الوظيفي الحالي",
+  currentProfessionalDegree: "المرتبة الحالية",
+  actualWorkingAge : "عمر العمل الحالي",
+  theSalary: "الراتب الحالي",
+  salaryPeriodList: "قائمة فترات الرواتب",
+  addSalaryPeriod: "اضافة فترة راتب",
 };
