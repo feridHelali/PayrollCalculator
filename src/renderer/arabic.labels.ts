@@ -55,11 +55,12 @@ export const labels = {
   affairDate: "تاريخ القضية",
   affairDepartment: "القضية المرفوعة",
   
-  claimant: "المطالب",
+  claimant: "المدعي",
   professionalCategoryAtBegining: "الصنف الوظيفي في البدئة",
   professionalDegreeAtBegining: "المرتبة في البدئة",
   startDateOfWork: "تاريخ بدئة العمل",
   endDateOfWork: "تاريخ نهاية العمل",
+  sectorialJointAgreementId: "الاتفاقية القطاعية المشتركة",
 
 
   salaryPeriod: "فترة الرواتب",

@@ -1,3 +1,4 @@
+// src\main\services\AffairService.ts
 import { Repository } from 'typeorm';
 import AppDataSource from '../../main/typeorm.config';
 import { Affair } from '../db/entities/Affair';

@@ -1,3 +1,4 @@
+// src\main\db\entities\Affair.ts
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ActualMonthSalary } from "./ActualMonthSalary";
 
@@ -5,6 +6,12 @@ import { ActualMonthSalary } from "./ActualMonthSalary";
 export class Affair {
   @PrimaryGeneratedColumn({ type: "integer", name: "affairID" })
   affairId!: number;
+
+  @Column({ type:"text", name: "affairNumber" })
+  affairNumber!: string;
+
+  @Column("text", { name: "title" })
+  title!: string;
 
   @Column("text", { name: "claimant" })
   claimant!: string;
@@ -23,6 +30,7 @@ export class Affair {
 
   @Column("integer", { name: "sectorial_joint_AgreementID" })
   sectorialJointAgreementId!: number;
+
 
   @OneToMany(
     () => ActualMonthSalary,

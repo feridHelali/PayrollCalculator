@@ -1,3 +1,4 @@
+//src\renderer\components\affair\AffairForm.tsx
 import React, { useEffect, useState } from 'react';
 import { Box, Button, FormControl, FormLabel, Heading, Input, VStack, HStack, Text } from '@chakra-ui/react';
 import { labels } from '../../arabic.labels';
@@ -8,13 +9,16 @@ import { createAffair, fetchAffairById, switchToUpdateMode, switchToCreateMode, 
 import { useNavigate, useParams } from 'react-router-dom';
 import AlfaSpinner from '../../shared/AlfaSpinner';
 
-interface affairState  {
+interface affairState {
     affairId: string;
     affairNumber: string;
     title: string;
     claimant: string;
     startDateOfWork: string;
     endDateDateOfWork: string;
+    professionalCategoryAtBegining: string;
+    professionalDegreeAtBegining: string;
+    sectorialJointAgreement: { sectorialJointAgreementId: string, name: string };
     mode: 'create' | 'update';
 }
 
@@ -25,6 +29,9 @@ const initialAffair: affairState = {
     claimant: '',
     startDateOfWork: '',
     endDateDateOfWork: '',
+    professionalCategoryAtBegining: '',
+    professionalDegreeAtBegining: '',
+    sectorialJointAgreement: { sectorialJointAgreementId: '', name: '' },
     mode: 'create',
 };
 
@@ -55,15 +62,27 @@ const AffairForm: React.FC = () => {
         }
     }, [currentAffair, dispatch]);
 
+    useEffect(() => {
+        if (currentAffair && mode === 'update') {
+            setNewAffair({
+                ...currentAffair,
+                startDateOfWork: new Date(currentAffair.startDateOfWork),
+                endDateDateOfWork: new Date(currentAffair.endDateDateOfWork)
+            })
+        }
+    }, [currentAffair, mode]);
+
     const handleCreate = () => {
-        if (newAffair.title.trim() && mode === 'create') {
+        if (newAffair.title.trim() &&
+            isAffairValid(newAffair) &&
+            mode === 'create') {
             dispatch(createAffair(newAffair))
                 .then(() => navigate('/affairs'));
         }
     };
 
     const handleUpdate = () => {
-        if (currentAffair && newAffair.title.trim()) {
+        if (currentAffair && isAffairValid(newAffair)) {
             dispatch(updateAffair(newAffair))
                 .then(() => navigate('/affairs'));
         }
@@ -84,10 +103,35 @@ const AffairForm: React.FC = () => {
                     />
                 </FormControl>
                 <FormControl>
+                    <FormLabel>{labels.affairNumber}</FormLabel>
+                    <Input
+                        type="text"
+                        value={newAffair.affairNumber}
+                        onChange={(e) => setNewAffair((prev) => ({ ...prev, affairNumber: e.target.value }))}
+                    />
+                </FormControl>
+
+                <FormControl>
                     <FormLabel>{labels.claimant}</FormLabel>
                     <Input
                         value={newAffair.claimant}
-                        onChange={(e) => setNewAffair((prev) => ({ ...prev, concernedDepartment: e.target.value }))}
+                        onChange={(e) => setNewAffair((prev) => ({ ...prev, claimant: e.target.value }))}
+                    />
+                </FormControl>
+                <FormControl>
+                    <FormLabel>{labels.sectorialJointAgreementId}</FormLabel>
+                    <Input
+                        type="number"
+                        value={newAffair.sectorialJointAgreement.sectorialJointAgreementId}
+                        onChange={(e) => setNewAffair((prev) => (
+                            {
+                                ...prev,
+                                sectorialJointAgreement: {
+                                    ...prev.sectorialJointAgreement,
+                                    sectorialJointAgreementId: e.target.value
+                                }
+                            }
+                        ))}
                     />
                 </FormControl>
                 <FormControl>
@@ -95,7 +139,7 @@ const AffairForm: React.FC = () => {
                     <Input
                         type="date"
                         value={newAffair.startDateOfWork}
-                        onChange={(e) => setNewAffair((prev) => ({ ...prev, startDate: e.target.value }))}
+                        onChange={(e) => setNewAffair((prev) => ({ ...prev, startDateOfWork: e.target.value }))}
                     />
                 </FormControl>
                 <FormControl>
@@ -103,12 +147,30 @@ const AffairForm: React.FC = () => {
                     <Input
                         type="date"
                         value={newAffair.endDateDateOfWork}
-                        onChange={(e) => setNewAffair((prev) => ({ ...prev, endDate: e.target.value }))}
+                        onChange={(e) => setNewAffair((prev) => ({ ...prev, endDateDateOfWork: e.target.value }))}
                     />
                 </FormControl>
+                <FormControl>
+                    <FormLabel>{labels.professionalCategoryAtBegining}</FormLabel>
+                    <Input
+                        value={newAffair.professionalCategoryAtBegining}
+                        onChange={(e) => setNewAffair((prev) => ({ ...prev, professionalCategoryAtBegining: e.target.value }))}
+                    />
+                </FormControl>
+
+                <FormControl>
+                    <FormLabel>{labels.professionalDegreeAtBegining}</FormLabel>
+                    <Input
+                        type="number"
+                        value={newAffair.professionalDegreeAtBegining}
+                        onChange={(e) => setNewAffair((prev) => ({ ...prev, professionalDegreeAtBegining: e.target.value }))}
+                    />
+                </FormControl>
+
+               
             </VStack>
             <HStack spacing={4} mt={4} justifyContent='flex-end' p={4}>
-                <Button onClick={mode === 'update' ? handleUpdate : handleCreate} colorScheme='blue' shadow='md' isDisabled={!isNewAffairValid(newAffair)}>
+                <Button onClick={mode === 'update' ? handleUpdate : handleCreate} colorScheme='blue' shadow='md' isDisabled={!isAffairValid(newAffair)}>
                     {mode === 'update' ? labels.update : labels.save}
                 </Button>
             </HStack>
@@ -118,6 +180,13 @@ const AffairForm: React.FC = () => {
 
 export default AffairForm;
 
-function isNewAffairValid(newAffair: affairState): boolean {
-    return !!(newAffair && newAffair.title.trim());
+function isAffairValid(newAffair: affairState): boolean {
+    return !!(newAffair &&
+        newAffair.title.trim() &&
+        newAffair.affairNumber.trim() &&
+        newAffair.claimant.trim() &&
+        newAffair.startDateOfWork.trim() &&
+        newAffair.endDateDateOfWork.trim() &&
+        newAffair.professionalCategoryAtBegining.trim() &&
+        newAffair.professionalDegreeAtBegining.trim());
 }
