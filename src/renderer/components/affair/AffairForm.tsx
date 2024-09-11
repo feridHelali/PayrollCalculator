@@ -10,12 +10,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import AlfaSpinner from '../../shared/AlfaSpinner';
 
 interface affairState {
-    affairId: string;
+    affairId?: number;
     affairNumber: string;
     title: string;
     claimant: string;
     startDateOfWork: string;
-    endDateDateOfWork: string;
+    endDateOfWork: string;
     professionalCategoryAtBegining: string;
     professionalDegreeAtBegining: string;
     sectorialJointAgreement: { sectorialJointAgreementId: string, name: string };
@@ -23,12 +23,12 @@ interface affairState {
 }
 
 const initialAffair: affairState = {
-    affairId: '',
+    affairId: -1,
     affairNumber: '',
     title: '',
     claimant: '',
     startDateOfWork: '',
-    endDateDateOfWork: '',
+    endDateOfWork: '',
     professionalCategoryAtBegining: '',
     professionalDegreeAtBegining: '',
     sectorialJointAgreement: { sectorialJointAgreementId: '', name: '' },
@@ -146,8 +146,8 @@ const AffairForm: React.FC = () => {
                     <FormLabel>{labels.endDateOfWork}</FormLabel>
                     <Input
                         type="date"
-                        value={newAffair.endDateDateOfWork}
-                        onChange={(e) => setNewAffair((prev) => ({ ...prev, endDateDateOfWork: e.target.value }))}
+                        value={newAffair.endDateOfWork}
+                        onChange={(e) => setNewAffair((prev) => ({ ...prev, endDateOfWork: e.target.value }))}
                     />
                 </FormControl>
                 <FormControl>
@@ -186,7 +186,7 @@ function isAffairValid(newAffair: affairState): boolean {
         newAffair.affairNumber.trim() &&
         newAffair.claimant.trim() &&
         newAffair.startDateOfWork.trim() &&
-        newAffair.endDateDateOfWork.trim() &&
+        newAffair.endDateOfWork.trim() &&
         newAffair.professionalCategoryAtBegining.trim() &&
         newAffair.professionalDegreeAtBegining.trim());
 }

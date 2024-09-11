@@ -7,19 +7,19 @@ export class Affair {
   @PrimaryGeneratedColumn({ type: "integer", name: "affairID" })
   affairId!: number;
 
-  @Column({ type:"text", name: "affairNumber" })
+  @Column({ type:"text", name: "affairNumber",nullable:false })
   affairNumber!: string;
 
-  @Column("text", { name: "title" })
+  @Column("text", { name: "title",nullable:false })
   title!: string;
 
-  @Column("text", { name: "claimant" })
+  @Column("text", { name: "claimant",nullable:false })
   claimant!: string;
 
-  @Column("date", { name: "startDateOfWork" })
+  @Column("date", { name: "startDateOfWork", nullable:false })
   startDateOfWork!: string;
 
-  @Column("date", { name: "endDateOfWork" })
+  @Column("date", { name: "endDateOfWork" , nullable:false})
   endDateOfWork!: string;
 
   @Column("text", { name: "professionalCategoryAtBegining" })

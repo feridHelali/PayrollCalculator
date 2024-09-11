@@ -9,7 +9,7 @@ export class SectorialJointAgreement {
   })
   sectorialJointAgreementId!: number;
 
-  @Column("text", { name: "agreement_name" })
+  @Column("text", { name: "agreement_name", nullable: false })
   agreementName!: string;
 
   @Column("text", { name: "description", nullable: true })
