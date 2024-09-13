@@ -1,3 +1,4 @@
+import { lookup } from "dns";
 import { Affair } from "../main/db/entities/Affair";
 import sectorialJointAgreementSlice from "./redux/sectorialJointAgreement/sectorialJointAgreementSlice";
 
@@ -16,6 +17,7 @@ export const labels = {
   ageOfWork: 'الاقدمية الفعلية',
   cancel: 'الغاء',
   save: 'حفظ',
+  close: 'اغلاق',
   saved: 'تم الحفظ',
   update: 'تحديث',
   updated: 'تم التحديث',
@@ -23,6 +25,9 @@ export const labels = {
   delete: 'حذف',
   create: 'اضافة',
   created: 'تم الاضافة',
+  search: 'بحث',
+  lookup: 'بحث',
+  sectorialAgreementTitle: 'الاتفاقية القطاعية',
   successfully: 'تمت العملية بنجاح',
   failed: 'فشلت العملية',
   idle: 'معلقة',

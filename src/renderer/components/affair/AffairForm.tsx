@@ -7,6 +7,8 @@ import { AppDispatch, RootState } from '../../redux/store';
 import { createAffair, fetchAffairById, switchToUpdateMode, switchToCreateMode, updateAffair } from '../../redux/affair/affairSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import AlfaSpinner from '../../shared/AlfaSpinner';
+import GenericLookupDialog, { Entity } from '../../shared/GenericLookupDialog';
+import { fetchAgreements } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
 
 interface affairState {
     affairId?: number;
@@ -42,7 +44,17 @@ const AffairForm: React.FC = () => {
     const currentAffair = useAppSelector((state: RootState) => state.affairs.currentAffair);
     const error = useAppSelector((state: RootState) => state.affairs.error);
     const mode = useAppSelector((state: RootState) => state.affairs.mode);
+    const agreements = useAppSelector((state: RootState) => state.agreements.agreements);
+    const [isLookupOpen, setIsLookupOpen] = useState(false); // Dialog state
+    const [agreementsForLookup, setAgreementsForLookup] = useState<Entity[]>([]); // Agreements for lookup
     const [newAffair, setNewAffair] = useState<affairState>(initialAffair);
+
+    useEffect(() => {
+        if (agreements.length === 0) {
+            dispatch(fetchAgreements());
+            setAgreementsForLookup(mapAgreementsToEntity(agreements));
+        }
+    }, [dispatch]);
 
     useEffect(() => {
         if (affairId) {
@@ -71,10 +83,28 @@ const AffairForm: React.FC = () => {
         }
     }, [currentAffair, mode]);
 
+    const handleAgreementSelect = (agreement: Entity) => {
+        setNewAffair((prev) => ({
+            ...prev,
+            sectorialJointAgreement: { sectorialJointAgreementId: agreement.id.toString(), name: agreement.label },
+        }));
+    };
+
     const handleCreate = () => {
-        const {affairId,...affaireData}=newAffair;
+        const affairDTO={   
+            affairNumber: newAffair.affairNumber,
+            title: newAffair.title,
+            claimant: newAffair.claimant,
+            startDateOfWork: newAffair.startDateOfWork,
+            endDateOfWork: newAffair.endDateOfWork,
+            professionalCategoryAtBegining: newAffair.professionalCategoryAtBegining,
+            professionalDegreeAtBegining: newAffair.professionalDegreeAtBegining,
+            agreement: newAffair.sectorialJointAgreement.sectorialJointAgreementId
+        }
+        
+        
         if (isAffairValid(newAffair) && mode === 'create') {
-            dispatch(createAffair(affaireData))
+            dispatch(createAffair(affairDTO))
                 .then(() => navigate('/affairs'));
         }
     };
@@ -122,20 +152,24 @@ const AffairForm: React.FC = () => {
                 </FormControl>
                 <FormControl>
                     <FormLabel>{labels.sectorialJointAgreementId}</FormLabel>
-                    <Input
-                        type="number"
-                        value={newAffair.sectorialJointAgreement.sectorialJointAgreementId}
-                        onChange={(e) => setNewAffair((prev) => (
-                            {
-                                ...prev,
-                                sectorialJointAgreement: {
-                                    ...prev.sectorialJointAgreement,
-                                    sectorialJointAgreementId: e.target.value
-                                }
-                            }
-                        ))}
-                    />
+                    <HStack>
+                        <Input
+                            type="text"
+                            value={newAffair.sectorialJointAgreement.name}
+                            placeholder={labels.sectorialJointAgreementId}
+                            readOnly
+                        />
+                        <Button onClick={() => setIsLookupOpen(true)}>{labels.selectAgreement}</Button>
+                    </HStack>
                 </FormControl>
+                {/* Lookup Dialog */}
+                <GenericLookupDialog
+                    isOpen={isLookupOpen}
+                    onClose={() => setIsLookupOpen(false)}
+                    entities={mapAgreementsToEntity(agreements)}
+                    onSelect={handleAgreementSelect}
+                    title={labels.selectAgreement}
+                />
                 <FormControl>
                     <FormLabel>{labels.startDateOfWork}</FormLabel>
                     <Input
@@ -202,3 +236,7 @@ function isAffairValid(newAffair: affairState): boolean {
         newAffair.professionalCategoryAtBegining.trim() &&
         newAffair.professionalDegreeAtBegining.trim());
 }
+function mapAgreementsToEntity(agreements: any) {
+    return agreements.map((agreement: any) => ({ id: agreement.sectorialJointAgreementId, label: agreement.agreementName }))
+}
+

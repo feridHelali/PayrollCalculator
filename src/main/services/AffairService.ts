@@ -29,9 +29,7 @@ export class AffairService {
 
   // Create a new Affair
   async createAffair(affairData: Partial<Affair>): Promise<Affair> {
-    const newAffair=await this.repository.save( {
-      ...affairData,
-      agreementId:affairData.agreement });
+    const newAffair=await this.repository.save(affairData as Affair);
     return  this.repository.findOne({
       where:{affairId:newAffair.affairId},
       relations:["sectorialJointAgreement"]
