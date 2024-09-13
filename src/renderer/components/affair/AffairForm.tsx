@@ -116,6 +116,8 @@ const AffairForm: React.FC = () => {
                     <Input
                         value={newAffair.claimant}
                         onChange={(e) => setNewAffair((prev) => ({ ...prev, claimant: e.target.value }))}
+                        required
+                        placeholder={labels.claimant}
                     />
                 </FormControl>
                 <FormControl>
@@ -140,6 +142,8 @@ const AffairForm: React.FC = () => {
                         type="date"
                         value={newAffair.startDateOfWork}
                         onChange={(e) => setNewAffair((prev) => ({ ...prev, startDateOfWork: e.target.value }))}
+                        required
+                        placeholder={labels.startDateOfWork}
                     />
                 </FormControl>
                 <FormControl>
@@ -148,6 +152,8 @@ const AffairForm: React.FC = () => {
                         type="date"
                         value={newAffair.endDateOfWork}
                         onChange={(e) => setNewAffair((prev) => ({ ...prev, endDateOfWork: e.target.value }))}
+                        required
+                        placeholder={labels.endDateOfWork}
                     />
                 </FormControl>
                 <FormControl>
@@ -168,7 +174,7 @@ const AffairForm: React.FC = () => {
                         value={newAffair.professionalDegreeAtBegining}
                         onChange={(e) => setNewAffair((prev) => ({ ...prev, professionalDegreeAtBegining: e.target.value }))}
                         required
-                        placeholder={labels.professionalCategoryAtBegining}
+                        placeholder={labels.professionalDegreeAtBegining}
                     />
                 </FormControl>
 
