@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, FormControl, FormLabel, Heading, Input, VStack, HStack, Text } from '@chakra-ui/react';
 import { labels } from '../../arabic.labels';
-import { affairProps } from '../../../types/affairProps';
 import { useAppDispatch, useAppSelector } from '../../redux/redux.hooks';
 import { AppDispatch, RootState } from '../../redux/store';
 import { createAffair, fetchAffairById, switchToUpdateMode, switchToCreateMode, updateAffair } from '../../redux/affair/affairSlice';
@@ -73,10 +72,9 @@ const AffairForm: React.FC = () => {
     }, [currentAffair, mode]);
 
     const handleCreate = () => {
-        if (newAffair.title.trim() &&
-            isAffairValid(newAffair) &&
-            mode === 'create') {
-            dispatch(createAffair(newAffair))
+        const {affairId,...affaireData}=newAffair;
+        if (isAffairValid(newAffair) && mode === 'create') {
+            dispatch(createAffair(affaireData))
                 .then(() => navigate('/affairs'));
         }
     };
@@ -108,6 +106,8 @@ const AffairForm: React.FC = () => {
                         type="text"
                         value={newAffair.affairNumber}
                         onChange={(e) => setNewAffair((prev) => ({ ...prev, affairNumber: e.target.value }))}
+                        required
+                        placeholder={labels.affairNumber}
                     />
                 </FormControl>
 
@@ -153,8 +153,11 @@ const AffairForm: React.FC = () => {
                 <FormControl>
                     <FormLabel>{labels.professionalCategoryAtBegining}</FormLabel>
                     <Input
+
                         value={newAffair.professionalCategoryAtBegining}
                         onChange={(e) => setNewAffair((prev) => ({ ...prev, professionalCategoryAtBegining: e.target.value }))}
+                        required
+                        placeholder={labels.professionalCategoryAtBegining}
                     />
                 </FormControl>
 
@@ -164,16 +167,19 @@ const AffairForm: React.FC = () => {
                         type="number"
                         value={newAffair.professionalDegreeAtBegining}
                         onChange={(e) => setNewAffair((prev) => ({ ...prev, professionalDegreeAtBegining: e.target.value }))}
+                        required
+                        placeholder={labels.professionalCategoryAtBegining}
                     />
                 </FormControl>
 
-               
+
             </VStack>
             <HStack spacing={4} mt={4} justifyContent='flex-end' p={4}>
                 <Button onClick={mode === 'update' ? handleUpdate : handleCreate} colorScheme='blue' shadow='md' isDisabled={!isAffairValid(newAffair)}>
                     {mode === 'update' ? labels.update : labels.save}
                 </Button>
             </HStack>
+            <pre><code>{JSON.stringify(newAffair)}</code></pre>
         </Box>
     );
 };
@@ -185,6 +191,7 @@ function isAffairValid(newAffair: affairState): boolean {
         newAffair.title.trim() &&
         newAffair.affairNumber.trim() &&
         newAffair.claimant.trim() &&
+        newAffair.sectorialJointAgreement.sectorialJointAgreementId.trim() &&
         newAffair.startDateOfWork.trim() &&
         newAffair.endDateOfWork.trim() &&
         newAffair.professionalCategoryAtBegining.trim() &&

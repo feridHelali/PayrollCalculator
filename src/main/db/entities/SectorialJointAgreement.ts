@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { SalaryTable } from "./SalaryTable";
+import { Affair } from "./Affair";
 
 @Entity("SectorialJointAgreement")
 export class SectorialJointAgreement {
@@ -17,4 +18,7 @@ export class SectorialJointAgreement {
 
   @OneToMany(() => SalaryTable, (salaryTable) => salaryTable.agreement)
   salaryTables!: SalaryTable[];
+  
+  @OneToMany(() => Affair, (affair) => affair.agreement)
+  affairs!: Affair[];
 }
