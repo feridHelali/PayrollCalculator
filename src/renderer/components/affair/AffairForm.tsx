@@ -24,7 +24,7 @@ interface affairState {
 }
 
 const initialAffair: affairState = {
-    affairId: -1,
+    affairId: undefined,
     affairNumber: '',
     title: '',
     claimant: '',
@@ -50,13 +50,7 @@ const AffairForm: React.FC = () => {
     const [newAffair, setNewAffair] = useState<affairState>(initialAffair);
 
     useEffect(() => {
-        if (agreements.length === 0) {
-            dispatch(fetchAgreements());
-            setAgreementsForLookup(mapAgreementsToEntity(agreements));
-        }
-    }, [dispatch]);
 
-    useEffect(() => {
         if (affairId) {
             dispatch(switchToUpdateMode());
             dispatch(fetchAffairById(affairId));
@@ -67,16 +61,18 @@ const AffairForm: React.FC = () => {
     }, [affairId, dispatch]);
 
     useEffect(() => {
-        if (currentAffair) {
-            dispatch(switchToUpdateMode());
-            setNewAffair(currentAffair);
+        if (agreements.length === 0) {
+            dispatch(fetchAgreements());
+            setAgreementsForLookup(mapAgreementsToEntity(agreements));
         }
-    }, [currentAffair, dispatch]);
+    }, [dispatch]);
+
 
     useEffect(() => {
         if (currentAffair && mode === 'update') {
             setNewAffair({
                 ...currentAffair,
+                sectorialJointAgreement: currentAffair.agreement || { sectorialJointAgreementId: '', name: '' },
                 startDateOfWork: new Date(currentAffair.startDateOfWork),
                 endDateDateOfWork: new Date(currentAffair.endDateDateOfWork)
             })
@@ -91,7 +87,7 @@ const AffairForm: React.FC = () => {
     };
 
     const handleCreate = () => {
-        const affairDTO={   
+        const affairDTO = {
             affairNumber: newAffair.affairNumber,
             title: newAffair.title,
             claimant: newAffair.claimant,
@@ -101,8 +97,8 @@ const AffairForm: React.FC = () => {
             professionalDegreeAtBegining: newAffair.professionalDegreeAtBegining,
             agreement: newAffair.sectorialJointAgreement.sectorialJointAgreementId
         }
-        
-        
+
+
         if (isAffairValid(newAffair) && mode === 'create') {
             dispatch(createAffair(affairDTO))
                 .then(() => navigate('/affairs'));
@@ -111,7 +107,18 @@ const AffairForm: React.FC = () => {
 
     const handleUpdate = () => {
         if (currentAffair && isAffairValid(newAffair)) {
-            dispatch(updateAffair(newAffair))
+            const updatedAffairDTO = {
+                affairId: currentAffair.affairId,
+                affairNumber: newAffair.affairNumber,
+                title: newAffair.title,
+                claimant: newAffair.claimant,
+                startDateOfWork: newAffair.startDateOfWork,
+                endDateOfWork: newAffair.endDateOfWork,
+                professionalCategoryAtBegining: newAffair.professionalCategoryAtBegining,
+                professionalDegreeAtBegining: newAffair.professionalDegreeAtBegining,
+                agreement: newAffair.sectorialJointAgreement.sectorialJointAgreementId,
+            };
+            dispatch(updateAffair(updatedAffairDTO))
                 .then(() => navigate('/affairs'));
         }
     };
@@ -166,7 +173,7 @@ const AffairForm: React.FC = () => {
                 <GenericLookupDialog
                     isOpen={isLookupOpen}
                     onClose={() => setIsLookupOpen(false)}
-                    entities={mapAgreementsToEntity(agreements)}
+                    entities={mapAgreementsToEntity(agreementsForLookup)}
                     onSelect={handleAgreementSelect}
                     title={labels.selectAgreement}
                 />
@@ -219,6 +226,11 @@ const AffairForm: React.FC = () => {
                     {mode === 'update' ? labels.update : labels.save}
                 </Button>
             </HStack>
+            <pre><code>
+                {JSON.stringify(newAffair, null, 2)}
+                <br />
+                {affairId}
+            </code></pre>
         </Box>
     );
 };

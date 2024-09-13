@@ -71,6 +71,7 @@ const AffairList: React.FC = () => {
                     onClick={() => handleEdit(affair.affairId)}
                     colorScheme='teal'
                     shadow={'md'}
+                    
                   >
                     {labels.update}
                   </Button>

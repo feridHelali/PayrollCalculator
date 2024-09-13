@@ -18,13 +18,14 @@ export class AffairService {
       },
       relations: {
         actualMonthSalaries: true,  // Load related ActualMonthSalary entities
+        agreement: true
       },
     });
   }
 
-  // Get a single Affair by its ID, including relations to ActualMonthSalary
+  // Get a single Affair by its ID, including relations to ActualMonthSalary and agreement
   async getAffairById(id: number): Promise<Affair | undefined | null> {
-    return this.repository.findOne({ where: { affairId: id }, relations: { actualMonthSalaries: true } });
+    return this.repository.findOne({ where: { affairId: id }, relations: { actualMonthSalaries: true, agreement: true } });
   }
 
   // Create a new Affair

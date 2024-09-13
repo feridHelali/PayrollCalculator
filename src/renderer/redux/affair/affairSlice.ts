@@ -65,6 +65,17 @@ const affairSlice = createSlice({
         state.affairs.push(action.payload);
         state.status = 'succeeded';
       })
+      .addCase(fetchAffairById.fulfilled, (state, action: PayloadAction<any>) => {
+        state.currentAffair = action.payload;
+        state.status = 'succeeded';
+      })
+      .addCase(fetchAffairById.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message ?? null;
+      })
+      .addCase(fetchAffairById.pending, (state) => {
+        state.status = 'loading';
+      })
       .addCase(updateAffair.fulfilled, (state, action: PayloadAction<any>) => {
         state.status = 'succeeded';
         state.currentAffair = action.payload;

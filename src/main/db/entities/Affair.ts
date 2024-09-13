@@ -33,7 +33,7 @@ export class Affair {
   @ManyToOne(
     () => SectorialJointAgreement,
     (sectorialJointAgreement) => sectorialJointAgreement.affairs,
-    { onDelete: 'CASCADE' }
+    { onDelete: 'CASCADE',eager: true }
   )
   @JoinColumn([
     { name: "agreementID" },
