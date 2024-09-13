@@ -63,8 +63,8 @@ const AffairList: React.FC = () => {
               <Td>{affair.affairNumber}</Td>
               <Td>{affair.title}</Td>
               <Td>{affair.claimant}</Td>
-              <Td>{new Date(affair.startDate).toLocaleDateString()}</Td>
-              <Td>{affair.endDate ? new Date(affair.endDate).toLocaleDateString() : 'N/A'}</Td>
+              <Td>{new Date(affair.startDateOfWork).toLocaleDateString()}</Td>
+              <Td>{new Date(affair.endDateOfWork).toLocaleDateString()}</Td>
               <Td>
                 <HStack spacing={4}>
                   <Button
