@@ -179,7 +179,6 @@ const AffairForm: React.FC = () => {
                     {mode === 'update' ? labels.update : labels.save}
                 </Button>
             </HStack>
-            <pre><code>{JSON.stringify(newAffair)}</code></pre>
         </Box>
     );
 };
