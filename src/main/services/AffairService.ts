@@ -16,16 +16,21 @@ export class AffairService {
       order: {
         affairId: 'ASC',  // Adjust the ordering field as needed
       },
-      relations: {
-        actualMonthSalaries: true,  // Load related ActualMonthSalary entities
-        agreement: true
-      },
+      relations: [
+        'actualMonthSalaries',
+        'agreement'
+      ],
     });
   }
 
   // Get a single Affair by its ID, including relations to ActualMonthSalary and agreement
   async getAffairById(id: number): Promise<Affair | undefined | null> {
-    return this.repository.findOne({ where: { affairId: id }, relations: { actualMonthSalaries: true, agreement: true } });
+    const affair = await this.repository.findOne({ 
+      where: { affairId: id }, 
+      relations: [ "actualMonthSalaries", "agreement" ]
+    })  
+    console.log('Fetched affair:', affair); // Add logging to check fetched dat
+    return affair;
   }
 
   // Create a new Affair

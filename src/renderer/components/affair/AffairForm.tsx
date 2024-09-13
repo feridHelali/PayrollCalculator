@@ -15,10 +15,10 @@ interface affairState {
     affairNumber: string;
     title: string;
     claimant: string;
-    startDateOfWork: string;
-    endDateOfWork: string;
+    startDateOfWork: string ;
+    endDateOfWork: string ;
     professionalCategoryAtBegining: string;
-    professionalDegreeAtBegining: string;
+    professionalDegreeAtBegining: string | number;
     sectorialJointAgreement: { sectorialJointAgreementId: string, name: string };
     mode: 'create' | 'update';
 }
@@ -72,9 +72,11 @@ const AffairForm: React.FC = () => {
         if (currentAffair && mode === 'update') {
             setNewAffair({
                 ...currentAffair,
-                sectorialJointAgreement: currentAffair.agreement || { sectorialJointAgreementId: '', name: '' },
-                startDateOfWork: new Date(currentAffair.startDateOfWork),
-                endDateDateOfWork: new Date(currentAffair.endDateDateOfWork)
+                sectorialJointAgreement: {
+                    sectorialJointAgreementId: currentAffair.agreement.sectorialJointAgreementId ? currentAffair.agreement.sectorialJointAgreementId.toString() : '',
+                    name: currentAffair.agreement.agreementName
+                }, 
+                
             })
         }
     }, [currentAffair, mode]);
@@ -226,27 +228,23 @@ const AffairForm: React.FC = () => {
                     {mode === 'update' ? labels.update : labels.save}
                 </Button>
             </HStack>
-            <pre><code>
-                {JSON.stringify(newAffair, null, 2)}
-                <br />
-                {affairId}
-            </code></pre>
         </Box>
     );
 };
 
 export default AffairForm;
 
-function isAffairValid(newAffair: affairState): boolean {
-    return !!(newAffair &&
-        newAffair.title.trim() &&
-        newAffair.affairNumber.trim() &&
-        newAffair.claimant.trim() &&
-        newAffair.sectorialJointAgreement.sectorialJointAgreementId.trim() &&
-        newAffair.startDateOfWork.trim() &&
-        newAffair.endDateOfWork.trim() &&
-        newAffair.professionalCategoryAtBegining.trim() &&
-        newAffair.professionalDegreeAtBegining.trim());
+function isAffairValid(_affair: affairState): boolean {
+    console.log(_affair);
+    return !!(_affair &&
+        _affair.title.trim() &&
+        _affair.affairNumber.trim() &&
+        _affair.claimant.trim() &&
+        _affair.sectorialJointAgreement.sectorialJointAgreementId.trim() &&
+        _affair.startDateOfWork.trim() &&
+        _affair.endDateOfWork.trim() &&
+        _affair.professionalCategoryAtBegining.trim() &&
+        (typeof(_affair.professionalDegreeAtBegining) === 'number'))
 }
 function mapAgreementsToEntity(agreements: any) {
     return agreements.map((agreement: any) => ({ id: agreement.sectorialJointAgreementId, label: agreement.agreementName }))
