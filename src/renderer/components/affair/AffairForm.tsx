@@ -220,7 +220,9 @@ const AffairForm: React.FC = () => {
                         />
                         <Button onClick={() => {
                             setIsSalaryTableLookupWindowOpen(true)
-                        }}>{labels.selectNumeroTable}</Button>
+                        }}
+                        disabled={!newAffair.sectorialJointAgreement.sectorialJointAgreementId}
+                        >{labels.selectNumeroTable}</Button>
                     </HStack>
                 </FormControl>
                 {/* Lookup Dialog for salary tables*/}
@@ -231,7 +233,6 @@ const AffairForm: React.FC = () => {
                     onSelect={handleNumeroTableSelect}
                     title={labels.selectNumeroTable}
                 />
-                {JSON.stringify(salaryTablesForLookup,null,2)}
                 {/* ----------------------------------------------------------------------------------------- */}
 
                 <FormControl>
