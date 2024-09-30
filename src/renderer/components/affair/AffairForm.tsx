@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import AlfaSpinner from '../../shared/AlfaSpinner';
 import GenericLookupDialog, { Entity } from '../../shared/GenericLookupDialog';
 import { fetchAgreements } from '../../redux/sectorialJointAgreement/sectorialJointAgreementSlice';
+import { fetchSalaryTablesByAgreementId } from '../../redux/sectorialJointAgreement/salaryTablesSlice';
 
 interface affairState {
     affairId?: number;
@@ -20,6 +21,7 @@ interface affairState {
     professionalCategoryAtBegining: string;
     professionalDegreeAtBegining: string | number;
     sectorialJointAgreement: { sectorialJointAgreementId: string, name: string };
+    numeroTable: { numeroTableId: string, name: string };
     mode: 'create' | 'update';
 }
 
@@ -33,6 +35,7 @@ const initialAffair: affairState = {
     professionalCategoryAtBegining: '',
     professionalDegreeAtBegining: '',
     sectorialJointAgreement: { sectorialJointAgreementId: '', name: '' },
+    numeroTable: { numeroTableId: '', name: '' },
     mode: 'create',
 };
 
@@ -44,11 +47,13 @@ const AffairForm: React.FC = () => {
     const currentAffair = useAppSelector((state: RootState) => state.affairs.currentAffair);
     const error = useAppSelector((state: RootState) => state.affairs.error);
     const mode = useAppSelector((state: RootState) => state.affairs.mode);
-    const [isLookupOpen, setIsLookupOpen] = useState(false); // Dialog state
+    const [isAggrementLookupWindowOpen, setIsAgreementLookupWindowOpen] = useState(false); // Dialog state for agreement Lookup
+    const [isSalaryTableLookupWindowOpen, setIsSalaryTableLookupWindowOpen] = useState(false); // Dialog state for salary table Lookup
     const [agreementsForLookup, setAgreementsForLookup] = useState<Entity[]>([]); // Agreements for lookup
+    const [salaryTablesForLookup, setSalaryTablesForLookup] = useState<Entity[]>([]); // Salary tables for lookup
     const [newAffair, setNewAffair] = useState<affairState>(initialAffair);
 
-    
+
 
     useEffect(() => {
         if (affairId) {
@@ -60,10 +65,16 @@ const AffairForm: React.FC = () => {
     }, [affairId, dispatch]);
 
     useEffect(() => {
-            dispatch(fetchAgreements()).then((agreements) => {
-                setAgreementsForLookup(mapAgreementsToEntity(agreements["payload"]));      
-            })
+        dispatch(fetchAgreements()).then((agreements) => {
+            setAgreementsForLookup(mapAgreementsToEntity(agreements["payload"]));
+        })
     }, []);
+
+    useEffect(() => {
+        dispatch(fetchSalaryTablesByAgreementId(+newAffair.sectorialJointAgreement.sectorialJointAgreementId)).then((salaryTables) => {
+            setSalaryTablesForLookup(mapSalryTablesToEntity(salaryTables["payload"]));
+        })
+    }, [newAffair.sectorialJointAgreement.sectorialJointAgreementId]);
 
 
 
@@ -94,6 +105,13 @@ const AffairForm: React.FC = () => {
         }));
     };
 
+    const handleNumeroTableSelect = (salaryTable: Entity) => {
+        setNewAffair((prev) => ({
+            ...prev,
+            numeroTable: { numeroTableId: salaryTable.id.toString(), name: salaryTable.label },
+        }));
+    };
+
     const handleCreate = () => {
         const affairDTO = {
             affairNumber: newAffair.affairNumber,
@@ -103,7 +121,8 @@ const AffairForm: React.FC = () => {
             endDateOfWork: newAffair.endDateOfWork,
             professionalCategoryAtBegining: newAffair.professionalCategoryAtBegining,
             professionalDegreeAtBegining: newAffair.professionalDegreeAtBegining,
-            agreement: newAffair.sectorialJointAgreement.sectorialJointAgreementId
+            agreement: newAffair.sectorialJointAgreement.sectorialJointAgreementId,
+            numeroTable: newAffair.numeroTable
         }
 
 
@@ -125,6 +144,7 @@ const AffairForm: React.FC = () => {
                 professionalCategoryAtBegining: newAffair.professionalCategoryAtBegining,
                 professionalDegreeAtBegining: newAffair.professionalDegreeAtBegining,
                 agreement: newAffair.sectorialJointAgreement.sectorialJointAgreementId,
+                numeroTable: newAffair.numeroTable
             };
             dispatch(updateAffair(updatedAffairDTO))
                 .then(() => navigate('/affairs'));
@@ -165,6 +185,7 @@ const AffairForm: React.FC = () => {
                         placeholder={labels.claimant}
                     />
                 </FormControl>
+                {/* ----------------------------------- Sectorial Joint Agreement ---------------------------------------------------------- */}
                 <FormControl>
                     <FormLabel>{labels.sectorialJointAgreementId}</FormLabel>
                     <HStack>
@@ -175,18 +196,44 @@ const AffairForm: React.FC = () => {
                             readOnly
                         />
                         <Button onClick={() => {
-                            setIsLookupOpen(true)
+                            setIsAgreementLookupWindowOpen(true)
                         }}>{labels.selectAgreement}</Button>
                     </HStack>
                 </FormControl>
-                {/* Lookup Dialog */}
+                {/* Lookup Dialog for agreements*/}
                 <GenericLookupDialog
-                    isOpen={isLookupOpen}
-                    onClose={() => setIsLookupOpen(false)}
+                    isOpen={isAggrementLookupWindowOpen}
+                    onClose={() => setIsAgreementLookupWindowOpen(false)}
                     entities={agreementsForLookup}
                     onSelect={handleAgreementSelect}
                     title={labels.selectAgreement}
                 />
+                {/* ------------------------------- numeroTable ------------------------------------------------------------------ */}
+                <FormControl>
+                    <FormLabel>{labels.numeroTable}</FormLabel>
+                    <HStack>
+                        <Input
+                            type="number"
+                            value={newAffair.numeroTable.name}
+                            placeholder={labels.numeroTable}
+                            readOnly
+                        />
+                        <Button onClick={() => {
+                            setIsSalaryTableLookupWindowOpen(true)
+                        }}>{labels.selectNumeroTable}</Button>
+                    </HStack>
+                </FormControl>
+                {/* Lookup Dialog for salary tables*/}
+                <GenericLookupDialog
+                    isOpen={isSalaryTableLookupWindowOpen}
+                    onClose={() => setIsSalaryTableLookupWindowOpen(false)}
+                    entities={salaryTablesForLookup}
+                    onSelect={handleNumeroTableSelect}
+                    title={labels.selectNumeroTable}
+                />
+                {JSON.stringify(salaryTablesForLookup,null,2)}
+                {/* ----------------------------------------------------------------------------------------- */}
+
                 <FormControl>
                     <FormLabel>{labels.startDateOfWork}</FormLabel>
                     <Input
@@ -260,3 +307,6 @@ function mapAgreementsToEntity(agreements: any) {
     return agreements.map((agreement: any) => ({ id: agreement.sectorialJointAgreementId, label: agreement.agreementName }))
 }
 
+function mapSalryTablesToEntity(salaryTables: any) {
+    return salaryTables.map((salaryTable: any) => ({ id: salaryTable.numeroTable, label: ` ${salaryTable.consernedEmployee} {${salaryTable.type}} ${salaryTable.numeroTable}` }))
+}

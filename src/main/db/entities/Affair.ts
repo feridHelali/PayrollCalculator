@@ -43,11 +43,11 @@ export class Affair {
 
   @ManyToOne(() => SalaryTable, (salaryTable) => salaryTable.affairs, { nullable: true })
   @JoinColumn([
-    { name: "salaryTableID" },
+    { name: "numero_table" },
   ])
   salaryTable!: SalaryTable;
-  @Column("integer", { name: "salaryTableID", nullable: true })
-  salaryTableId!: number;
+  @Column("integer", { name: "numero_table", nullable: true })
+  numeroTable!: number;
 
   @OneToMany(
     () => ActualMonthSalary,
