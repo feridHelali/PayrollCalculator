@@ -3855,10 +3855,10 @@ batch@0.6.1:
   resolved "https://registry.yarnpkg.com/batch/-/batch-0.6.1.tgz#dc34314f4e679318093fc760272525f94bf25c16"
   integrity sha512-x+VAiMRL6UPkx+kudNvxTl6hB2XNNCG2r+7wixVfIYwu/2HKRXimwQyaumLjMveWvT2Hkd/cAJw+QBMfJ/EKVw==
 
-better-sqlite3@^11.0.0:
-  version "11.1.2"
-  resolved "https://registry.yarnpkg.com/better-sqlite3/-/better-sqlite3-11.1.2.tgz#6c9d064c9f1ff2a7f507477648ca0ba67bf564a3"
-  integrity sha512-gujtFwavWU4MSPT+h9B+4pkvZdyOUkH54zgLdIrMmmmd4ZqiBIrRNBzNzYVFO417xo882uP5HBu4GjOfaSrIQw==
+better-sqlite3@^11.3.0:
+  version "11.3.0"
+  resolved "https://registry.yarnpkg.com/better-sqlite3/-/better-sqlite3-11.3.0.tgz#f10b32ddff665c33176d148e707bd1e57dfd0284"
+  integrity sha512-iHt9j8NPYF3oKCNOO5ZI4JwThjt3Z6J6XrcwG85VNMVzv1ByqrHWv5VILEbCMFWDsoHhXvQ7oC8vgRXFAKgl9w==
   dependencies:
     bindings "^1.5.0"
     prebuild-install "^7.1.1"

@@ -82,7 +82,7 @@
     "@emotion/styled": "^11.11.5",
     "@reduxjs/toolkit": "^2.2.5",
     "@types/jest": "^29.5.12",
-    "better-sqlite3": "^11.0.0",
+    "better-sqlite3": "^11.3.0",
     "electron-builder": "^24.13.3",
     "electron-squirrel-startup": "^1.0.1",
     "framer-motion": "^11.2.10",

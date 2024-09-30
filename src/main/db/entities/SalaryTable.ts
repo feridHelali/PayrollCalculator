@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import { SalaryTableCell } from "./SalaryTableCell";
 import { SectorialJointAgreement } from "./SectorialJointAgreement";
+import { Affair } from "./Affair";
 
 @Entity("SalaryTable")
 export class SalaryTable {
@@ -57,6 +58,9 @@ export class SalaryTable {
 
   @Column({ type: "integer", name: "agreementID", nullable: false })
   agreementId!: number;
+
+  @OneToMany(() => Affair, (affair) => affair.salaryTable)
+  affairs!: Affair[];
 
 
 }
