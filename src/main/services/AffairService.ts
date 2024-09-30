@@ -25,20 +25,24 @@ export class AffairService {
 
   // Get a single Affair by its ID, including relations to ActualMonthSalary and agreement
   async getAffairById(id: number): Promise<Affair | undefined | null> {
-    const affair = await this.repository.findOne({ 
-      where: { affairId: id }, 
-      relations: [ "actualMonthSalaries", "agreement" ]
-    })  
+    const affair = await this.repository.findOne({
+      where: { affairId: id },
+      relations: ["actualMonthSalaries", "agreement"]
+    })
     console.log('Fetched affair:', affair); // Add logging to check fetched dat
     return affair;
   }
 
   // Create a new Affair
   async createAffair(affairData: Partial<Affair>): Promise<Affair> {
-    const newAffair=await this.repository.save(affairData as Affair);
-    return  this.repository.findOne({
-      where:{affairId:newAffair.affairId},
-      relations:["sectorialJointAgreement"]
+    console.log(`%C Affair DTO:`, "background: red; color: white; font-weight: bold", affairData)
+    const insertedAffair = await this.repository.save(affairData as Affair);
+    console.log(`%C Affair created:`, "background: blue; color: white; font-weight: bold", insertedAffair)
+
+    // Fetch the fully populated Affair including its relations
+    return this.repository.findOne({
+      where: { affairId: insertedAffair.affairId },
+      relations: ["sectorialJointAgreement"]
     }) as Promise<Affair>
   }
 
