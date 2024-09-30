@@ -44,19 +44,18 @@ const AffairForm: React.FC = () => {
     const currentAffair = useAppSelector((state: RootState) => state.affairs.currentAffair);
     const error = useAppSelector((state: RootState) => state.affairs.error);
     const mode = useAppSelector((state: RootState) => state.affairs.mode);
-    const agreements = useAppSelector((state: RootState) => state.agreements.agreements);
     const [isLookupOpen, setIsLookupOpen] = useState(false); // Dialog state
     const [agreementsForLookup, setAgreementsForLookup] = useState<Entity[]>([]); // Agreements for lookup
     const [newAffair, setNewAffair] = useState<affairState>(initialAffair);
 
-    useEffect(() => {
+    
 
+    useEffect(() => {
         if (affairId) {
             dispatch(switchToUpdateMode());
             dispatch(fetchAffairById(affairId));
         } else {
             dispatch(switchToCreateMode());
-            setNewAffair(initialAffair);
         }
     }, [affairId, dispatch]);
 
@@ -65,6 +64,8 @@ const AffairForm: React.FC = () => {
                 setAgreementsForLookup(mapAgreementsToEntity(agreements["payload"]));      
             })
     }, []);
+
+
 
 
     useEffect(() => {
@@ -79,6 +80,12 @@ const AffairForm: React.FC = () => {
             })
         }
     }, [currentAffair, mode]);
+
+    useEffect(() => {
+        if (mode === 'create') {
+            setNewAffair(initialAffair);
+        }
+    }, [mode]);
 
     const handleAgreementSelect = (agreement: Entity) => {
         setNewAffair((prev) => ({
