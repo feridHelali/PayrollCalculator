@@ -15,8 +15,8 @@ interface affairState {
     affairNumber: string;
     title: string;
     claimant: string;
-    startDateOfWork: string ;
-    endDateOfWork: string ;
+    startDateOfWork: string;
+    endDateOfWork: string;
     professionalCategoryAtBegining: string;
     professionalDegreeAtBegining: string | number;
     sectorialJointAgreement: { sectorialJointAgreementId: string, name: string };
@@ -61,11 +61,10 @@ const AffairForm: React.FC = () => {
     }, [affairId, dispatch]);
 
     useEffect(() => {
-        if (agreements.length === 0) {
-            dispatch(fetchAgreements());
-            setAgreementsForLookup(mapAgreementsToEntity(agreements));
-        }
-    }, [dispatch]);
+            dispatch(fetchAgreements()).then((agreements) => {
+                setAgreementsForLookup(mapAgreementsToEntity(agreements["payload"]));      
+            })
+    }, []);
 
 
     useEffect(() => {
@@ -75,8 +74,8 @@ const AffairForm: React.FC = () => {
                 sectorialJointAgreement: {
                     sectorialJointAgreementId: currentAffair.agreement.sectorialJointAgreementId ? currentAffair.agreement.sectorialJointAgreementId.toString() : '',
                     name: currentAffair.agreement.agreementName
-                }, 
-                
+                },
+
             })
         }
     }, [currentAffair, mode]);
@@ -168,14 +167,16 @@ const AffairForm: React.FC = () => {
                             placeholder={labels.sectorialJointAgreementId}
                             readOnly
                         />
-                        <Button onClick={() => setIsLookupOpen(true)}>{labels.selectAgreement}</Button>
+                        <Button onClick={() => {
+                            setIsLookupOpen(true)
+                        }}>{labels.selectAgreement}</Button>
                     </HStack>
                 </FormControl>
                 {/* Lookup Dialog */}
                 <GenericLookupDialog
                     isOpen={isLookupOpen}
                     onClose={() => setIsLookupOpen(false)}
-                    entities={mapAgreementsToEntity(agreementsForLookup)}
+                    entities={agreementsForLookup}
                     onSelect={handleAgreementSelect}
                     title={labels.selectAgreement}
                 />
@@ -235,7 +236,6 @@ const AffairForm: React.FC = () => {
 export default AffairForm;
 
 function isAffairValid(_affair: affairState): boolean {
-    console.log(_affair);
     return !!(_affair &&
         _affair.title.trim() &&
         _affair.affairNumber.trim() &&
@@ -244,7 +244,10 @@ function isAffairValid(_affair: affairState): boolean {
         _affair.startDateOfWork.trim() &&
         _affair.endDateOfWork.trim() &&
         _affair.professionalCategoryAtBegining.trim() &&
-        (typeof(_affair.professionalDegreeAtBegining) === 'number'))
+        (typeof (_affair.professionalDegreeAtBegining) === 'number' ||
+            typeof (_affair.professionalDegreeAtBegining) === "string"
+            && _affair.professionalDegreeAtBegining.trim())
+    );
 }
 function mapAgreementsToEntity(agreements: any) {
     return agreements.map((agreement: any) => ({ id: agreement.sectorialJointAgreementId, label: agreement.agreementName }))

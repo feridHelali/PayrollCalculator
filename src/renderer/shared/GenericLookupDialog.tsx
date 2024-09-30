@@ -48,8 +48,8 @@ const GenericLookupDialog: React.FC<GenericLookupDialogProps> = ({ isOpen, onClo
           <Table variant="simple">
             <Thead>
               <Tr>
-                <Th>ID</Th>
-                <Th>Label</Th>
+                <Th>{labels.id}</Th>
+                <Th>{labels.label}</Th>
               </Tr>
             </Thead>
             <Tbody>

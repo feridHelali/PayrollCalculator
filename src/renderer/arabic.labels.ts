@@ -75,4 +75,7 @@ export const labels = {
   theSalary: "الراتب الحالي",
   salaryPeriodList: "قائمة فترات الرواتب",
   addSalaryPeriod: "اضافة فترة راتب",
+
+  id:"رقم",
+  label:"الاسم",
 };
