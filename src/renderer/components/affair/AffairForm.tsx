@@ -122,7 +122,7 @@ const AffairForm: React.FC = () => {
             professionalCategoryAtBegining: newAffair.professionalCategoryAtBegining,
             professionalDegreeAtBegining: newAffair.professionalDegreeAtBegining,
             agreement: newAffair.sectorialJointAgreement.sectorialJointAgreementId,
-            numeroTable: newAffair.numeroTable
+            numeroTable: newAffair.numeroTable.numeroTableId
         }
 
 
@@ -144,7 +144,7 @@ const AffairForm: React.FC = () => {
                 professionalCategoryAtBegining: newAffair.professionalCategoryAtBegining,
                 professionalDegreeAtBegining: newAffair.professionalDegreeAtBegining,
                 agreement: newAffair.sectorialJointAgreement.sectorialJointAgreementId,
-                numeroTable: newAffair.numeroTable
+                numeroTable: newAffair.numeroTable.numeroTableId
             };
             dispatch(updateAffair(updatedAffairDTO))
                 .then(() => navigate('/affairs'));
@@ -214,14 +214,14 @@ const AffairForm: React.FC = () => {
                     <HStack>
                         <Input
                             type="number"
-                            value={newAffair.numeroTable.name}
+                            value={newAffair.numeroTable.numeroTableId}
                             placeholder={labels.numeroTable}
                             readOnly
                         />
                         <Button onClick={() => {
                             setIsSalaryTableLookupWindowOpen(true)
                         }}
-                        disabled={!newAffair.sectorialJointAgreement.sectorialJointAgreementId}
+                        isDisabled={!newAffair.sectorialJointAgreement.sectorialJointAgreementId}
                         >{labels.selectNumeroTable}</Button>
                     </HStack>
                 </FormControl>
@@ -309,5 +309,7 @@ function mapAgreementsToEntity(agreements: any) {
 }
 
 function mapSalryTablesToEntity(salaryTables: any) {
-    return salaryTables.map((salaryTable: any) => ({ id: salaryTable.numeroTable, label: ` ${salaryTable.consernedEmployee} {${salaryTable.type}} ${salaryTable.numeroTable}` }))
+    return salaryTables.map((salaryTable: any) => ({ 
+        id: salaryTable.numeroTable, 
+        label: ` ${salaryTable.consernedEmployee} - ${salaryTable.type} - ${salaryTable.numeroTable}` }))
 }

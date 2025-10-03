@@ -2,7 +2,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ActualMonthSalary } from "./ActualMonthSalary";
 import { SectorialJointAgreement } from "./SectorialJointAgreement";
-import sectorialJointAgreementSlice from "../../../renderer/redux/sectorialJointAgreement/sectorialJointAgreementSlice";
 import { SalaryTable } from "./SalaryTable";
 
 @Entity("Affair")
@@ -43,11 +42,11 @@ export class Affair {
 
   @ManyToOne(() => SalaryTable, (salaryTable) => salaryTable.affairs, { nullable: true })
   @JoinColumn([
-    { name: "numero_table" },
+    { name: "salaryTableId" },
   ])
   salaryTable!: SalaryTable;
-  @Column("integer", { name: "numero_table", nullable: true })
-  numeroTable!: number;
+  @Column("integer", { name: "salaryTableId", nullable: true })
+  salaryTableId!: number;
 
   @OneToMany(
     () => ActualMonthSalary,
