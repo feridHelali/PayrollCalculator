@@ -1,0 +1,207 @@
+[
+  {
+    "key": "arrete-2022-06-textile-17",
+    "sha256": "7ff44fb89cbc9f09e8875b93102de64fd4c07a1ed4fb1f4d9366d06ea8e8c2be",
+    "bytes": 2979202,
+    "pages": 7,
+    "status": "partial",
+    "kind": "MinisterialOrder",
+    "signedOn": "2022-06-23",
+    "jort": {
+      "number": 71,
+      "date": "2022-06-24"
+    },
+    "agreements": [
+      "textile"
+    ],
+    "language": "ar",
+    "notes": "Read from the page-1 text layer (digits decoded); to confirm on the page image. Order of the Minister of Social Affairs approving rider 17 (from the file name: \"MAJ 17 TEXTILE\"); first page is JORT p. 2147."
+  },
+  {
+    "key": "arrete-2024-1383-ar",
+    "sha256": "41ebe78f23b7c77ba3ebbbd94f7aa0656fff99014663b3adcfe571f686c603dc",
+    "bytes": 6319237,
+    "pages": 11,
+    "status": "partial",
+    "kind": "MinisterialOrder",
+    "number": "2024-1383",
+    "signedOn": "2024-04-08",
+    "jort": {
+      "number": 49,
+      "date": "2024-04-16"
+    },
+    "agreements": [
+      "vetements_tisses_et_prets_a_porter"
+    ],
+    "language": "ar",
+    "notes": "Read from the page-1 text layer (digits decoded); to confirm on the page image. Order of the Minister of Social Affairs approving a rider (18) of the woven and ready-to-wear clothing agreement; first page is JORT p. 3513. Lists the earlier riders; staged amounts 2024, 2025, 2026 (design review §1)."
+  },
+  {
+    "key": "convention-electronique-electricite",
+    "sha256": "35f33edf0bef0622fc00d1bb67c12f893fb81f0f66394735b89207b9c3b9609a",
+    "bytes": 9304964,
+    "pages": 65,
+    "status": "partial",
+    "kind": "Agreement",
+    "agreements": [
+      "electricite_et_electronique"
+    ],
+    "notes": "Scanned, no text layer. Agreement of the electrical and electronics industry (from the file name). Not the trade agreement a retailer falls under."
+  },
+  {
+    "key": "unidentified-00",
+    "sha256": "bc13aad25203da0ec7f0380cbf65dc50d5c8f29da47f5b5d4f5b3a0e8398403b",
+    "bytes": 706665,
+    "pages": 30,
+    "status": "partial",
+    "jort": {
+      "number": 41,
+      "date": "1997-05-23"
+    },
+    "agreements": [
+      "agences_de_voyages"
+    ],
+    "language": "ar",
+    "notes": "Read from the page-1 text layer (digits decoded); to confirm on the page image. An issue of 1997 (table of contents on page 1). Files 09 and 11 cite the travel agencies agreement as signed on 22 April 1997, approved on 15 May 1997 and published in this issue."
+  },
+  {
+    "key": "unidentified-01",
+    "sha256": "3f72a197e627e9e07eae97a48a5626f9118bc7415fc93dd8568557c82a8a7ecc",
+    "bytes": 4104730,
+    "pages": 64,
+    "status": "unidentified",
+    "agreements": [],
+    "notes": "Scanned, no text layer."
+  },
+  {
+    "key": "unidentified-02",
+    "sha256": "01e61f413abb548fa2b2c5877993e92f0ad829c49379b55e7e8ac964cb78122f",
+    "bytes": 477677,
+    "pages": 5,
+    "status": "unidentified",
+    "agreements": [],
+    "notes": "Text layer in another font encoding; not decoded yet."
+  },
+  {
+    "key": "unidentified-03",
+    "sha256": "7fae6409a3ba946e797719427448405a06245ecf87bc52fa2092deaad380eb4f",
+    "bytes": 297717,
+    "pages": 5,
+    "status": "unidentified",
+    "agreements": [],
+    "language": "ar",
+    "notes": "Read from the page-1 text layer (digits decoded); to confirm on the page image. JORT of 2006 (old font, words not decoded)."
+  },
+  {
+    "key": "unidentified-04",
+    "sha256": "82f18e8f3c1f322e35790a143d21c629b22e95ca9241b5aed9f0d3e29f2aca0f",
+    "bytes": 319987,
+    "pages": 10,
+    "status": "unidentified",
+    "agreements": [],
+    "language": "ar",
+    "notes": "Read from the page-1 text layer (digits decoded); to confirm on the page image. JORT of 2009 (old font, words not decoded)."
+  },
+  {
+    "key": "unidentified-05",
+    "sha256": "bace84f8834c1e7353cfc041919ff9442140edc3b0d76495ab4e540d1a8eb911",
+    "bytes": 163575,
+    "pages": 3,
+    "status": "unidentified",
+    "agreements": [],
+    "language": "ar",
+    "notes": "Read from the page-1 text layer (digits decoded); to confirm on the page image. JORT of 2012, page 1384 (old font, words not decoded)."
+  },
+  {
+    "key": "unidentified-06",
+    "sha256": "c58454a27eebbddf07826b13621cf34fb565acfb5be80f2af5af4dcf506cb67b",
+    "bytes": 167466,
+    "pages": 3,
+    "status": "unidentified",
+    "agreements": [],
+    "language": "ar",
+    "notes": "Read from the page-1 text layer (digits decoded); to confirm on the page image. JORT of 2013, page 1062 (old font, words not decoded)."
+  },
+  {
+    "key": "unidentified-07",
+    "sha256": "97b46e8cd448dd2b7a6a59a52c20517095d2fcbeff96ff387482d6b9dad059fb",
+    "bytes": 196700,
+    "pages": 4,
+    "status": "partial",
+    "kind": "MinisterialOrder",
+    "signedOn": "2014-08-08",
+    "jort": {
+      "number": 68,
+      "date": "2014-08-22"
+    },
+    "agreements": [],
+    "language": "ar",
+    "notes": "Read from the page-1 text layer (digits decoded); to confirm on the page image. Order of the Minister of Economy and Finance; first page is JORT p. 2266. Raises given as a percentage by group of categories (11.60 % / 9.67 %, design review §1). Agreement not identified yet."
+  },
+  {
+    "key": "unidentified-08",
+    "sha256": "9aa76aae8b8244dd388923cd7b3a26b572144ff59a677a7b48ce1928811ad066",
+    "bytes": 255438,
+    "pages": 4,
+    "status": "partial",
+    "jort": {
+      "number": 96,
+      "date": "2016-11-25"
+    },
+    "agreements": [],
+    "language": "ar",
+    "notes": "Read from the page-1 text layer (digits decoded); to confirm on the page image. First page is JORT p. 3764. Refers to an agreement signed on 14 November 2002 and to its rider 3 (signed 29 December 2005, approved 17 January 2006). Agreement not identified yet."
+  },
+  {
+    "key": "unidentified-09",
+    "sha256": "a398809b56a1b858fab1c5b6cf4a311335c0ba2eb0132201bea7a154e0fee08f",
+    "bytes": 1202008,
+    "pages": 3,
+    "status": "partial",
+    "kind": "MinisterialOrder",
+    "jort": {
+      "number": 62,
+      "date": "2017-08-04"
+    },
+    "agreements": [
+      "agences_de_voyages"
+    ],
+    "language": "ar",
+    "notes": "Read from the page-1 text layer (digits decoded); to confirm on the page image. Erratum (إصلاح خطأ) to an order of 22 March 2017; first page is JORT p. 2494. Concerns the agreement signed on 22 April 1997 (travel agencies, see unidentified-00)."
+  },
+  {
+    "key": "unidentified-10",
+    "sha256": "854dc7e4d2ba7e6189d8fcd2fe1e5401689e368f8b5c08adc95294bc9e508186",
+    "bytes": 598931,
+    "pages": 6,
+    "status": "partial",
+    "kind": "MinisterialOrder",
+    "signedOn": "2018-11-30",
+    "jort": {
+      "number": 99,
+      "date": "2018-12-11"
+    },
+    "agreements": [],
+    "language": "ar",
+    "notes": "Read from the page-1 text layer (digits decoded); to confirm on the page image. Order of the Minister of Social Affairs; first page is JORT p. 5132. Concerns an agreement signed on 4 November 2002, approved on 25 November 2002 (JORT 101 of 13 December 2002). Agreement not identified yet."
+  },
+  {
+    "key": "unidentified-11",
+    "sha256": "5891154edb652cfaa5e5cb04f5299ce2fd3cf8adf410baff2373d8518353ff39",
+    "bytes": 2748659,
+    "pages": 5,
+    "status": "partial",
+    "kind": "Decree",
+    "number": "2022-790",
+    "signedOn": "2022-11-04",
+    "jort": {
+      "number": 120,
+      "date": "2022-11-08"
+    },
+    "agreements": [
+      "agences_de_voyages"
+    ],
+    "language": "ar",
+    "notes": "Read from the page-1 text layer (digits decoded); to confirm on the page image. Text number 790 of 2022 (decree or order, to confirm); first page is JORT p. 3263. Travel agencies agreement (signed 22 April 1997), riders including one signed on 31 October 2018."
+  }
+]

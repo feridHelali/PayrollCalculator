@@ -14,7 +14,11 @@ internal sealed class AgreementConfiguration : IEntityTypeConfiguration<Sectoria
         b.HasKey(a => a.Id);
         b.Property(a => a.Name).IsRequired().HasMaxLength(500);
         b.Property(a => a.Description).HasMaxLength(4000);
+        b.Property(a => a.Code).IsRequired().HasMaxLength(80);
+        b.HasIndex(a => a.Code).IsUnique();
+        b.Property(a => a.Origin).HasConversion<string>().HasMaxLength(10);
         b.Ignore(a => a.IsTransient);
+        b.Ignore(a => a.IsSeeded);
     }
 }
 

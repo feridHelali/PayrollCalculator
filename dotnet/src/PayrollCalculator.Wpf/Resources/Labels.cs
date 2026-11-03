@@ -186,6 +186,7 @@ public static class Labels
             DomainError.Undeclared => $"{field}{detail} غير معرّف في هذا التاريخ",
             DomainError.InvalidStatusTransition => $"{field}{detail}: لا يمكن الانتقال إلى هذه الحالة",
             DomainError.ImmutableOnceApproved => $"{field}{detail}: لا يمكن تعديل حدث مصادق عليه، يجب سحبه وإدخال حدث جديد",
+            DomainError.ReadOnlySeed => $"{field}{detail}: هذه البيانات مرفقة بالبرنامج ولا يمكن تعديلها أو حذفها",
             DomainError.IncompleteSnapshot => $"{field}{detail}: بعض الأحداث المحفوظة في هذه النسخة لم تعد موجودة",
             _ => "عملية غير مسموح بها: " + error.Message,
         };
@@ -234,6 +235,7 @@ public static class Labels
         DomainField.Affair => Affair,
         DomainField.DaysWorked => "عدد أيام العمل",
         DomainField.Unit => "وحدة الأجر",
+        DomainField.AgreementCode => "رمز الاتفاقية",
         _ => string.Empty,
     };
 

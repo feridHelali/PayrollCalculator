@@ -5,6 +5,9 @@
     <Project Path="src/PayrollCalculator.Infrastructure/PayrollCalculator.Infrastructure.csproj" />
     <Project Path="src/PayrollCalculator.Wpf/PayrollCalculator.Wpf.csproj" />
   </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/PayrollCalculator.Seed/PayrollCalculator.Seed.csproj" />
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/PayrollCalculator.Application.Tests/PayrollCalculator.Application.Tests.csproj" />
     <Project Path="tests/PayrollCalculator.Domain.Tests/PayrollCalculator.Domain.Tests.csproj" />

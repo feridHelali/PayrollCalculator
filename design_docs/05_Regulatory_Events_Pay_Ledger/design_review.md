@@ -3,7 +3,7 @@
 This review covers two things: the idea proposed for sprint 05, and the domain model built in sprints 01 to 04. Each finding
 says what is wrong or ambiguous, why it matters for a salary reconstruction used in court, and what the new model does about it.
 
-## 1. Evidence from the sample texts (`design_docs/PDF Conventions`)
+## 1. Evidence from the sample texts (now `data/jort/files`)
 
 I read the sample PDFs before modelling.
 

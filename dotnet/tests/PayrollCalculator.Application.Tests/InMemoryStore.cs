@@ -48,7 +48,11 @@ internal sealed class InMemoryStore : IUnitOfWork
         public void Remove(T aggregate) => Items.Remove(aggregate);
     }
 
-    internal sealed class AgreementRepo : Repo<SectorialJointAgreement>, IAgreementRepository;
+    internal sealed class AgreementRepo : Repo<SectorialJointAgreement>, IAgreementRepository
+    {
+        public Task<SectorialJointAgreement?> FindByCodeAsync(string code, CancellationToken cancellationToken = default) =>
+            Task.FromResult(Items.FirstOrDefault(a => a.Code == code));
+    }
 
     internal sealed class AffairRepo : Repo<Affair>, IAffairRepository;
 

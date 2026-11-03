@@ -24,6 +24,7 @@ public enum DomainError
     InvalidStatusTransition,
     ImmutableOnceApproved,
     IncompleteSnapshot,
+    ReadOnlySeed,
 }
 
 /// <summary>The value a rule applies to.</summary>
@@ -71,6 +72,7 @@ public enum DomainField
     Affair,
     DaysWorked,
     Unit,
+    AgreementCode,
 }
 
 /// <summary>Raised when an operation would break a business invariant.</summary>

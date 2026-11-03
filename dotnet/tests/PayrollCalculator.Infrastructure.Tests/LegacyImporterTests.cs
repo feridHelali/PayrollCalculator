@@ -129,11 +129,8 @@ public sealed class LegacyImporterTests(ITestOutputHelper output) : IDisposable
     [Fact]
     public async Task Real_legacy_database_imports_without_errors()
     {
-        var real = FindUp("payroll.sqlite");
-        if (real is null)
-        {
-            return; // repository copy not available on this machine
-        }
+        var real = FindUp(Path.Combine("fixtures", "legacy-sample.sqlite"));
+        Assert.NotNull(real); // the Electron sample is a test fixture of the repository
 
         File.Copy(real, _legacyPath, overwrite: true);
 

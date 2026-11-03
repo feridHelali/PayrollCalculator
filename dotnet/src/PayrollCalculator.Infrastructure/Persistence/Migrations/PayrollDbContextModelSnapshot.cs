@@ -88,6 +88,11 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
                         .HasMaxLength(4000)
                         .HasColumnType("TEXT");
@@ -97,7 +102,18 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("SortOrder")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
 
                     b.ToTable("Agreements", (string)null);
                 });

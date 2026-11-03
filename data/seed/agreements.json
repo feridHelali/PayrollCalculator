@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "label": "الاتفاقية المشتركة القطاعية لصناعة الملابس المنسوجة والجاهزة",
+    "slug": "vetements_tisses_et_prets_a_porter"
+  },
+  {
+    "id": 2,
+    "label": "الاتفاقية المشتركة القطاعية للنسيج",
+    "slug": "textile"
+  },
+  {
+    "id": 3,
+    "label": "الاتفاقية المشتركة القطاعية للبناء والأشغال العامة",
+    "slug": "batiment_et_travaux_publics"
+  },
+  {
+    "id": 4,
+    "label": "الاتفاقية المشتركة القطاعية لصناعة تحويل البلاستيك",
+    "slug": "transformation_du_plastique"
+  },
+  {
+    "id": 5,
+    "label": "الاتفاقية المشتركة القطاعية للبنوك والمؤسسات المالية",
+    "slug": "banques_et_institutions_financieres"
+  },
+  {
+    "id": 6,
+    "label": "الاتفاقية المشتركة القطاعية لوكالات الأسفار",
+    "slug": "agences_de_voyages"
+  },
+  {
+    "id": 7,
+    "label": "الاتفاقية المشتركة القطاعية لمستخدمي الصيدليات",
+    "slug": "employes_des_pharmacies"
+  },
+  {
+    "id": 8,
+    "label": "الاتفاقية المشتركة القطاعية للتعليم الخاص",
+    "slug": "enseignement_prive"
+  },
+  {
+    "id": 9,
+    "label": "الاتفاقية المشتركة القطاعية للنزل السياحية والمؤسسات المشابهة",
+    "slug": "hotels_touristiques"
+  },
+  {
+    "id": 10,
+    "label": "الاتفاقية المشتركة القطاعية للتأمين",
+    "slug": "assurances"
+  },
+  {
+    "id": 11,
+    "label": "الاتفاقية المشتركة القطاعية للمسابك والتعدين والبناءات الميكانيكية",
+    "slug": "fonderie_metallurgie_mecanique"
+  },
+  {
+    "id": 12,
+    "label": "الاتفاقية المشتركة القطاعية لصناعة الكهرباء والألكترونيك",
+    "slug": "electricite_et_electronique"
+  },
+  {
+    "id": 13,
+    "label": "الاتفاقية المشتركة القطاعية للبناء المعدني",
+    "slug": "construction_metallique"
+  },
+  {
+    "id": 14,
+    "label": "الاتفاقية المشتركة القطاعية لصانعي ووكلاء السيارات",
+    "slug": "constructeurs_et_concessionnaires_automobiles"
+  },
+  {
+    "id": 15,
+    "label": "الاتفاقية المشتركة القطاعية لوكلاء التجهيزات الفلاحية والهندسة المدنية",
+    "slug": "equipements_agricoles_et_genie_civil"
+  },
+  {
+    "id": 16,
+    "label": "الاتفاقية المشتركة القطاعية للمصحات الخاصة",
+    "slug": "cliniques_privees"
+  },
+  {
+    "id": 17,
+    "label": "الاتفاقية المشتركة القطاعية للتصرف في النفايات الصلبة والسائلة",
+    "slug": "gestion_des_dechets"
+  },
+  {
+    "id": 18,
+    "label": "الاتفاقية المشتركة القطاعية لتحويل البلور والمرآة",
+    "slug": "transformation_du_verre_et_miroiterie"
+  },
+  {
+    "id": 19,
+    "label": "الاتفاقية المشتركة القطاعية للتجارة وتوزيع المواد والمنتوجات",
+    "slug": "commerce_et_distribution"
+  },
+  {
+    "id": 20,
+    "label": "الاتفاقية المشتركة القطاعية للمفرقعات",
+    "slug": "explosifs_et_pyrotechnie"
+  }
+]

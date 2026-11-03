@@ -11,12 +11,19 @@ dotnet build                                   # warnings are errors
 dotnet test                                    # all 4 test projects
 dotnet test tests/PayrollCalculator.Domain.Tests --filter "FullyQualifiedName~SalaryTimeline"
 dotnet run --project src/PayrollCalculator.Wpf
-dotnet run --project src/PayrollCalculator.Wpf -- --import-legacy ..\payroll.sqlite   # one-shot migration into an empty DB
+.\run.ps1 -Reset                               # delete the dev database; it is recreated from the seed on startup
+dotnet run --project src/PayrollCalculator.Wpf -- --import-legacy tests\fixtures\legacy-sample.sqlite   # the old Electron sample
+dotnet run --project tools/PayrollCalculator.Seed -- catalogue   # PDF library: file data/jort/inbox/*.pdf, refresh the manifest
+dotnet run --project tools/PayrollCalculator.Seed -- library-verify | text <key> [page]
 dotnet ef migrations add <Name> -p src/PayrollCalculator.Infrastructure -s src/PayrollCalculator.Infrastructure -o Persistence/Migrations
 ```
 
 - The database is created and migrated on startup at `%LOCALAPPDATA%\PayrollCalculator\payroll.db`. Set the
   `PAYROLL_DB_PATH` environment variable to use another file.
+- **Reference data (sprint 07).** On every startup the app applies the data shipped with the build: today the 20
+  sectoral agreements of `data/seed/agreements.json` (embedded in Infrastructure), matched by their stable code. Seeded
+  agreements are read-only in the app. The JORT PDFs live in `data/jort/files`, described by `data/jort/manifest.json`;
+  they are not shipped with the app.
 
 ## Sign-in and users
 
@@ -39,8 +46,8 @@ dotnet ef migrations add <Name> -p src/PayrollCalculator.Infrastructure -s src/P
 | `Wpf` | MVVM (CommunityToolkit.Mvvm) with an RTL Arabic UI; `LoginWindow` before the shell; theme in `Themes/Theme.xaml` (icons via `Controls/Ui.cs`); view-model-first navigation (`Navigator` + DataTemplates in `App.xaml`); `IServiceRunner` runs each use case in a fresh DI scope (one DbContext per operation) | Application, Infrastructure |
 
 The tests mirror the layers. Domain and Application tests are pure unit tests that use in-memory fakes. Infrastructure
-tests use real SQLite in memory with the migrations applied, and include an import of the repository's real
-`payroll.sqlite`. The Wpf tests drive the view models through the full stack.
+tests use real SQLite in memory with the migrations applied, and include an import of the Electron sample
+(`tests/fixtures/legacy-sample.sqlite`) and a check of the PDF library against its manifest. The Wpf tests drive the view models through the full stack.
 
 ## Business rules and assumptions to validate
 

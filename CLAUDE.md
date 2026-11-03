@@ -14,14 +14,17 @@ layoff. The UI is in **Arabic, RTL**. The product spec is `design_docs/00_Incept
   architecture and the business-rule assumptions.
 - `design_docs/`: specs, the agreement PDFs, sprint notes. `02_Legacy_Electron_Archive/electron-app/` is the former
   Electron app, kept for reference only. Don't build or change it.
-- `payroll.sqlite`: the legacy Electron data. The .NET app imports it with `--import-legacy`, and an Infrastructure
-  test reads it. Keep it at the root.
+- `data/seed/`: reference data shipped with the app (JSON, the source of truth; today `agreements.json`, embedded in
+  Infrastructure and applied at startup). `data/jort/`: the JORT PDF library (`files/`, `inbox/`, `manifest.json`), used
+  to build the seed, not shipped. Plan: `design_docs/07_Reference_Data_Seed/sprint.md`.
+- `dotnet/tests/fixtures/legacy-sample.sqlite`: the old Electron sample data (test fixture only; the app no longer uses it).
 
 ## Commands (from `dotnet/`)
 
 - `dotnet build`: warnings are errors (`Directory.Build.props`).
 - `dotnet test`, or one test class with `dotnet test tests/PayrollCalculator.Domain.Tests --filter "FullyQualifiedName~SalaryTimeline"`.
-- `.\run.ps1 [-DbPath <file>] [-ImportLegacy] [-Release]`: build and run the WPF app.
+- `.\run.ps1 [-Reset] [-DbPath <file>] [-ImportLegacy] [-Release]`: build and run the WPF app (`-Reset` deletes the database first).
+- `dotnet run --project tools/PayrollCalculator.Seed -- catalogue | library-verify | text <key> [page]`: the PDF library.
 - `dotnet ef migrations add <Name> -p src/PayrollCalculator.Infrastructure -s src/PayrollCalculator.Infrastructure -o Persistence/Migrations`
 
 ## Conventions

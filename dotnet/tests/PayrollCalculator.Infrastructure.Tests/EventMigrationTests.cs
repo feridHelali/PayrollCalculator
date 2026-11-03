@@ -179,16 +179,12 @@ public sealed class EventMigrationTests(ITestOutputHelper output) : IDisposable
         Assert.Equal(first.Agreements, await ctx.LegalSources.CountAsync()); // one placeholder source per agreement
     }
 
-    /// <summary>The parity test on the real Electron data, when the repository copy is present.</summary>
+    /// <summary>The parity test on the real Electron data (the sample kept as <c>tests/fixtures/legacy-sample.sqlite</c>).</summary>
     [Fact]
     public async Task The_real_data_migrates_with_only_documented_differences()
     {
-        var real = LegacyImporterTests.FindUp("payroll.sqlite");
-        if (real is null)
-        {
-            output.WriteLine("payroll.sqlite not found: skipped");
-            return;
-        }
+        var real = LegacyImporterTests.FindUp(Path.Combine("fixtures", "legacy-sample.sqlite"));
+        Assert.NotNull(real);
 
         await ImportAsync(real);
         var report = await MigrateAsync();

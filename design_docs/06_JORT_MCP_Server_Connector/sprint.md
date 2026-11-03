@@ -132,7 +132,7 @@ All of them are to do and written test first.
 | 06.12 | **Connector packaging** | v1: an MCP bundle (`.mcpb`) for Claude Desktop, with a manifest asking for the database path and the library folder; a `.mcp.json` snippet for Claude Code and an `opencode.json` snippet for OpenCode (sprint 07, G9). v2 (optional): Streamable HTTP with OAuth for a remote connector | The manifest validates; the server starts from the bundle on a clean machine |
 | 06.13 | **IORT (optional, after 06.0)** | Download a text from its JORT reference into the library; allow-list for the IORT domain only | Decided in 06.0 |
 | 06.14 | **Prompts and the extraction workflow** | `extract_document`, `extract_library`, `review_hints` | The prompts list their tools; dry run on one document |
-| 06.15 | **Evaluation on the sample library** | Values checked by hand for the sample PDFs (`design_docs/PDF Conventions`); a script runs the extraction and scores it (precision and recall per cell, citations correct) | Score recorded here; the target is set in 06.0 |
+| 06.15 | **Evaluation on the sample library** | Values checked by hand for the sample PDFs (`data/jort/files`); a script runs the extraction and scores it (precision and recall per cell, citations correct) | Score recorded here; the target is set in 06.0 |
 | 06.16 | **Documentation and closing** | `dotnet/README.md` (MCP section), `CLAUDE.md`, an installation guide in Arabic for the user | — |
 
 ## Delivery order

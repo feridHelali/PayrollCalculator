@@ -70,6 +70,30 @@ flowchart LR
 
 ---
 
+## The buffer zone and an upload tool (question from the product owner)
+
+**Is a buffer zone, with a tool to upload PDFs, turn them into text and generate the payroll elements, a good idea?**
+Yes, but as two buffers in files, with the tool as a maintainer's command line for now. It is not a screen in the app.
+
+| Stage | Buffer | Tool | Status |
+|---|---|---|---|
+| 1. Upload | `data/jort/inbox/`: drop the PDFs there | `payroll-seed catalogue` files them under `files/`, hashes them, refuses a copy of a file already there, and adds them to the manifest as "unidentified" | **Done** (07.2) |
+| 2. Identify | `data/jort/manifest.json` (status unidentified → partial → identified) | `payroll-seed text <key>`: the text layer with the JORT digits decoded, to read the issue, date and page; a person completes the entry | **Done**, 9 of 15 files partly identified |
+| 3. Extract | `data/seed/drafts/{agreement}/*.json`: events not yet approved, the file equivalent of the Draft status | An LLM with vision writes them from the page images (07.13); `payroll-seed verify` checks them | To do (07.3, 07.4, 07.13) |
+| 4. Approve | moving a draft to `data/seed/agreements/{agreement}.json`, through a reviewed git change | `seed verify` must pass; the reviewer compares the diff with the page images | To do |
+| 5. Ship | `payroll.seed.db` / embedded seed | `seed build` | To do (07.4, 07.9) |
+
+- **"Convert to text": only for identification.** The text layer is reliable for the **digits** (one fixed glyph
+  substitution, `∞±≤≥¥µ∂∑∏π` → `0–9`) and, in the files from 2014 on, for the Arabic words too. It is not reliable for
+  tables: columns merge, and the oldest files have no text layer. Amounts are read from the **page image** by a vision
+  model and checked by `verify` (monotonicity, published against computed). The text layer then cross-checks the digits.
+- **An upload screen in the app is not worth it for the first release.** End users never change shipped rules (D4),
+  so they have nothing to upload. It becomes worth building if someone other than a developer feeds the pipeline,
+  for example the domain expert. It would be a "maintainer mode": drop PDFs, see the manifest status, view a page
+  next to its draft cells, approve. That is the review inbox of sprint 06, deferred with it.
+
+---
+
 ## Sub-sprints
 
 | # | Sub-sprint | Content | First tests |
@@ -124,3 +148,33 @@ acceptable. Checked on a clean **Windows Sandbox** (no .NET), offline, in 07.9.
   `verify` report.
 - An update from seed v1 to v2 keeps every user's affairs and old snapshots.
 - The golden ledgers pass for every agreement.
+
+---
+
+## Progress (branch `sprint-07-phase-1`)
+
+- **07.12 done.** `PerDayWorked` (a rate per working day, with the days of a full month given by the text, in
+  proportion for a partial month; `PayUnit.Daily` is for allowances only). `NonMonotonicGrid` warning: the written
+  value is kept, and a raise reports only the decreases it introduces.
+- **07.1 partly done.** `SectorialJointAgreement` has a `Code` (unique; a lowercase slug for seeded ones, `custom_…`
+  for those entered by a user), an `Origin` (Seed / User) and a `SortOrder`. Seeded agreements can't be renamed or
+  deleted (`ReadOnlySeed`). Migration `AddAgreementCodeAndOrigin` gives existing rows a unique user code. Still to
+  do: `Origin` on legal sources and rule events.
+- **The 20 agreements** of the product owner's list are in `data/seed/agreements.json` (id = display order, Arabic
+  label, slug = code). The file is embedded in Infrastructure and applied on every startup by `ReferenceDataSeeder`:
+  idempotent, matched by code, it never touches user data. The legacy import now only refuses a database that holds
+  user data.
+- **07.2 done.** One library, `data/jort/files/` (15 PDFs; the duplicate folder and the two zips were removed after
+  checking they were identical), `inbox/`, and `manifest.json` (SHA-256, size, pages, status, kind, number, date,
+  JORT issue, agreements, notes). The tool `dotnet/tools/PayrollCalculator.Seed` (`payroll-seed`, PdfPig) provides
+  `catalogue`, `library-verify` and `text`. A test checks the library against its manifest.
+- **What the text layers say:**
+  - The 2024 order (JORT 49, 16 April 2024) is for **woven and ready-to-wear clothing**, not textile.
+  - Files 00, 09 and 11 belong to the **travel agencies** agreement of 22 April 1997.
+  - Files 07, 08 and 10 still need their agreement identified.
+  - Files 01 and the electronics agreement have no text layer; file 02 uses an encoding not decoded yet.
+- **07.5 done.** `run.ps1 -Reset` deletes the database, which the app recreates from the seed on startup. The Electron
+  sample moved to `dotnet/tests/fixtures/legacy-sample.sqlite`; the real-data tests now fail if it is missing instead
+  of skipping silently.
+- **Next:** 07.3 (seed file format and `drafts/`), 07.4 (`verify` / `build`), 07.11 (prime catalogue), 07.13 (light
+  loop), then identify the remaining files.

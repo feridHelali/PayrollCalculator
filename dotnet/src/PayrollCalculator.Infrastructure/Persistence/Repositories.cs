@@ -25,7 +25,11 @@ public abstract class EfRepository<T>(PayrollDbContext context) : IRepository<T>
 }
 
 public sealed class AgreementRepository(PayrollDbContext context)
-    : EfRepository<SectorialJointAgreement>(context), IAgreementRepository;
+    : EfRepository<SectorialJointAgreement>(context), IAgreementRepository
+{
+    public Task<SectorialJointAgreement?> FindByCodeAsync(string code, CancellationToken cancellationToken = default) =>
+        Set.FirstOrDefaultAsync(a => a.Code == code, cancellationToken);
+}
 
 public sealed class AffairRepository(PayrollDbContext context)
     : EfRepository<Affair>(context), IAffairRepository;

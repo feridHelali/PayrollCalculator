@@ -1,5 +1,6 @@
 using PayrollCalculator.Application.Agreements;
 using PayrollCalculator.Application.Common;
+using PayrollCalculator.Domain.Agreements;
 using PayrollCalculator.Domain.Common;
 
 namespace PayrollCalculator.Application.Tests;
@@ -29,7 +30,9 @@ public class AgreementServiceTests
 
         await _service.UpdateAsync(new AgreementDto(id, "B", "d"));
 
-        Assert.Equal(new AgreementDto(id, "B", "d"), await _service.GetAsync(id));
+        var updated = await _service.GetAsync(id);
+        Assert.Equal((id, "B", "d", false), (updated.Id, updated.Name, updated.Description, updated.IsSeeded));
+        Assert.StartsWith("custom_", updated.Code, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -62,5 +65,38 @@ public class AgreementServiceTests
         await _service.CreateAsync(new AgreementDto(0, "A", null));
 
         Assert.Equal(["A", "B"], (await _service.ListAsync()).Select(a => a.Name));
+    }
+
+    private async Task<int> SeedAsync(string code, string name, int order)
+    {
+        _store.Agreements.Add(SectorialJointAgreement.FromSeed(code, name, order));
+        await _store.SaveChangesAsync();
+        return _store.Agreements.Items.Single(a => a.Code == code).Id;
+    }
+
+    [Fact]
+    public async Task Seeded_agreements_come_first_in_their_shipped_order()
+    {
+        await _service.CreateAsync(new AgreementDto(0, "A", null));
+        await SeedAsync("textile", "الاتفاقية المشتركة القطاعية للنسيج", 2);
+        await SeedAsync("vetements_tisses_et_prets_a_porter", "الاتفاقية المشتركة القطاعية لصناعة الملابس المنسوجة والجاهزة", 1);
+
+        var list = await _service.ListAsync();
+
+        Assert.Equal(["vetements_tisses_et_prets_a_porter", "textile"], list.Take(2).Select(a => a.Code));
+        Assert.True(list[0].IsSeeded);
+        Assert.Equal("A", list[2].Name);
+    }
+
+    [Fact]
+    public async Task A_seeded_agreement_can_be_neither_changed_nor_deleted()
+    {
+        var id = await SeedAsync("textile", "الاتفاقية المشتركة القطاعية للنسيج", 2);
+
+        var update = await Assert.ThrowsAsync<DomainException>(() => _service.UpdateAsync(new AgreementDto(id, "x", null)));
+        var delete = await Assert.ThrowsAsync<DomainException>(() => _service.DeleteAsync(id));
+
+        Assert.Equal((DomainError.ReadOnlySeed, DomainError.ReadOnlySeed), (update.Error, delete.Error));
+        Assert.Single(await _service.ListAsync());
     }
 }
