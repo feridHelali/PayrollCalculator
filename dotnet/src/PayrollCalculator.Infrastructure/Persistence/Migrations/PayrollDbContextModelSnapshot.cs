@@ -280,6 +280,40 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("PayrollCalculator.Domain.Allowances.Allowance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AgreementId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AppliesTo")
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Conditions")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AgreementId");
+
+                    b.ToTable("Allowances", (string)null);
+                });
+
             modelBuilder.Entity("PayrollCalculator.Domain.Ledger.LedgerSnapshot", b =>
                 {
                     b.Property<int>("Id")
@@ -957,6 +991,47 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                         });
 
                     b.Navigation("GridKinds");
+                });
+
+            modelBuilder.Entity("PayrollCalculator.Domain.Allowances.Allowance", b =>
+                {
+                    b.HasOne("PayrollCalculator.Domain.Agreements.SectorialJointAgreement", null)
+                        .WithMany()
+                        .HasForeignKey("AgreementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsMany("PayrollCalculator.Domain.Allowances.AllowanceRate", "Rates", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<int>("AllowanceId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<DateOnly>("EffectiveFrom")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Source")
+                                .HasMaxLength(500)
+                                .HasColumnType("TEXT");
+
+                            b1.Property<decimal>("Value")
+                                .HasPrecision(18, 4)
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("AllowanceId");
+
+                            b1.ToTable("AllowanceRates", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("AllowanceId");
+                        });
+
+                    b.Navigation("Rates");
                 });
 
             modelBuilder.Entity("PayrollCalculator.Domain.Ledger.LedgerSnapshot", b =>

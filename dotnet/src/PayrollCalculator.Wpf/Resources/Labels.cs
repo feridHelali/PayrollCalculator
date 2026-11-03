@@ -1,3 +1,4 @@
+using PayrollCalculator.Domain.Allowances;
 using PayrollCalculator.Domain.Calculation;
 using PayrollCalculator.Domain.SalaryTables;
 using PayrollCalculator.Domain.Users;
@@ -18,6 +19,21 @@ public static class Labels
     public const string Description = "بيانات على الاتفاقية";
     public const string AllAgreements = "كل الاتفاقيات";
     public const string SalaryTables = "جداول الأجور";
+    public const string Allowances = "المنح والمنافع";
+    public const string Allowance = "المنحة";
+    public const string AllowanceName = "اسم المنحة";
+    public const string AllowanceUnitLabel = "طريقة الاحتساب";
+    public const string AppliesTo = "المنتفعون";
+    public const string Conditions = "شروط الإسناد";
+    public const string Rates = "المبالغ حسب تاريخ التطبيق";
+    public const string AddRate = "إضافة مبلغ";
+    public const string EffectiveFrom = "بداية من";
+    public const string RateValue = "المبلغ أو النسبة";
+    public const string RateSource = "المرجع (الرائد الرسمي، الصفحة، الفصل)";
+    public const string CurrentValue = "المبلغ الحالي";
+    public const string FirstDate = "منذ";
+    public const string RateCount = "عدد المبالغ";
+    public const string RateIncomplete = "يجب إدخال التاريخ والمبلغ في كل سطر";
     public const string SalaryTable = "جدول الأجور";
     public const string TableNumber = "رقم الجدول";
     public const string SalaryTypeLabel = "نوع الجدول";
@@ -243,6 +259,8 @@ public static class Labels
         DomainField.DaysWorked => "عدد أيام العمل",
         DomainField.Unit => "وحدة الأجر",
         DomainField.AgreementCode => "رمز الاتفاقية",
+        DomainField.AllowanceName => AllowanceName,
+        DomainField.EffectiveDate => "تاريخ التطبيق",
         DomainField.ImportFile => "الملف",
         _ => string.Empty,
     };
@@ -286,6 +304,15 @@ public static class Labels
         UserStatus.MustChangePassword => "في انتظار تغيير كلمة المرور",
         UserStatus.Locked => "مقفل مؤقتا",
         _ => status.ToString(),
+    };
+
+    public static string AllowanceUnitText(AllowanceUnit? unit) => unit switch
+    {
+        AllowanceUnit.PerMonth => "مبلغ شهري (د)",
+        AllowanceUnit.PerHour => "عن كل ساعة عمل (د)",
+        AllowanceUnit.PerDayWorked => "عن كل يوم عمل (د)",
+        AllowanceUnit.PercentOfBase => "نسبة من الأجر الأساسي (%)",
+        _ => string.Empty,
     };
 
     public static string SalaryTypeText(SalaryType? type) => type switch

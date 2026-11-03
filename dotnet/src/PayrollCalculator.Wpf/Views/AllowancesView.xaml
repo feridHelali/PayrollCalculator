@@ -1,0 +1,44 @@
+<UserControl x:Class="PayrollCalculator.Wpf.Views.AllowancesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:PayrollCalculator.Wpf.ViewModels"
+             xmlns:res="clr-namespace:PayrollCalculator.Wpf.Resources"
+             xmlns:c="clr-namespace:PayrollCalculator.Wpf.Controls"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:AllowancesViewModel}">
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top" Style="{StaticResource PageTitle}" Text="{Binding Title}" />
+        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+            <ComboBox DockPanel.Dock="Left" Width="360" Margin="0,0,16,0"
+                      ItemsSource="{Binding AgreementFilter}" SelectedItem="{Binding SelectedFilter}" DisplayMemberPath="Name" />
+            <StackPanel Style="{StaticResource Toolbar}" Margin="0">
+                <Button Style="{StaticResource PrimaryButton}" c:Ui.Icon="{x:Static c:Icons.New}" Content="{x:Static res:Labels.New}" Command="{Binding NewCommand}" />
+                <Button c:Ui.Icon="{x:Static c:Icons.Edit}" Content="{x:Static res:Labels.Edit}" Command="{Binding EditCommand}" />
+                <Button Style="{StaticResource DangerButton}" c:Ui.Icon="{x:Static c:Icons.Delete}" Content="{x:Static res:Labels.Delete}" Command="{Binding DeleteCommand}" />
+            </StackPanel>
+        </DockPanel>
+        <DataGrid ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}" IsReadOnly="True"
+                  MouseDoubleClick="OnRowDoubleClick">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{x:Static res:Labels.Agreement}" Binding="{Binding AgreementName}" Width="2*" />
+                <DataGridTextColumn Header="{x:Static res:Labels.AllowanceName}" Binding="{Binding Name}" Width="2*" />
+                <DataGridTextColumn Header="{x:Static res:Labels.AllowanceUnitLabel}" Binding="{Binding Unit, Converter={StaticResource AllowanceUnitText}}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.AppliesTo}" Binding="{Binding AppliesTo}" Width="*" />
+                <DataGridTextColumn Header="{x:Static res:Labels.CurrentValue}" Binding="{Binding CurrentValue, StringFormat=0.000}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.FirstDate}" Binding="{Binding FirstDate, Converter={StaticResource DateText}}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.RateCount}" Binding="{Binding RateCount}" Width="Auto" />
+                <DataGridTemplateColumn Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource RowDeleteButton}"
+                                    Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

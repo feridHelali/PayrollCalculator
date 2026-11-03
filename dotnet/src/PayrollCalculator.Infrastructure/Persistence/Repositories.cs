@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PayrollCalculator.Domain.Affairs;
 using PayrollCalculator.Domain.Agreements;
+using PayrollCalculator.Domain.Allowances;
 using PayrollCalculator.Domain.Common;
 using PayrollCalculator.Domain.SalaryTables;
 using PayrollCalculator.Domain.Users;
@@ -29,6 +30,13 @@ public sealed class AgreementRepository(PayrollDbContext context)
 {
     public Task<SectorialJointAgreement?> FindByCodeAsync(string code, CancellationToken cancellationToken = default) =>
         Set.FirstOrDefaultAsync(a => a.Code == code, cancellationToken);
+}
+
+public sealed class AllowanceRepository(PayrollDbContext context)
+    : EfRepository<Allowance>(context), IAllowanceRepository
+{
+    public async Task<IReadOnlyList<Allowance>> ListByAgreementAsync(int? agreementId, CancellationToken cancellationToken = default) =>
+        await Set.Where(a => agreementId == null || a.AgreementId == agreementId).ToListAsync(cancellationToken).ConfigureAwait(false);
 }
 
 public sealed class AffairRepository(PayrollDbContext context)

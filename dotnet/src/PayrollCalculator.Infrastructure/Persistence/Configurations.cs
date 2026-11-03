@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PayrollCalculator.Domain.Affairs;
 using PayrollCalculator.Domain.Agreements;
+using PayrollCalculator.Domain.Allowances;
 using PayrollCalculator.Domain.SalaryTables;
 
 namespace PayrollCalculator.Infrastructure.Persistence;
@@ -105,6 +106,33 @@ internal sealed class SalaryTableConfiguration : IEntityTypeConfiguration<Salary
             c.Property(x => x.Amount).HasPrecision(18, 4);
         });
         b.Navigation(t => t.Cells).UsePropertyAccessMode(PropertyAccessMode.Field);
+    }
+}
+
+internal sealed class AllowanceConfiguration : IEntityTypeConfiguration<Allowance>
+{
+    public void Configure(EntityTypeBuilder<Allowance> b)
+    {
+        b.ToTable("Allowances");
+        b.HasKey(a => a.Id);
+        b.Ignore(a => a.IsTransient);
+        b.Property(a => a.Name).IsRequired().HasMaxLength(300);
+        b.Property(a => a.Unit).HasConversion<string>().HasMaxLength(20);
+        b.Property(a => a.AppliesTo).HasMaxLength(300);
+        b.Property(a => a.Conditions).HasMaxLength(2000);
+        b.HasOne<SectorialJointAgreement>().WithMany().HasForeignKey(a => a.AgreementId).OnDelete(DeleteBehavior.Cascade);
+        b.HasIndex(a => a.AgreementId);
+
+        b.OwnsMany(a => a.Rates, r =>
+        {
+            r.ToTable("AllowanceRates");
+            r.WithOwner().HasForeignKey("AllowanceId");
+            r.Property<int>("Id");
+            r.HasKey("Id");
+            r.Property(x => x.Value).HasPrecision(18, 4);
+            r.Property(x => x.Source).HasMaxLength(500);
+        });
+        b.Navigation(a => a.Rates).UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }
 

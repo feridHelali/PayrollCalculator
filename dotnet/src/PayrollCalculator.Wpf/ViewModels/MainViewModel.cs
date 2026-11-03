@@ -13,6 +13,7 @@ public enum NavSection
     None,
     Affairs,
     SalaryTables,
+    Allowances,
     Agreements,
     Users,
     About,
@@ -57,6 +58,7 @@ public sealed partial class MainViewModel : PageViewModel
     {
         AffairsViewModel or AffairEditorViewModel or TimelineViewModel => NavSection.Affairs,
         SalaryTablesViewModel or SalaryTableEditorViewModel => NavSection.SalaryTables,
+        AllowancesViewModel or AllowanceEditorViewModel => NavSection.Allowances,
         AgreementsViewModel => NavSection.Agreements,
         UsersViewModel => NavSection.Users,
         AboutViewModel => NavSection.About,
@@ -66,6 +68,8 @@ public sealed partial class MainViewModel : PageViewModel
     public bool IsAffairsActive => ActiveSection == NavSection.Affairs;
 
     public bool IsSalaryTablesActive => ActiveSection == NavSection.SalaryTables;
+
+    public bool IsAllowancesActive => ActiveSection == NavSection.Allowances;
 
     public bool IsAgreementsActive => ActiveSection == NavSection.Agreements;
 
@@ -78,6 +82,9 @@ public sealed partial class MainViewModel : PageViewModel
 
     [RelayCommand]
     private Task ShowSalaryTablesAsync() => _navigator.GoAsync<SalaryTablesViewModel>(p => p.LoadAsync());
+
+    [RelayCommand]
+    private Task ShowAllowancesAsync() => _navigator.GoAsync<AllowancesViewModel>(p => p.LoadAsync());
 
     [RelayCommand]
     private Task ShowAffairsAsync() => _navigator.GoAsync<AffairsViewModel>(p => p.LoadAsync());

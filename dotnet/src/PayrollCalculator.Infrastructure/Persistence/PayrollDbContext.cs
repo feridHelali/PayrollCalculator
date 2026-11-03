@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PayrollCalculator.Domain.Affairs;
 using PayrollCalculator.Domain.Agreements;
+using PayrollCalculator.Domain.Allowances;
 using PayrollCalculator.Domain.Common;
 using PayrollCalculator.Domain.Ledger;
 using PayrollCalculator.Domain.LegalSources;
@@ -18,6 +19,8 @@ public sealed class PayrollDbContext(DbContextOptions<PayrollDbContext> options)
     public DbSet<SalaryTable> SalaryTables => Set<SalaryTable>();
 
     public DbSet<Affair> Affairs => Set<Affair>();
+
+    public DbSet<Allowance> Allowances => Set<Allowance>();
 
     public DbSet<User> Users => Set<User>();
 

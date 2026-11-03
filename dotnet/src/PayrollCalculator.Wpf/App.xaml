@@ -1,4 +1,4 @@
-﻿<Application x:Class="PayrollCalculator.Wpf.App"
+<Application x:Class="PayrollCalculator.Wpf.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:PayrollCalculator.Wpf.ViewModels"
@@ -12,6 +12,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <conv:SalaryTypeTextConverter x:Key="SalaryTypeText" />
+            <conv:AllowanceUnitTextConverter x:Key="AllowanceUnitText" />
             <conv:IssueTextConverter x:Key="IssueText" />
             <conv:DateOnlyTextConverter x:Key="DateText" />
             <conv:UserStatusTextConverter x:Key="UserStatusText" />
@@ -25,6 +26,8 @@
             <DataTemplate DataType="{x:Type vm:AgreementsViewModel}"><v:AgreementsView /></DataTemplate>
             <DataTemplate DataType="{x:Type vm:SalaryTablesViewModel}"><v:SalaryTablesView /></DataTemplate>
             <DataTemplate DataType="{x:Type vm:SalaryTableEditorViewModel}"><v:SalaryTableEditorView /></DataTemplate>
+            <DataTemplate DataType="{x:Type vm:AllowancesViewModel}"><v:AllowancesView /></DataTemplate>
+            <DataTemplate DataType="{x:Type vm:AllowanceEditorViewModel}"><v:AllowanceEditorView /></DataTemplate>
             <DataTemplate DataType="{x:Type vm:AffairsViewModel}"><v:AffairsView /></DataTemplate>
             <DataTemplate DataType="{x:Type vm:AffairEditorViewModel}"><v:AffairEditorView /></DataTemplate>
             <DataTemplate DataType="{x:Type vm:TimelineViewModel}"><v:TimelineView /></DataTemplate>

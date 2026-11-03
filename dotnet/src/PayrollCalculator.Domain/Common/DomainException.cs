@@ -75,6 +75,8 @@ public enum DomainField
     Unit,
     AgreementCode,
     ImportFile,
+    AllowanceName,
+    EffectiveDate,
 }
 
 /// <summary>Raised when an operation would break a business invariant.</summary>

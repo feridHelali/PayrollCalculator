@@ -1,3 +1,4 @@
+using PayrollCalculator.Wpf.Resources;
 using PayrollCalculator.Application.Agreements;
 using System.IO;
 using PayrollCalculator.Domain.Calculation;
@@ -262,6 +263,74 @@ public sealed class ViewModelTests : IDisposable
         {
             File.Delete(bad);
         }
+    }
+
+    private async Task<AllowanceEditorViewModel> PresenceOfRider18Async()
+    {
+        var editor = _app.Get<AllowanceEditorViewModel>();
+        await editor.LoadAsync(null);
+        editor.SelectedAgreementId = editor.Agreements.Single(a => a.Code == "vetements_tisses_et_prets_a_porter").Id;
+        editor.Name = "منحة الحضور";
+        editor.Unit = PayrollCalculator.Domain.Allowances.AllowanceUnit.PerMonth;
+        editor.AppliesTo = "كافة العمال";
+        foreach (var (year, value) in new[] { (2024, 7.930m), (2025, 8.445m), (2026, 9.036m) })
+        {
+            editor.AddRateCommand.Execute(null);
+            editor.Rates[^1].EffectiveFrom = new DateTime(year, 1, 1);
+            editor.Rates[^1].Value = value;
+            editor.Rates[^1].Source ??= "الرائد الرسمي عدد 49 لسنة 2024، ص 3516، الفصل 49";
+        }
+
+        return editor;
+    }
+
+    [Fact]
+    public async Task A_prime_with_its_dated_amounts_is_saved_and_listed_with_the_amount_in_force()
+    {
+        var shell = _app.Get<MainViewModel>();
+        var editor = await PresenceOfRider18Async();
+        Assert.All(editor.Rates, r => Assert.StartsWith("الرائد الرسمي", r.Source, StringComparison.Ordinal)); // copied to each new line
+
+        await editor.SaveCommand.ExecuteAsync(null);
+
+        Assert.Empty(_app.Dialogs.Errors);
+        var list = Assert.IsType<AllowancesViewModel>(shell.CurrentPage);
+        var row = Assert.Single(list.Items);
+        Assert.Equal(("منحة الحضور", 3, new DateOnly(2024, 1, 1)), (row.Name, row.RateCount, row.FirstDate));
+        Assert.NotNull(row.CurrentValue);
+
+        var reopened = _app.Get<AllowanceEditorViewModel>();
+        await reopened.LoadAsync(row.Id);
+        Assert.Equal([7.930m, 8.445m, 9.036m], reopened.Rates.Select(r => r.Value!.Value));
+        Assert.Equal("كافة العمال", reopened.AppliesTo);
+    }
+
+    [Fact]
+    public async Task A_prime_line_without_a_date_or_with_a_repeated_date_is_refused()
+    {
+        var editor = await PresenceOfRider18Async();
+        editor.AddRateCommand.Execute(null);
+
+        await editor.SaveCommand.ExecuteAsync(null);
+        Assert.Equal(Labels.RateIncomplete, Assert.Single(_app.Dialogs.Errors));
+
+        editor.Rates[^1].EffectiveFrom = new DateTime(2025, 1, 1);
+        editor.Rates[^1].Value = 1m;
+        await editor.SaveCommand.ExecuteAsync(null);
+        Assert.Equal(2, _app.Dialogs.Errors.Count);
+        Assert.IsNotType<AllowancesViewModel>(_app.Get<MainViewModel>().CurrentPage); // the two dates 2025 clash: still on the form
+    }
+
+    [Fact]
+    public async Task A_prime_is_deleted_from_its_row_after_confirmation()
+    {
+        var editor = await PresenceOfRider18Async();
+        await editor.SaveCommand.ExecuteAsync(null);
+        var list = (AllowancesViewModel)_app.Get<MainViewModel>().CurrentPage!;
+
+        await list.DeleteCommand.ExecuteAsync(list.Items[0]);
+
+        Assert.Empty(list.Items);
     }
 
     [Fact]

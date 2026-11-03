@@ -32,6 +32,7 @@ public static class Icons
     public const string Affairs = "";        // Work (briefcase): a legal case
     public const string SalaryTables = "";   // ViewAll (grid): the categories × degrees grid
     public const string Agreements = "";     // Library: the agreements' texts
+    public const string Allowances = "";     // PaymentCard: the primes and allowances
     public const string Users = "";          // People
     public const string User = "";           // Contact
     public const string AddUser = "";        // AddFriend

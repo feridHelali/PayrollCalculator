@@ -62,6 +62,19 @@ public partial class SalaryTablesView : UserControl
         (DataContext as SalaryTablesViewModel)?.EditCommand.Execute(null);
 }
 
+public partial class AllowancesView : UserControl
+{
+    public AllowancesView() => InitializeComponent();
+
+    private void OnRowDoubleClick(object sender, MouseButtonEventArgs e) =>
+        (DataContext as AllowancesViewModel)?.EditCommand.Execute(null);
+}
+
+public partial class AllowanceEditorView : UserControl
+{
+    public AllowanceEditorView() => InitializeComponent();
+}
+
 public partial class SalaryTableEditorView : UserControl
 {
     public SalaryTableEditorView() => InitializeComponent();

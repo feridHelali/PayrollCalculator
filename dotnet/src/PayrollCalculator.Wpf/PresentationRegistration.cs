@@ -19,6 +19,8 @@ public static class PresentationRegistration
         services.AddTransient<AgreementsViewModel>();
         services.AddTransient<SalaryTablesViewModel>();
         services.AddTransient<SalaryTableEditorViewModel>();
+        services.AddTransient<AllowancesViewModel>();
+        services.AddTransient<AllowanceEditorViewModel>();
         services.AddTransient<AffairsViewModel>();
         services.AddTransient<AffairEditorViewModel>();
         services.AddTransient<TimelineViewModel>();

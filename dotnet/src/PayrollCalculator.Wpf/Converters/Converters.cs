@@ -7,6 +7,15 @@ using PayrollCalculator.Wpf.Resources;
 
 namespace PayrollCalculator.Wpf.Converters;
 
+public sealed class AllowanceUnitTextConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) =>
+        Labels.AllowanceUnitText(value as PayrollCalculator.Domain.Allowances.AllowanceUnit?);
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
+        throw new NotSupportedException();
+}
+
 public sealed class SalaryTypeTextConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) =>

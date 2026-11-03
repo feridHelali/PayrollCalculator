@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using PayrollCalculator.Application.LegacyImport;
 using PayrollCalculator.Domain.Affairs;
 using PayrollCalculator.Domain.Agreements;
+using PayrollCalculator.Domain.Allowances;
 using PayrollCalculator.Domain.Careers;
 using PayrollCalculator.Domain.Common;
 using PayrollCalculator.Domain.Ledger;
@@ -42,6 +43,7 @@ public static class DependencyInjection
         services.AddScoped<IAgreementRepository, AgreementRepository>();
         services.AddScoped<ISalaryTableRepository, SalaryTableRepository>();
         services.AddScoped<IAffairRepository, AffairRepository>();
+        services.AddScoped<IAllowanceRepository, AllowanceRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ILegalSourceRepository, LegalSourceRepository>();
         services.AddScoped<IRuleEventStore, RuleEventStore>();
