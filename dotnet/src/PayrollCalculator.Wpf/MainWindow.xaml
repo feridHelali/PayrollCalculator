@@ -5,39 +5,88 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:PayrollCalculator.Wpf.ViewModels"
         xmlns:res="clr-namespace:PayrollCalculator.Wpf.Resources"
+        xmlns:c="clr-namespace:PayrollCalculator.Wpf.Controls"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
-        Title="{x:Static res:Labels.AppTitle}"
-        Width="1280" Height="860" MinWidth="900" MinHeight="600"
+        Title="{x:Static res:Labels.AppTitle}" Icon="{StaticResource Logo}"
+        MinWidth="960" MinHeight="600"
         WindowStartupLocation="CenterScreen"
         FlowDirection="RightToLeft" Language="ar-TN"
-        FontFamily="Segoe UI" FontSize="14">
+        FontFamily="Segoe UI" FontSize="14"
+        Background="{StaticResource Brush.Page}" Foreground="{StaticResource Brush.Text}">
     <DockPanel>
-        <!-- Status bar -->
-        <Border DockPanel.Dock="Bottom" Background="{StaticResource Brush.AccentLight}" Padding="12,4">
+        <!-- Side menu (docked Left = the right-hand side in RTL) -->
+        <Border DockPanel.Dock="Left" Width="248" Background="{StaticResource Brush.Nav}">
             <DockPanel>
-                <ProgressBar DockPanel.Dock="Left" Width="120" Height="8" IsIndeterminate="True" Margin="0,0,12,0"
-                             Visibility="{Binding Status.IsBusy, Converter={StaticResource BoolToVisibility}}" />
-                <TextBlock Text="{Binding Status.Message}" VerticalAlignment="Center" />
-            </DockPanel>
-        </Border>
+                <!-- Brand -->
+                <StackPanel DockPanel.Dock="Top" Margin="18,22,18,18">
+                    <StackPanel Orientation="Horizontal">
+                        <Border Background="White" CornerRadius="10" Padding="6" Width="44" Height="44">
+                            <Image Source="{StaticResource Logo}" RenderOptions.BitmapScalingMode="HighQuality" />
+                        </Border>
+                        <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="{x:Static res:Labels.AppTitle}" Foreground="White" FontSize="19" FontWeight="Bold" />
+                            <TextBlock Text="{x:Static res:Labels.Publisher}" Foreground="{StaticResource Brush.NavText}"
+                                       Opacity="0.6" FontSize="11" FlowDirection="LeftToRight" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </StackPanel>
+                    <Border Height="3" CornerRadius="2" Margin="0,16,0,0" Background="{StaticResource Brush.BrandRule}" />
+                </StackPanel>
 
-        <!-- Side navigation -->
-        <Border DockPanel.Dock="Left" Width="230" Background="{StaticResource Brush.Nav}">
-            <DockPanel>
-                <TextBlock DockPanel.Dock="Top" Text="{x:Static res:Labels.AppTitle}" Foreground="White"
-                           FontSize="20" FontWeight="Bold" Margin="16,20,16,24" />
-                <Button DockPanel.Dock="Bottom" Style="{StaticResource NavButton}" FontSize="13" Opacity="0.8"
-                        Content="{x:Static res:Labels.ImportLegacy}" Command="{Binding ImportLegacyCommand}" Margin="0,0,0,12" />
+                <!-- Signed-in user, sign out, legacy import -->
+                <StackPanel DockPanel.Dock="Bottom" Margin="0,0,0,14">
+                    <Button Style="{StaticResource NavButton}" FontSize="13" Opacity="0.75"
+                            c:Ui.Icon="{x:Static c:Icons.Import}"
+                            Content="{x:Static res:Labels.ImportLegacy}" Command="{Binding ImportLegacyCommand}" />
+                    <Border Height="1" Background="{StaticResource Brush.NavHover}" Margin="16,10" />
+                    <Border Margin="10,0,10,4" Padding="12,8" CornerRadius="8" Background="{StaticResource Brush.NavHover}">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="32" Height="32" CornerRadius="16" Background="{StaticResource Brush.BrandGradient}">
+                                <TextBlock Style="{StaticResource Glyph}" Text="{x:Static c:Icons.User}" Foreground="White"
+                                           FontSize="15" HorizontalAlignment="Center" />
+                            </Border>
+                            <TextBlock Text="{Binding UserDisplayName}" Foreground="White" Margin="10,0,0,0"
+                                       VerticalAlignment="Center" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" MaxWidth="160" />
+                        </StackPanel>
+                    </Border>
+                    <Button Style="{StaticResource NavButton}" c:Ui.Icon="{x:Static c:Icons.SignOut}"
+                            Content="{x:Static res:Labels.SignOut}" Command="{Binding SignOutCommand}" />
+                </StackPanel>
+
+                <!-- Navigation -->
                 <StackPanel>
-                    <Button Style="{StaticResource NavButton}" Content="{x:Static res:Labels.Affairs}" Command="{Binding ShowAffairsCommand}" />
-                    <Button Style="{StaticResource NavButton}" Content="{x:Static res:Labels.SalaryTables}" Command="{Binding ShowSalaryTablesCommand}" />
-                    <Button Style="{StaticResource NavButton}" Content="{x:Static res:Labels.Agreements}" Command="{Binding ShowAgreementsCommand}" />
+                    <Button Style="{StaticResource NavButton}" c:Ui.Icon="{x:Static c:Icons.Affairs}"
+                            c:Ui.IsActive="{Binding IsAffairsActive}"
+                            Content="{x:Static res:Labels.Affairs}" Command="{Binding ShowAffairsCommand}" />
+                    <Button Style="{StaticResource NavButton}" c:Ui.Icon="{x:Static c:Icons.SalaryTables}"
+                            c:Ui.IsActive="{Binding IsSalaryTablesActive}"
+                            Content="{x:Static res:Labels.SalaryTables}" Command="{Binding ShowSalaryTablesCommand}" />
+                    <Button Style="{StaticResource NavButton}" c:Ui.Icon="{x:Static c:Icons.Agreements}"
+                            c:Ui.IsActive="{Binding IsAgreementsActive}"
+                            Content="{x:Static res:Labels.Agreements}" Command="{Binding ShowAgreementsCommand}" />
+                    <Border Height="1" Background="{StaticResource Brush.NavHover}" Margin="16,10" />
+                    <Button Style="{StaticResource NavButton}" c:Ui.Icon="{x:Static c:Icons.Users}"
+                            c:Ui.IsActive="{Binding IsUsersActive}"
+                            Content="{x:Static res:Labels.Users}" Command="{Binding ShowUsersCommand}" />
+                    <Button Style="{StaticResource NavButton}" c:Ui.Icon="{x:Static c:Icons.About}"
+                            c:Ui.IsActive="{Binding IsAboutActive}"
+                            Content="{x:Static res:Labels.About}" Command="{Binding ShowAboutCommand}" />
                 </StackPanel>
             </DockPanel>
         </Border>
 
+        <!-- Status bar -->
+        <Border DockPanel.Dock="Bottom" Background="{StaticResource Brush.Surface}" BorderBrush="{StaticResource Brush.Border}"
+                BorderThickness="0,1,0,0" Padding="16,6">
+            <DockPanel>
+                <ProgressBar DockPanel.Dock="Left" Width="120" Height="6" IsIndeterminate="True" Margin="0,0,12,0"
+                             Foreground="{StaticResource Brush.Accent}" BorderThickness="0"
+                             Visibility="{Binding Status.IsBusy, Converter={StaticResource BoolToVisibility}}" />
+                <TextBlock Text="{Binding Status.Message}" VerticalAlignment="Center" Foreground="{StaticResource Brush.TextMuted}" />
+            </DockPanel>
+        </Border>
+
         <!-- Current page (resolved through the DataTemplates in App.xaml) -->
-        <ContentControl Content="{Binding CurrentPage}" Margin="20" />
+        <ContentControl Content="{Binding CurrentPage}" Margin="28,24" />
     </DockPanel>
 </Window>

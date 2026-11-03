@@ -5,6 +5,8 @@ using PayrollCalculator.Domain.Affairs;
 using PayrollCalculator.Domain.Agreements;
 using PayrollCalculator.Domain.Common;
 using PayrollCalculator.Domain.SalaryTables;
+using PayrollCalculator.Domain.Users;
+using PayrollCalculator.Infrastructure.Security;
 using PayrollCalculator.Infrastructure.LegacyImport;
 using PayrollCalculator.Infrastructure.Persistence;
 
@@ -34,7 +36,9 @@ public static class DependencyInjection
         services.AddScoped<IAgreementRepository, AgreementRepository>();
         services.AddScoped<ISalaryTableRepository, SalaryTableRepository>();
         services.AddScoped<IAffairRepository, AffairRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ILegacyDataImporter, LegacyElectronImporter>();
+        services.AddSingleton<IPasswordHasher>(new Pbkdf2PasswordHasher());
         return services;
     }
 

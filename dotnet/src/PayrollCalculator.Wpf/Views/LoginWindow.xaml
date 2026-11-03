@@ -1,0 +1,108 @@
+<Window x:Class="PayrollCalculator.Wpf.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:PayrollCalculator.Wpf.ViewModels"
+        xmlns:res="clr-namespace:PayrollCalculator.Wpf.Resources"
+        xmlns:c="clr-namespace:PayrollCalculator.Wpf.Controls"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=vm:LoginViewModel}"
+        Title="{x:Static res:Labels.AppTitle}" Icon="{StaticResource Logo}"
+        Width="780" Height="580" WindowStyle="None" ResizeMode="NoResize" AllowsTransparency="True"
+        Background="Transparent" WindowStartupLocation="CenterScreen"
+        FlowDirection="RightToLeft" Language="ar-TN" FontFamily="Segoe UI" FontSize="14"
+        Foreground="{StaticResource Brush.Text}" MouseLeftButtonDown="OnDrag">
+    <Border CornerRadius="14" Background="{StaticResource Brush.Surface}" BorderBrush="{StaticResource Brush.Border}"
+            BorderThickness="1" Margin="12">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="22" ShadowDepth="3" Opacity="0.25" />
+        </Border.Effect>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="290" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Brand panel: the one large surface allowed to carry the gradient -->
+            <Border Grid.Column="0" CornerRadius="14,0,0,14" Background="{StaticResource Brush.BrandGradient}">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="24">
+                    <Border Background="White" CornerRadius="18" Padding="14" HorizontalAlignment="Center">
+                        <Image Source="{StaticResource Logo}" Width="72" Height="68" RenderOptions.BitmapScalingMode="HighQuality" />
+                    </Border>
+                    <TextBlock Text="{x:Static res:Labels.AppTitle}" Foreground="White" FontSize="28" FontWeight="SemiBold"
+                               HorizontalAlignment="Center" Margin="0,20,0,0" />
+                    <TextBlock Text="{x:Static res:Labels.Agreements}" Foreground="White" Opacity="0.9" FontSize="13"
+                               HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,0" />
+                    <TextBlock Text="{x:Static res:Labels.Publisher}" Foreground="White" Opacity="0.75" FontSize="11"
+                               HorizontalAlignment="Center" Margin="0,28,0,0" FlowDirection="LeftToRight" />
+                </StackPanel>
+            </Border>
+
+            <Grid Grid.Column="1" Margin="40,30,40,26">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0">
+                    <TextBlock Text="{x:Static res:Labels.Welcome}" FontSize="24" FontWeight="SemiBold" />
+                    <TextBlock Style="{StaticResource Muted}" FontSize="13" Margin="0,2,0,0"
+                               Text="{x:Static res:Labels.SignInPrompt}"
+                               Visibility="{Binding IsChangingPassword, Converter={StaticResource InverseBoolToVisibility}}" />
+                    <TextBlock Foreground="{StaticResource Brush.Accent}" FontSize="13" FontWeight="SemiBold" Margin="0,2,0,0"
+                               TextWrapping="Wrap" Text="{x:Static res:Labels.ChangePasswordPrompt}"
+                               Visibility="{Binding IsChangingPassword, Converter={StaticResource BoolToVisibility}}" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" VerticalAlignment="Top" Margin="0,20,0,12">
+                    <!-- Step 1: sign in -->
+                    <StackPanel Visibility="{Binding IsChangingPassword, Converter={StaticResource InverseBoolToVisibility}}">
+                        <Label Content="{x:Static res:Labels.UserName}" />
+                        <TextBox x:Name="UserNameBox" Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"
+                                 FlowDirection="LeftToRight" />
+                        <Label Content="{x:Static res:Labels.Password}" />
+                        <PasswordBox x:Name="PasswordBox" FlowDirection="LeftToRight" KeyDown="OnPasswordKeyDown" />
+                    </StackPanel>
+
+                    <!-- Step 2: replace the temporary password -->
+                    <StackPanel Visibility="{Binding IsChangingPassword, Converter={StaticResource BoolToVisibility}}">
+                        <Label Content="{x:Static res:Labels.CurrentPassword}" />
+                        <PasswordBox x:Name="CurrentPasswordBox" FlowDirection="LeftToRight" />
+                        <Label Content="{x:Static res:Labels.NewPassword}" />
+                        <PasswordBox x:Name="NewPasswordBox" FlowDirection="LeftToRight" />
+                        <Label Content="{x:Static res:Labels.ConfirmPassword}" />
+                        <PasswordBox x:Name="ConfirmPasswordBox" FlowDirection="LeftToRight" KeyDown="OnConfirmKeyDown" />
+                        <TextBlock Style="{StaticResource Muted}" Text="{x:Static res:Labels.PasswordRules}" Margin="0,4,0,0" />
+                    </StackPanel>
+
+                    <Border Margin="0,12,0,0" Padding="10,7" CornerRadius="8" Background="{StaticResource Brush.DangerLight}"
+                            Visibility="{Binding HasError, Converter={StaticResource BoolToVisibility}}">
+                        <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource Brush.Danger}" FontSize="12.5" TextWrapping="Wrap" />
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0"
+                                Visibility="{Binding IsFirstRun, Converter={StaticResource BoolToVisibility}}">
+                        <TextBlock Style="{StaticResource Muted}" Text="{x:Static res:Labels.FirstRunHint}" VerticalAlignment="Center" />
+                        <TextBlock Text="{x:Static res:Labels.FirstRunCredentials}" FlowDirection="LeftToRight" Margin="8,0,0,0"
+                                   FontFamily="Consolas" FontSize="13" Foreground="{StaticResource Brush.Accent}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </StackPanel>
+
+                <DockPanel Grid.Row="2" LastChildFill="False">
+                    <Button DockPanel.Dock="Left" Style="{StaticResource PrimaryButton}" MinWidth="130"
+                            c:Ui.Icon="{x:Static c:Icons.SignIn}" Content="{x:Static res:Labels.SignIn}" Click="OnSignIn"
+                            Visibility="{Binding IsChangingPassword, Converter={StaticResource InverseBoolToVisibility}}" />
+                    <Button DockPanel.Dock="Left" Style="{StaticResource PrimaryButton}" MinWidth="130"
+                            c:Ui.Icon="{x:Static c:Icons.Password}" Content="{x:Static res:Labels.ChangePassword}" Click="OnChangePassword"
+                            Visibility="{Binding IsChangingPassword, Converter={StaticResource BoolToVisibility}}" />
+                    <Button DockPanel.Dock="Left" c:Ui.Icon="{x:Static c:Icons.Back}" Content="{x:Static res:Labels.Back}"
+                            Command="{Binding BackToSignInCommand}"
+                            Visibility="{Binding IsChangingPassword, Converter={StaticResource BoolToVisibility}}" />
+                    <Button DockPanel.Dock="Right" Margin="0" c:Ui.Icon="{x:Static c:Icons.Close}"
+                            Content="{x:Static res:Labels.Quit}" IsCancel="True" Click="OnQuit" />
+                </DockPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

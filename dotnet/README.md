@@ -18,14 +18,25 @@ dotnet ef migrations add <Name> -p src/PayrollCalculator.Infrastructure -s src/P
 - The database is created and migrated on startup at `%LOCALAPPDATA%\PayrollCalculator\payroll.db`. Set the
   `PAYROLL_DB_PATH` environment variable to use another file.
 
+## Sign-in and users
+
+- Version **1.0.0** (set in `Directory.Build.props`). The app shows a splash screen, then a sign-in window; the About page (حول البرنامج) shows the version and credits (idea: Lazhar Lataoui).
+- On an empty database it creates **`admin` / `Admin@2026`**, which must
+  change its password at the first sign-in (the published password cannot be used to work).
+- The users screen (المستخدمون) adds users and resets passwords. Both set a temporary password that the user must
+  change at their next sign-in. There are no roles: every signed-in user can manage users.
+- Passwords are hashed with PBKDF2-HMAC-SHA256 (600 000 iterations). 5 failures in a row lock the account for 15
+  minutes. Policy: at least 8 characters and 3 of lower/upper/digit/symbol. Design notes are in
+  `design_docs/03_Authentication_User_Management/sprint.md`.
+
 ## Architecture (DDD, layered)
 
 | Project | Role | Depends on |
 |---|---|---|
-| `Domain` | Aggregates `SectorialJointAgreement`, `SalaryTable` (categories × degrees grid) and `Affair`; value objects `DateRange`, `YearMonth` and `ProfessionalPosition`; the `SalaryTimelineCalculator` domain service and the `IDegreeProgressionPolicy` strategy; repository interfaces | nothing |
-| `Application` | Use-case services (`AgreementService`, `SalaryTableService`, `AffairService`), DTOs, `TimelineCsv`, `ILegacyDataImporter` port | Domain |
-| `Infrastructure` | EF Core SQLite `PayrollDbContext` (owned collections for the grid, complex types for value objects), repositories, migrations, `LegacyElectronImporter` | Application, Domain |
-| `Wpf` | MVVM (CommunityToolkit.Mvvm) with an RTL Arabic UI; view-model-first navigation (`Navigator` + DataTemplates in `App.xaml`); `IServiceRunner` runs each use case in a fresh DI scope (one DbContext per operation) | Application, Infrastructure |
+| `Domain` | Aggregates `SectorialJointAgreement`, `SalaryTable` (categories × degrees grid), `Affair` and `User` (lockout, forced password change); `PasswordPolicy`; value objects `DateRange`, `YearMonth` and `ProfessionalPosition`; the `SalaryTimelineCalculator` domain service and the `IDegreeProgressionPolicy` strategy; repository interfaces | nothing |
+| `Application` | Use-case services (`AgreementService`, `SalaryTableService`, `AffairService`, `AuthenticationService`, `UserService`), `CurrentUser` session, `UserSeeder`, DTOs, `TimelineCsv`, `ILegacyDataImporter` port | Domain |
+| `Infrastructure` | EF Core SQLite `PayrollDbContext` (owned collections for the grid, complex types for value objects), repositories, migrations, `LegacyElectronImporter`, `Pbkdf2PasswordHasher` | Application, Domain |
+| `Wpf` | MVVM (CommunityToolkit.Mvvm) with an RTL Arabic UI; `LoginWindow` before the shell; theme in `Themes/Theme.xaml` (icons via `Controls/Ui.cs`); view-model-first navigation (`Navigator` + DataTemplates in `App.xaml`); `IServiceRunner` runs each use case in a fresh DI scope (one DbContext per operation) | Application, Infrastructure |
 
 The tests mirror the layers. Domain and Application tests are pure unit tests that use in-memory fakes. Infrastructure
 tests use real SQLite in memory with the migrations applied, and include an import of the repository's real

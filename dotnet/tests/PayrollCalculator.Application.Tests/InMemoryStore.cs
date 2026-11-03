@@ -2,6 +2,7 @@ using PayrollCalculator.Domain.Affairs;
 using PayrollCalculator.Domain.Agreements;
 using PayrollCalculator.Domain.Common;
 using PayrollCalculator.Domain.SalaryTables;
+using PayrollCalculator.Domain.Users;
 
 namespace PayrollCalculator.Application.Tests;
 
@@ -16,11 +17,13 @@ internal sealed class InMemoryStore : IUnitOfWork
 
     public AffairRepo Affairs { get; } = new();
 
+    public UserRepo Users { get; } = new();
+
     public int SaveCount { get; private set; }
 
     public Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        IEnumerable<Entity> all = [.. Agreements.Items, .. SalaryTables.Items, .. Affairs.Items];
+        IEnumerable<Entity> all = [.. Agreements.Items, .. SalaryTables.Items, .. Affairs.Items, .. Users.Items];
         foreach (var entity in all.Where(e => e.IsTransient))
         {
             entity.AssignIdentity(_nextId++);
@@ -53,5 +56,13 @@ internal sealed class InMemoryStore : IUnitOfWork
     {
         public Task<IReadOnlyList<SalaryTable>> ListByAgreementAsync(int agreementId, CancellationToken cancellationToken = default) =>
             Task.FromResult<IReadOnlyList<SalaryTable>>(Items.Where(t => t.AgreementId == agreementId).ToList());
+    }
+
+    internal sealed class UserRepo : Repo<User>, IUserRepository
+    {
+        public Task<User?> FindByUserNameAsync(string normalizedUserName, CancellationToken cancellationToken = default) =>
+            Task.FromResult(Items.FirstOrDefault(u => u.UserName == normalizedUserName));
+
+        public Task<bool> AnyAsync(CancellationToken cancellationToken = default) => Task.FromResult(Items.Count > 0);
     }
 }

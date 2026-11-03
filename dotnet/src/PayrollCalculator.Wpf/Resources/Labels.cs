@@ -1,5 +1,8 @@
 using PayrollCalculator.Domain.Calculation;
 using PayrollCalculator.Domain.SalaryTables;
+using PayrollCalculator.Domain.Users;
+using PayrollCalculator.Application.Users;
+using PayrollCalculator.Wpf.Services;
 
 namespace PayrollCalculator.Wpf.Resources;
 
@@ -65,6 +68,118 @@ public static class Labels
     public const string ImportDone = "تم الاستيراد";
     public const string LegacyDbFilter = "SQLite (*.sqlite;*.db)|*.sqlite;*.db|*.*|*.*";
     public const string CsvFilter = "CSV (*.csv)|*.csv";
+
+    // Sign-in and users
+    public const string Publisher = "AlfaComputers";
+    public const string Welcome = "مرحبا بك";
+    public const string SignInPrompt = "سجّل الدخول للمتابعة";
+    public const string SignIn = "دخول";
+    public const string SignOut = "تسجيل الخروج";
+    public const string Quit = "إغلاق";
+    public const string UserName = "اسم المستخدم";
+    public const string Password = "كلمة المرور";
+    public const string CurrentPassword = "كلمة المرور الحالية (المؤقتة)";
+    public const string NewPassword = "كلمة المرور الجديدة";
+    public const string ConfirmPassword = "تأكيد كلمة المرور الجديدة";
+    public const string ChangePassword = "تغيير كلمة المرور";
+    public const string ChangePasswordPrompt = "كلمة المرور مؤقتة: اختر كلمة مرور جديدة قبل المتابعة";
+    public const string PasswordRules = "8 أحرف على الأقل، وثلاثة أنواع من: حروف صغيرة، حروف كبيرة، أرقام، رموز";
+    public const string Users = "المستخدمون";
+    public const string DisplayName = "الاسم الكامل";
+    public const string AddUser = "إضافة مستخدم";
+    public const string ResetPassword = "إعادة تعيين كلمة المرور";
+    public const string TemporaryPassword = "كلمة المرور المؤقتة";
+    public const string TemporaryPasswordHint = "يُبلَّغ بها المستخدم، وسيُطلب منه تغييرها عند أول دخول";
+    public const string Generate = "توليد";
+    public const string LastSignIn = "آخر دخول";
+    public const string UserAdded = "تمت إضافة المستخدم";
+    public const string PasswordWasReset = "تمت إعادة تعيين كلمة المرور";
+    public const string SelectUser = "يجب اختيار مستخدم من القائمة";
+    public const string ConfirmReset = "سيُطلب من المستخدم اختيار كلمة مرور جديدة عند دخوله القادم. هل تريد المتابعة؟";
+    public const string FirstRunHint = "أول تشغيل، الحساب الأولي:";
+
+    /// <summary>Shown in its own left-to-right block: inside Arabic text "Admin@2026" would render as "2026@Admin".</summary>
+    public const string FirstRunCredentials = "admin  /  Admin@2026";
+
+    public const string InvalidCredentials = "اسم المستخدم أو كلمة المرور غير صحيحة";
+    public const string AccountLocked = "الحساب مقفل مؤقتا بعد عدة محاولات فاشلة. أعد المحاولة بعد 15 دقيقة";
+    public const string UserNameInvalid = "اسم المستخدم غير صالح: حروف لاتينية أو أرقام أو . - _ (32 حرفا على الأقصى)";
+    public const string DisplayNameRequired = "يجب إدخال الاسم الكامل";
+    public const string UserNameTaken = "اسم المستخدم مستعمل";
+    public const string PasswordRejected = "كلمة المرور لا تستجيب للشروط:";
+    public const string PasswordTooShort = "8 أحرف على الأقل";
+    public const string PasswordTooSimple = "ثلاثة أنواع على الأقل من: حروف صغيرة، حروف كبيرة، أرقام، رموز";
+    public const string PasswordSameAsUserName = "يجب أن تختلف عن اسم المستخدم";
+    public const string WrongCurrentPassword = "كلمة المرور الحالية غير صحيحة";
+    public const string PasswordUnchanged = "يجب أن تختلف كلمة المرور الجديدة عن الحالية";
+    public const string PasswordConfirmationMismatch = "تأكيد كلمة المرور لا يطابق كلمة المرور الجديدة";
+
+    // About and splash
+    public const string About = "حول البرنامج";
+    public const string AppDescription = "تحديد الأجور الأساسية على فترات طويلة حسب الاتفاقيات القطاعية المشتركة";
+    public const string Version = "الإصدار";
+    public const string Idea = "الفكرة";
+    public const string IdeaBy = "Lazhar Lataoui";
+    public const string Development = "التطوير";
+    public const string DevelopedBy = "Ferid HELALI — AlfaComputers";
+    public const string AssistedBy = "طُوِّر بمساعدة Claude Code";
+    public const string Runtime = "بيئة التشغيل";
+    public const string OperatingSystem = "نظام التشغيل";
+    public const string Database = "قاعدة البيانات";
+    public const string CopyInfo = "نسخ المعلومات";
+    public const string InfoCopied = "تم نسخ المعلومات";
+    public const string SupportInfo = "معلومات للدعم الفني";
+
+    public static string StartupStageText(StartupStage stage) => stage switch
+    {
+        StartupStage.Starting => "جاري التشغيل...",
+        StartupStage.Database => "تهيئة قاعدة البيانات...",
+        StartupStage.Accounts => "تهيئة الحسابات...",
+        StartupStage.LegacyImport => "استيراد بيانات التطبيق القديم...",
+        StartupStage.Ready => "جاهز",
+        _ => stage.ToString(),
+    };
+
+    public static string SignInOutcomeText(SignInOutcome outcome) => outcome switch
+    {
+        SignInOutcome.LockedOut => AccountLocked,
+        SignInOutcome.MustChangePassword => ChangePasswordPrompt,
+        SignInOutcome.Succeeded => string.Empty,
+        _ => InvalidCredentials,
+    };
+
+    public static string UserErrorText(UserException error)
+    {
+        ArgumentNullException.ThrowIfNull(error);
+        return error.Error switch
+        {
+            UserError.UserNameInvalid => UserNameInvalid,
+            UserError.DisplayNameRequired => DisplayNameRequired,
+            UserError.UserNameTaken => UserNameTaken,
+            UserError.PasswordRejected => PasswordRejected + "\n" + string.Join("\n", error.Violations.Select(v => "• " + ViolationText(v))),
+            UserError.WrongCurrentPassword => WrongCurrentPassword,
+            UserError.PasswordUnchanged => PasswordUnchanged,
+            UserError.AccountLocked => AccountLocked,
+            UserError.PasswordConfirmationMismatch => PasswordConfirmationMismatch,
+            _ => error.Message,
+        };
+    }
+
+    public static string ViolationText(PasswordViolation violation) => violation switch
+    {
+        PasswordViolation.TooShort => PasswordTooShort,
+        PasswordViolation.TooSimple => PasswordTooSimple,
+        PasswordViolation.SameAsUserName => PasswordSameAsUserName,
+        _ => violation.ToString(),
+    };
+
+    public static string UserStatusText(UserStatus status) => status switch
+    {
+        UserStatus.Active => "نشط",
+        UserStatus.MustChangePassword => "في انتظار تغيير كلمة المرور",
+        UserStatus.Locked => "مقفل مؤقتا",
+        _ => status.ToString(),
+    };
 
     public static string SalaryTypeText(SalaryType? type) => type switch
     {

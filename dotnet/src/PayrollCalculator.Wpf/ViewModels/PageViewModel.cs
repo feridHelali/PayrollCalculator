@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.EntityFrameworkCore;
 using PayrollCalculator.Application.Common;
 using PayrollCalculator.Domain.Common;
+using PayrollCalculator.Domain.Users;
 using PayrollCalculator.Wpf.Resources;
 using PayrollCalculator.Wpf.Services;
 
@@ -44,7 +45,12 @@ public abstract class PageViewModel(IServiceRunner runner, IDialogService dialog
         catch (Exception ex) when (ex is DomainException or NotFoundException or InvalidOperationException
                                        or DbUpdateException or IOException or UnauthorizedAccessException)
         {
-            var message = ex is DbUpdateException { InnerException: { } inner } ? inner.Message : ex.Message;
+            var message = ex switch
+            {
+                UserException userError => Labels.UserErrorText(userError),
+                DbUpdateException { InnerException: { } inner } => inner.Message,
+                _ => ex.Message,
+            };
             Status.Message = $"{Labels.Error}: {message}";
             Dialogs.ShowError(message);
             return false;

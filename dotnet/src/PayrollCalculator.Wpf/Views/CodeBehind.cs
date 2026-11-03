@@ -9,6 +9,28 @@ public partial class AgreementsView : UserControl
     public AgreementsView() => InitializeComponent();
 }
 
+public partial class UsersView : UserControl
+{
+    public UsersView() => InitializeComponent();
+}
+
+public partial class AboutView : UserControl
+{
+    public AboutView() => InitializeComponent();
+
+    private void OnCopyInfo(object sender, System.Windows.RoutedEventArgs e)
+    {
+        if (DataContext is AboutViewModel about)
+        {
+            System.Windows.Clipboard.SetText(about.SupportText);
+            if (System.Windows.Application.Current?.MainWindow?.DataContext is MainViewModel shell)
+            {
+                shell.Status.Message = PayrollCalculator.Wpf.Resources.Labels.InfoCopied;
+            }
+        }
+    }
+}
+
 public partial class SalaryTablesView : UserControl
 {
     public SalaryTablesView() => InitializeComponent();

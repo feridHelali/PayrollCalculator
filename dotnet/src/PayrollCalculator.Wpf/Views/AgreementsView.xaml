@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:PayrollCalculator.Wpf.ViewModels"
              xmlns:res="clr-namespace:PayrollCalculator.Wpf.Resources"
+             xmlns:c="clr-namespace:PayrollCalculator.Wpf.Controls"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:AgreementsViewModel}">
     <DockPanel>
@@ -18,9 +19,9 @@
                 <TextBox Text="{Binding EditDescription}" Height="120" TextWrapping="Wrap" AcceptsReturn="True"
                          VerticalScrollBarVisibility="Auto" />
                 <StackPanel Style="{StaticResource Toolbar}" Margin="0,12,0,0">
-                    <Button Style="{StaticResource PrimaryButton}" Content="{x:Static res:Labels.Save}" Command="{Binding SaveCommand}" />
-                    <Button Content="{x:Static res:Labels.New}" Command="{Binding NewCommand}" />
-                    <Button Content="{x:Static res:Labels.Delete}" Command="{Binding DeleteCommand}" />
+                    <Button Style="{StaticResource PrimaryButton}" c:Ui.Icon="{x:Static c:Icons.Save}" Content="{x:Static res:Labels.Save}" Command="{Binding SaveCommand}" />
+                    <Button c:Ui.Icon="{x:Static c:Icons.New}" Content="{x:Static res:Labels.New}" Command="{Binding NewCommand}" />
+                    <Button Style="{StaticResource DangerButton}" c:Ui.Icon="{x:Static c:Icons.Delete}" Content="{x:Static res:Labels.Delete}" Command="{Binding DeleteCommand}" />
                 </StackPanel>
             </StackPanel>
         </Border>

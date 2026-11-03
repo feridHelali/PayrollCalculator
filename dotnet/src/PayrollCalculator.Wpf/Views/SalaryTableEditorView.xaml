@@ -6,13 +6,14 @@
              xmlns:vm="clr-namespace:PayrollCalculator.Wpf.ViewModels"
              xmlns:v="clr-namespace:PayrollCalculator.Wpf.Views"
              xmlns:res="clr-namespace:PayrollCalculator.Wpf.Resources"
+             xmlns:c="clr-namespace:PayrollCalculator.Wpf.Controls"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:SalaryTableEditorViewModel}">
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">
             <StackPanel DockPanel.Dock="Left" Style="{StaticResource Toolbar}" Margin="0">
-                <Button Style="{StaticResource PrimaryButton}" Content="{x:Static res:Labels.Save}" Command="{Binding SaveCommand}" />
-                <Button Content="{x:Static res:Labels.Back}" Command="{Binding BackCommand}" />
+                <Button Style="{StaticResource PrimaryButton}" c:Ui.Icon="{x:Static c:Icons.Save}" Content="{x:Static res:Labels.Save}" Command="{Binding SaveCommand}" />
+                <Button c:Ui.Icon="{x:Static c:Icons.Back}" Content="{x:Static res:Labels.Back}" Command="{Binding BackCommand}" />
             </StackPanel>
             <TextBlock Style="{StaticResource PageTitle}" Text="{Binding Title}" Margin="16,0,0,12" />
         </DockPanel>
@@ -57,7 +58,7 @@
         <GroupBox DockPanel.Dock="Left" Header="{x:Static res:Labels.Degrees}" Width="300" Margin="0,0,16,0" Padding="6">
             <DockPanel>
                 <Button DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="0,0,0,6"
-                        Content="{x:Static res:Labels.AddDegree}" Command="{Binding AddDegreeCommand}" />
+                        c:Ui.Icon="{x:Static c:Icons.New}" Content="{x:Static res:Labels.AddDegree}" Command="{Binding AddDegreeCommand}" />
                 <DataGrid ItemsSource="{Binding Degrees}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="{x:Static res:Labels.Degree}" Binding="{Binding Number, UpdateSourceTrigger=LostFocus}" Width="Auto" />
@@ -65,7 +66,7 @@
                         <DataGridTemplateColumn Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="✕" MinWidth="0" Padding="6,0" Margin="0"
+                                    <Button Style="{StaticResource DangerButton}" FontFamily="{StaticResource Font.Icons}" FontSize="11" Content="{x:Static c:Icons.Close}" MinWidth="0" Padding="7,4" Margin="0"
                                             Command="{Binding DataContext.RemoveDegreeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
                                 </DataTemplate>
@@ -80,8 +81,8 @@
         <GroupBox Header="{x:Static res:Labels.SalaryGrid}" Padding="6">
             <DockPanel>
                 <StackPanel DockPanel.Dock="Top" Style="{StaticResource Toolbar}" Margin="0,0,0,6">
-                    <Button Content="{x:Static res:Labels.AddCategory}" Command="{Binding AddCategoryCommand}" />
-                    <Button Content="{x:Static res:Labels.Delete}" Command="{Binding RemoveCategoryCommand}" />
+                    <Button c:Ui.Icon="{x:Static c:Icons.New}" Content="{x:Static res:Labels.AddCategory}" Command="{Binding AddCategoryCommand}" />
+                    <Button Style="{StaticResource DangerButton}" c:Ui.Icon="{x:Static c:Icons.Delete}" Content="{x:Static res:Labels.Delete}" Command="{Binding RemoveCategoryCommand}" />
                 </StackPanel>
                 <DataGrid x:Name="Matrix" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}"
                           FrozenColumnCount="1"

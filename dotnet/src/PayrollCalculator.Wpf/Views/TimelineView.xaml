@@ -5,13 +5,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:PayrollCalculator.Wpf.ViewModels"
              xmlns:res="clr-namespace:PayrollCalculator.Wpf.Resources"
+             xmlns:c="clr-namespace:PayrollCalculator.Wpf.Controls"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:TimelineViewModel}">
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">
             <StackPanel DockPanel.Dock="Left" Style="{StaticResource Toolbar}" Margin="0">
-                <Button Style="{StaticResource PrimaryButton}" Content="{x:Static res:Labels.ExportCsv}" Command="{Binding ExportCsvCommand}" />
-                <Button Content="{x:Static res:Labels.Back}" Command="{Binding BackCommand}" />
+                <Button Style="{StaticResource PrimaryButton}" c:Ui.Icon="{x:Static c:Icons.Export}" Content="{x:Static res:Labels.ExportCsv}" Command="{Binding ExportCsvCommand}" />
+                <Button c:Ui.Icon="{x:Static c:Icons.Back}" Content="{x:Static res:Labels.Back}" Command="{Binding BackCommand}" />
             </StackPanel>
             <TextBlock Style="{StaticResource PageTitle}" Margin="16,0,0,12">
                 <Run Text="{Binding Title, Mode=OneWay}" />

@@ -26,4 +26,8 @@
     <Using Include="System.IO" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Resource Include="Assets\logo.png" />
+  </ItemGroup>
+
 </Project>

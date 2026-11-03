@@ -5,14 +5,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:PayrollCalculator.Wpf.ViewModels"
              xmlns:res="clr-namespace:PayrollCalculator.Wpf.Resources"
+             xmlns:c="clr-namespace:PayrollCalculator.Wpf.Controls"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:AffairEditorViewModel}">
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">
             <StackPanel DockPanel.Dock="Left" Style="{StaticResource Toolbar}" Margin="0">
-                <Button Style="{StaticResource PrimaryButton}" Content="{x:Static res:Labels.Save}" Command="{Binding SaveCommand}" />
-                <Button Content="{x:Static res:Labels.Timeline}" Command="{Binding TimelineCommand}" />
-                <Button Content="{x:Static res:Labels.Back}" Command="{Binding BackCommand}" />
+                <Button Style="{StaticResource PrimaryButton}" c:Ui.Icon="{x:Static c:Icons.Save}" Content="{x:Static res:Labels.Save}" Command="{Binding SaveCommand}" />
+                <Button c:Ui.Icon="{x:Static c:Icons.Timeline}" Content="{x:Static res:Labels.Timeline}" Command="{Binding TimelineCommand}" />
+                <Button c:Ui.Icon="{x:Static c:Icons.Back}" Content="{x:Static res:Labels.Back}" Command="{Binding BackCommand}" />
             </StackPanel>
             <TextBlock Style="{StaticResource PageTitle}" Text="{Binding Title}" Margin="16,0,0,12" />
         </DockPanel>

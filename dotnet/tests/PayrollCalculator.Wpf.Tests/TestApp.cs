@@ -2,6 +2,8 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PayrollCalculator.Application;
+using PayrollCalculator.Domain.Users;
+using PayrollCalculator.Infrastructure.Security;
 using PayrollCalculator.Infrastructure;
 using PayrollCalculator.Infrastructure.Persistence;
 using PayrollCalculator.Wpf;
@@ -20,9 +22,11 @@ internal sealed class TestApp : IDisposable
         _connection.Open();
         var services = new ServiceCollection();
         services.AddApplication();
+        services.AddSingleton(new DatabaseOptions { DatabasePath = "test.db" });
         services.AddPersistence(o => o.UseSqlite(_connection));
         services.AddPresentation();
         services.AddSingleton<IDialogService>(Dialogs);
+        services.AddSingleton<IPasswordHasher>(new Pbkdf2PasswordHasher(iterations: 1_000)); // fast, same format
         _provider = services.BuildServiceProvider();
 
         using var scope = _provider.CreateScope();

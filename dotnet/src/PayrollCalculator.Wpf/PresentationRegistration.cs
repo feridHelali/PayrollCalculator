@@ -22,6 +22,9 @@ public static class PresentationRegistration
         services.AddTransient<AffairsViewModel>();
         services.AddTransient<AffairEditorViewModel>();
         services.AddTransient<TimelineViewModel>();
+        services.AddTransient<UsersViewModel>();
+        services.AddTransient<LoginViewModel>();
+        services.AddTransient<AboutViewModel>();
         return services;
     }
 }

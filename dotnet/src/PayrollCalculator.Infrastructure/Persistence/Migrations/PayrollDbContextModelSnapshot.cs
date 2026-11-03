@@ -146,6 +146,47 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                     b.ToTable("SalaryTables", (string)null);
                 });
 
+            modelBuilder.Entity("PayrollCalculator.Domain.Users.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FailedAttempts")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset?>("LastSignedInOn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("LockedUntil")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("MustChangePassword")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserName")
+                        .IsUnique();
+
+                    b.ToTable("Users", (string)null);
+                });
+
             modelBuilder.Entity("PayrollCalculator.Domain.Affairs.Affair", b =>
                 {
                     b.HasOne("PayrollCalculator.Domain.Agreements.SectorialJointAgreement", null)

@@ -6,6 +6,10 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <!-- CA1707: underscores in test names; CA1848/CA1873: LoggerMessage perf hints; CA1515: public types in apps/tests -->
+    <Version>1.0.0</Version>
+    <Company>AlfaComputers</Company>
+    <Product>PayrollCalculator</Product>
+    <Copyright>© 2026 AlfaComputers</Copyright>
     <NoWarn>$(NoWarn);CA1707;CA1848;CA1873;CA1515;CA1062;CA1716</NoWarn>
   </PropertyGroup>
 </Project>

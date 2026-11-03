@@ -3,6 +3,7 @@ using PayrollCalculator.Domain.Affairs;
 using PayrollCalculator.Domain.Agreements;
 using PayrollCalculator.Domain.Common;
 using PayrollCalculator.Domain.SalaryTables;
+using PayrollCalculator.Domain.Users;
 
 namespace PayrollCalculator.Infrastructure.Persistence;
 
@@ -28,6 +29,15 @@ public sealed class AgreementRepository(PayrollDbContext context)
 
 public sealed class AffairRepository(PayrollDbContext context)
     : EfRepository<Affair>(context), IAffairRepository;
+
+public sealed class UserRepository(PayrollDbContext context)
+    : EfRepository<User>(context), IUserRepository
+{
+    public Task<User?> FindByUserNameAsync(string normalizedUserName, CancellationToken cancellationToken = default) =>
+        Set.FirstOrDefaultAsync(u => u.UserName == normalizedUserName, cancellationToken);
+
+    public Task<bool> AnyAsync(CancellationToken cancellationToken = default) => Set.AnyAsync(cancellationToken);
+}
 
 public sealed class SalaryTableRepository(PayrollDbContext context)
     : EfRepository<SalaryTable>(context), ISalaryTableRepository
