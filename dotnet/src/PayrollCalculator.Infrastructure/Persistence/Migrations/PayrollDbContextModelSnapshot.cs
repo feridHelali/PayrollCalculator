@@ -102,6 +102,174 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                     b.ToTable("Agreements", (string)null);
                 });
 
+            modelBuilder.Entity("PayrollCalculator.Domain.Ledger.LedgerSnapshot", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AffairId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CareerEvents")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Hash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Months")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RuleEventIds")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("TakenAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TakenBy")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("Total")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("TotalMillimes");
+
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Settings", "PayrollCalculator.Domain.Ledger.LedgerSnapshot.Settings#LedgerSettings", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<bool>("AbsenceSuspendsSeniority")
+                                .HasColumnType("INTEGER")
+                                .HasColumnName("AbsenceSuspendsSeniority");
+
+                            b1.Property<string>("Proration")
+                                .IsRequired()
+                                .HasMaxLength(20)
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Proration");
+
+                            b1.Property<bool>("ResetTimeInDegreeOnReclassification")
+                                .HasColumnType("INTEGER")
+                                .HasColumnName("ResetTimeInDegreeOnReclassification");
+
+                            b1.Property<string>("Rounding")
+                                .IsRequired()
+                                .HasMaxLength(20)
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Rounding");
+                        });
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AffairId");
+
+                    b.ToTable("LedgerSnapshots", (string)null);
+                });
+
+            modelBuilder.Entity("PayrollCalculator.Domain.LegalSources.LegalSource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FileName")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly>("SignedOn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Kind", "Number")
+                        .IsUnique();
+
+                    b.ToTable("LegalSources", (string)null);
+                });
+
+            modelBuilder.Entity("PayrollCalculator.Domain.Rules.RecordedRuleEvent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("AgreementId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("EffectiveFrom")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Event")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Payload");
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("LegalSourceId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("RecordedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RecordedBy")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ReviewedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ReviewedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LegalSourceId");
+
+                    b.HasIndex("AgreementId", "EffectiveFrom");
+
+                    b.ToTable("RuleEvents", (string)null);
+                });
+
             modelBuilder.Entity("PayrollCalculator.Domain.SalaryTables.SalaryTable", b =>
                 {
                     b.Property<int>("Id")
@@ -187,6 +355,40 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("PayrollCalculator.Infrastructure.Persistence.Events.CareerEventRow", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AffairId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Payload")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AffairId");
+
+                    b.HasIndex("EventId")
+                        .IsUnique();
+
+                    b.ToTable("CareerEvents", (string)null);
+                });
+
             modelBuilder.Entity("PayrollCalculator.Domain.Affairs.Affair", b =>
                 {
                     b.HasOne("PayrollCalculator.Domain.Agreements.SectorialJointAgreement", null)
@@ -199,6 +401,56 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("SalaryTableId")
                         .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("PayrollCalculator.Domain.Ledger.LedgerSnapshot", b =>
+                {
+                    b.HasOne("PayrollCalculator.Domain.Affairs.Affair", null)
+                        .WithMany()
+                        .HasForeignKey("AffairId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PayrollCalculator.Domain.LegalSources.LegalSource", b =>
+                {
+                    b.OwnsOne("PayrollCalculator.Domain.LegalSources.JortReference", "Jort", b1 =>
+                        {
+                            b1.Property<int>("LegalSourceId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<DateOnly>("IssueDate")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("JortDate");
+
+                            b1.Property<int>("IssueNumber")
+                                .HasColumnType("INTEGER")
+                                .HasColumnName("JortIssue");
+
+                            b1.HasKey("LegalSourceId");
+
+                            b1.ToTable("LegalSources");
+
+                            b1.WithOwner()
+                                .HasForeignKey("LegalSourceId");
+                        });
+
+                    b.Navigation("Jort");
+                });
+
+            modelBuilder.Entity("PayrollCalculator.Domain.Rules.RecordedRuleEvent", b =>
+                {
+                    b.HasOne("PayrollCalculator.Domain.Agreements.SectorialJointAgreement", null)
+                        .WithMany()
+                        .HasForeignKey("AgreementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PayrollCalculator.Domain.LegalSources.LegalSource", null)
+                        .WithMany()
+                        .HasForeignKey("LegalSourceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PayrollCalculator.Domain.SalaryTables.SalaryTable", b =>
@@ -309,6 +561,15 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                     b.Navigation("Cells");
 
                     b.Navigation("Degrees");
+                });
+
+            modelBuilder.Entity("PayrollCalculator.Infrastructure.Persistence.Events.CareerEventRow", b =>
+                {
+                    b.HasOne("PayrollCalculator.Domain.Affairs.Affair", null)
+                        .WithMany()
+                        .HasForeignKey("AffairId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

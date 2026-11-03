@@ -21,7 +21,7 @@ public sealed class LegacyImporterTests(ITestOutputHelper output) : IDisposable
     }
 
     /// <summary>Schema copied from the Electron app's payroll.sqlite (TypeORM-generated).</summary>
-    private const string LegacySchema = """
+    internal const string LegacySchema = """
         CREATE TABLE "SectorialJointAgreement" ("sectorial_joint_AgreementID" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "agreement_name" text NOT NULL, "description" text);
         CREATE TABLE "SalaryTable" ("salaryTableID" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "numero_table" text NOT NULL, "type" text NOT NULL, "consernedEmployee" text NOT NULL, "beginning_date_of_application" date NOT NULL, "end_date_of_application" date, "degrees" json NOT NULL, "categories" json NOT NULL, "agreementID" integer NOT NULL);
         CREATE TABLE "SalaryTableCell" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "professionalCategory" text NOT NULL, "prefessionalSubCategory" text, "ProfessionalDegree" json NOT NULL, "salary" real NOT NULL, "salaryTableId" integer);
@@ -37,7 +37,7 @@ public sealed class LegacyImporterTests(ITestOutputHelper output) : IDisposable
         cmd.ExecuteNonQuery();
     }
 
-    private const string SampleData = """
+    internal const string SampleData = """
         INSERT INTO SectorialJointAgreement VALUES (2, 'المخابز', '');
         INSERT INTO SectorialJointAgreement VALUES (5, 'وكالات الأسفار', NULL);
         INSERT INTO SalaryTable VALUES (7, '5', 'جدول الاجور بالساعة', 'الاعوان الفنيون', '2023-01-01', '',
@@ -146,14 +146,18 @@ public sealed class LegacyImporterTests(ITestOutputHelper output) : IDisposable
         Assert.True(report.Affairs > 0);
     }
 
-    private static string? FindUp(string fileName)
+    /// <summary>Looks for the file above the test binaries, then above this source file (the binaries may live elsewhere).</summary>
+    internal static string? FindUp(string fileName, [System.Runtime.CompilerServices.CallerFilePath] string sourceFile = "")
     {
-        for (var dir = new DirectoryInfo(AppContext.BaseDirectory); dir is not null; dir = dir.Parent)
+        foreach (var start in new[] { AppContext.BaseDirectory, Path.GetDirectoryName(sourceFile) })
         {
-            var candidate = Path.Combine(dir.FullName, fileName);
-            if (File.Exists(candidate))
+            for (var dir = string.IsNullOrEmpty(start) ? null : new DirectoryInfo(start); dir is not null; dir = dir.Parent)
             {
-                return candidate;
+                var candidate = Path.Combine(dir.FullName, fileName);
+                if (File.Exists(candidate))
+                {
+                    return candidate;
+                }
             }
         }
 

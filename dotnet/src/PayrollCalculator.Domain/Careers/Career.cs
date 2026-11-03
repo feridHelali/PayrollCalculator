@@ -270,3 +270,15 @@ public sealed class Career
 
     private static DateOnly Min(DateOnly a, DateOnly b) => a < b ? a : b;
 }
+
+/// <summary>Port: the career events of each affair.</summary>
+public interface ICareerEventStore
+{
+    /// <returns>The affair's events in recorded order.</returns>
+    Task<IReadOnlyList<CareerEvent>> ListAsync(int affairId, CancellationToken cancellationToken = default);
+
+    void Add(int affairId, CareerEvent careerEvent);
+
+    /// <returns>False when the affair has no such event.</returns>
+    Task<bool> RemoveAsync(int affairId, Guid eventId, CancellationToken cancellationToken = default);
+}

@@ -1,14 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using PayrollCalculator.Application.LegacyImport;
 using PayrollCalculator.Domain.Affairs;
 using PayrollCalculator.Domain.Agreements;
+using PayrollCalculator.Domain.Careers;
 using PayrollCalculator.Domain.Common;
+using PayrollCalculator.Domain.Ledger;
+using PayrollCalculator.Domain.LegalSources;
+using PayrollCalculator.Domain.Rules;
 using PayrollCalculator.Domain.SalaryTables;
 using PayrollCalculator.Domain.Users;
 using PayrollCalculator.Infrastructure.Security;
 using PayrollCalculator.Infrastructure.LegacyImport;
 using PayrollCalculator.Infrastructure.Persistence;
+using PayrollCalculator.Infrastructure.Persistence.Events;
 
 namespace PayrollCalculator.Infrastructure;
 
@@ -37,6 +43,13 @@ public static class DependencyInjection
         services.AddScoped<ISalaryTableRepository, SalaryTableRepository>();
         services.AddScoped<IAffairRepository, AffairRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ILegalSourceRepository, LegalSourceRepository>();
+        services.AddScoped<IRuleEventStore, RuleEventStore>();
+        services.AddScoped<ICareerEventStore, CareerEventStore>();
+        services.AddScoped<ILedgerSnapshotRepository, LedgerSnapshotRepository>();
+        services.AddSingleton<ILedgerFingerprint>(new Sha256LedgerFingerprint());
+        services.AddScoped<LegacyEventMigration>();
+        services.TryAddSingleton(TimeProvider.System);
         services.AddScoped<ILegacyDataImporter, LegacyElectronImporter>();
         services.AddSingleton<IPasswordHasher>(new Pbkdf2PasswordHasher());
         return services;

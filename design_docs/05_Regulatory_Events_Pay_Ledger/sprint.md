@@ -15,7 +15,7 @@
 
 ## Phases and sub-sprints
 
-Phase B (05.2 – 05.10) is **done** (see "Phase B outcome" below); every other sub-sprint is **to do**. Each one is written test first, in the test project of its layer. The "First
+Phases B (05.2 – 05.10) and C (05.11 – 05.13) are **done** (see their "outcome" sections below); every other sub-sprint is **to do**. Each one is written test first, in the test project of its layer. The "First
 tests" column gives the scenarios that drive the code.
 
 ### Phase A: discovery (no production code)
@@ -58,6 +58,16 @@ tests" column gives the scenarios that drive the code.
 | 05.11 | **Event store** | Tables `LegalSources`, `RuleEvents` (type, schema version, JSON payload, status Draft / Approved / Rejected / Retracted, effective and published dates, citation), `CareerEvents`; EF migration; repositories | Round trip of each event type; an approved event cannot be updated (the repository refuses); JSON schema versioning |
 | 05.12 | **Migrating existing data** | Each `SalaryTable` version → `GridLineDeclared` + `SalaryGridEnacted` (end dates dropped and checked); `TableNumber` → grid line; category labels → codes; `Affair.InitialPosition` → `Hired`; legacy import still works | Parity test: on the existing data the new ledger gives the same base amounts as `SalaryTimelineCalculator` (apart from the documented fixes C1, C4 and C7). Once parity holds, the old calculator and tables are removed |
 | 05.13 | **Ledger snapshots** | `LedgerSnapshots` table (affair, event ids, hash, date, user) taken on export and print | The same events give the same hash; a snapshot can be reproduced after a correction |
+
+#### Phase C outcome
+
+- **Done:** 05.11 to 05.13, test first. 298 tests in all (Domain 164, Application 45, Infrastructure 61, WPF 28); 0 warnings. EF migration `AddRuleEvents`.
+- **05.11 event store.** `RecordedRuleEvent` (domain aggregate) holds an event with its status (Draft → Approved → Retracted, or Draft → Rejected), who recorded it and who reviewed it. Only a draft can be revised (same id) or withdrawn. Tables `LegalSources`, `RuleEvents`, `CareerEvents`. The payload is hand-written JSON (`Persistence/Events/EventJson.cs`) with a `schema` version and a `kind`; amounts in dinars. A newer or missing schema is refused, not misread. Kind, effective date and legal source are also columns (queries, foreign key). Before every save the context refuses any change to an approved event other than its retraction, and any change to a rejected or retracted one, even when the aggregate is bypassed. A cited legal source cannot be deleted.
+- **Change from the plan:** the schema version lives inside the payload (one place to read it), not in a column.
+- **05.12 migration.** `LegacyTranslator` (domain) turns each table version into `GridLineDeclared` + `SalaryGridEnacted` + `CareerRuleChanged` on the line `T{TableNumber}`, with the trimmed label as category code, and each affair into `Hired` + `Separated` (regime `H48`, hours unknown: hourly months report `RegimeUnknown` until a regime is entered). `LegacyEventMigration` (infrastructure) writes them, idempotently, citing one placeholder source per agreement (`legacy-{id}`), approved by `migration`. It is registered but not run at start-up yet; it will be wired when the screens switch to the ledger (Phase D).
+- **Parity:** on the real `payroll.sqlite`, 443 months of the 3 affairs that have a table are identical (2 affairs have no table: their table belongs to another agreement). On the sample data, 384 months are identical and 109 differ only by C1 (the grid stays in force after the old end date). The test also accepts two other documented causes: a degree with 0 years is now a ceiling (the old calculator skipped through it; tables T2 and T4 have such degrees), and C7 (seniority from the hiring day). Anything else fails the test.
+- **05.13 snapshots.** `LedgerSnapshot` keeps the rule event ids in applied order, a copy of the career events, the `LedgerSettings` (proration, rounding, career options), the total and a SHA-256 of the stored form of all of these. `Reproduce` rebuilds the ledger from the stored events, even retracted ones, and checks the hash.
+- **Not done:** removing the old `SalaryTable` / `SalaryTimelineCalculator`. The current screens still use them, so they go when the ledger screens replace those screens (05.15 – 05.17), not before.
 
 ### Phase D: application and UI (`Application`, `Wpf`)
 

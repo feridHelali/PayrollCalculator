@@ -184,6 +184,9 @@ public static class Labels
             DomainError.OutsideCareer => "حدث خارج فترة المسار المهني (بعد انتهاء العمل)",
             DomainError.NotApplicable => $"{field}{detail}: لا يمكن تطبيق هذا التعديل",
             DomainError.Undeclared => $"{field}{detail} غير معرّف في هذا التاريخ",
+            DomainError.InvalidStatusTransition => $"{field}{detail}: لا يمكن الانتقال إلى هذه الحالة",
+            DomainError.ImmutableOnceApproved => $"{field}{detail}: لا يمكن تعديل حدث مصادق عليه، يجب سحبه وإدخال حدث جديد",
+            DomainError.IncompleteSnapshot => $"{field}{detail}: بعض الأحداث المحفوظة في هذه النسخة لم تعد موجودة",
             _ => "عملية غير مسموح بها: " + error.Message,
         };
     }
@@ -225,6 +228,10 @@ public static class Labels
         DomainField.MonthsInDegree => "عدد الأشهر في الدرجة",
         DomainField.GridCell => "خانة الجدول",
         DomainField.CareerEvent => "حدث المسار المهني",
+        DomainField.RuleEvent => "الحدث التنظيمي",
+        DomainField.Reviewer => "المراجع",
+        DomainField.LedgerSnapshot => "نسخة السجل",
+        DomainField.Affair => Affair,
         _ => string.Empty,
     };
 

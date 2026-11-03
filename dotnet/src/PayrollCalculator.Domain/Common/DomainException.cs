@@ -21,6 +21,9 @@ public enum DomainError
     OutsideCareer,
     NotApplicable,
     Undeclared,
+    InvalidStatusTransition,
+    ImmutableOnceApproved,
+    IncompleteSnapshot,
 }
 
 /// <summary>The value a rule applies to.</summary>
@@ -62,6 +65,10 @@ public enum DomainField
     MonthsInDegree,
     GridCell,
     CareerEvent,
+    RuleEvent,
+    Reviewer,
+    LedgerSnapshot,
+    Affair,
 }
 
 /// <summary>Raised when an operation would break a business invariant.</summary>

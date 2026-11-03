@@ -47,6 +47,12 @@ public sealed class LegalSource : Entity
         FileName = fileName;
     }
 
+    // Required by EF Core (the JORT reference is an owned type, set after construction).
+    private LegalSource()
+    {
+        Number = Title = string.Empty;
+    }
+
     public LegalSourceKind Kind { get; private set; }
 
     /// <summary>The number of the text (for example "2024-1383" for an order, "18" for a rider).</summary>
@@ -89,4 +95,9 @@ public sealed record Citation
 
     /// <summary>The article (الفصل), when the text has them.</summary>
     public string? Article { get; }
+}
+
+public interface ILegalSourceRepository : IRepository<LegalSource>
+{
+    Task<LegalSource?> FindAsync(LegalSourceKind kind, string number, CancellationToken cancellationToken = default);
 }
