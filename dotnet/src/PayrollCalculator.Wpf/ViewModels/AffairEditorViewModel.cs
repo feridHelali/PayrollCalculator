@@ -105,9 +105,12 @@ public sealed partial class AffairEditorViewModel(IServiceRunner runner, IDialog
         }
 
         var dto = new AffairDto(Id, AffairNumber, AffairTitle, Claimant, start, end, agreementId, SelectedTableId, InitialCategory, InitialDegree);
-        await TryAsync(async () =>
-            Id = await Runner.RunAsync<AffairService, int>(s => s.SaveAsync(dto)).ConfigureAwait(true),
-            Labels.Saved).ConfigureAwait(true);
+        if (await TryAsync(async () =>
+                Id = await Runner.RunAsync<AffairService, int>(s => s.SaveAsync(dto)).ConfigureAwait(true),
+                Labels.Saved).ConfigureAwait(true))
+        {
+            await navigator.GoAsync<AffairsViewModel>(p => p.LoadAsync()).ConfigureAwait(true);
+        }
     }
 
     [RelayCommand]

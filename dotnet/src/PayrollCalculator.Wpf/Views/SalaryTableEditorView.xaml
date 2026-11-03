@@ -73,7 +73,7 @@
                         <DataGridTemplateColumn Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Style="{StaticResource DangerButton}" FontFamily="{StaticResource Font.Icons}" FontSize="11" Content="{x:Static c:Icons.Close}" MinWidth="0" Padding="7,4" Margin="0"
+                                    <Button Style="{StaticResource RowDeleteButton}"
                                             Command="{Binding DataContext.RemoveDegreeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
                                 </DataTemplate>
@@ -92,9 +92,18 @@
                     <Button Style="{StaticResource DangerButton}" c:Ui.Icon="{x:Static c:Icons.Delete}" Content="{x:Static res:Labels.Delete}" Command="{Binding RemoveCategoryCommand}" />
                 </StackPanel>
                 <DataGrid x:Name="Matrix" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}"
-                          FrozenColumnCount="1"
+                          FrozenColumnCount="2"
                           v:MatrixColumns.Degrees="{Binding Degrees}">
                     <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Style="{StaticResource RowDeleteButton}"
+                                            Command="{Binding DataContext.RemoveCategoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn Header="{x:Static res:Labels.Category}" Binding="{Binding Label}" MinWidth="160" />
                     </DataGrid.Columns>
                 </DataGrid>

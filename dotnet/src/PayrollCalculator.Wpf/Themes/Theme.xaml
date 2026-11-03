@@ -262,6 +262,17 @@
         </Style.Triggers>
     </Style>
 
+    <!-- Trash button on a row of a list or grid: icon only, red, with a tooltip -->
+    <Style TargetType="Button" x:Key="RowDeleteButton" BasedOn="{StaticResource DangerButton}">
+        <Setter Property="FontFamily" Value="{StaticResource Font.Icons}" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Content" Value="{x:Static c:Icons.Delete}" />
+        <Setter Property="ToolTip" Value="{x:Static res:Labels.Delete}" />
+        <Setter Property="MinWidth" Value="0" />
+        <Setter Property="Padding" Value="7,3" />
+        <Setter Property="Margin" Value="0" />
+    </Style>
+
     <!-- Side menu entry: icon + label, highlighted on hover, marked with the brand bar when its page is shown -->
     <Style TargetType="Button" x:Key="NavButton">
         <Setter Property="Foreground" Value="{StaticResource Brush.NavText}" />

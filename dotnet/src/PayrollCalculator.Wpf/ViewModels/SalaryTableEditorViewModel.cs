@@ -184,7 +184,7 @@ public sealed partial class SalaryTableEditorViewModel(IServiceRunner runner, ID
     [RelayCommand]
     private void RemoveCategory(CategoryRowViewModel? row)
     {
-        if ((row ?? SelectedCategory) is { } target)
+        if ((row ?? SelectedCategory) is { } target && Dialogs.Confirm(Labels.ConfirmDelete))
         {
             Categories.Remove(target);
         }
@@ -200,7 +200,7 @@ public sealed partial class SalaryTableEditorViewModel(IServiceRunner runner, ID
     [RelayCommand]
     private void RemoveDegree(DegreeColumnViewModel? degree)
     {
-        if (degree is null)
+        if (degree is null || !Dialogs.Confirm(Labels.ConfirmDelete))
         {
             return;
         }
@@ -234,9 +234,12 @@ public sealed partial class SalaryTableEditorViewModel(IServiceRunner runner, ID
             Degrees.Select(d => new DegreeDto(d.Key, d.Number, d.YearsInDegree)).ToList(),
             Categories.SelectMany(c => c.Amounts.Where(a => degreeKeys.Contains(a.Key)).Select(a => new CellDto(c.Key, a.Key, a.Value))).ToList());
 
-        await TryAsync(async () =>
-            Id = await Runner.RunAsync<SalaryTableService, int>(s => s.SaveAsync(dto)).ConfigureAwait(true),
-            Labels.Saved).ConfigureAwait(true);
+        if (await TryAsync(async () =>
+                Id = await Runner.RunAsync<SalaryTableService, int>(s => s.SaveAsync(dto)).ConfigureAwait(true),
+                Labels.Saved).ConfigureAwait(true))
+        {
+            await navigator.GoAsync<SalaryTablesViewModel>(p => p.LoadAsync()).ConfigureAwait(true);
+        }
     }
 
     [RelayCommand]

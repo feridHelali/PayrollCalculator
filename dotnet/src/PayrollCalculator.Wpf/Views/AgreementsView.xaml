@@ -29,6 +29,16 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="{x:Static res:Labels.AgreementName}" Binding="{Binding Name}" Width="2*" />
                 <DataGridTextColumn Header="{x:Static res:Labels.Description}" Binding="{Binding Description}" Width="*" />
+                <DataGridTemplateColumn Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource RowDeleteButton}"
+                                    Visibility="{Binding IsSeeded, Converter={StaticResource InverseBoolToVisibility}}"
+                                    Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

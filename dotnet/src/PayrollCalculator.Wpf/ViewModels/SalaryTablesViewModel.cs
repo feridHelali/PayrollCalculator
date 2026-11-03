@@ -50,9 +50,9 @@ public sealed partial class SalaryTablesViewModel(IServiceRunner runner, IDialog
         SelectedTable is { } t ? navigator.GoAsync<SalaryTableEditorViewModel>(e => e.LoadAsync(t.Id)) : Task.CompletedTask;
 
     [RelayCommand]
-    private async Task DeleteAsync()
+    private async Task DeleteAsync(SalaryTableSummaryDto? row)
     {
-        if (SelectedTable is not { } selected || !Dialogs.Confirm(Labels.ConfirmDelete))
+        if ((row ?? SelectedTable) is not { } selected || !Dialogs.Confirm(Labels.ConfirmDelete))
         {
             return;
         }

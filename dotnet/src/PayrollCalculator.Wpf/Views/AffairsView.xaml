@@ -26,6 +26,15 @@
                 <DataGridTextColumn Header="{x:Static res:Labels.EndOfWork}" Binding="{Binding EndDate, Converter={StaticResource DateText}}" Width="Auto" />
                 <DataGridTextColumn Header="{x:Static res:Labels.Agreement}" Binding="{Binding AgreementName}" Width="2*" />
                 <DataGridTextColumn Header="{x:Static res:Labels.TableNumber}" Binding="{Binding TableNumber}" Width="Auto" />
+                <DataGridTemplateColumn Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource RowDeleteButton}"
+                                    Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

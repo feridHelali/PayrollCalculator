@@ -28,6 +28,15 @@
                 <DataGridTextColumn Header="{x:Static res:Labels.ConcernedEmployees}" Binding="{Binding ConcernedEmployees}" Width="2*" />
                 <DataGridTextColumn Header="{x:Static res:Labels.StartDate}" Binding="{Binding StartDate, Converter={StaticResource DateText}}" Width="Auto" />
                 <DataGridTextColumn Header="{x:Static res:Labels.EndDate}" Binding="{Binding EndDate, Converter={StaticResource DateText}}" Width="Auto" />
+                <DataGridTemplateColumn Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource RowDeleteButton}"
+                                    Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

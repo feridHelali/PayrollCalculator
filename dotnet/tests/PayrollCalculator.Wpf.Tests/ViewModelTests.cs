@@ -145,6 +145,69 @@ public sealed class ViewModelTests : IDisposable
     }
 
     [Fact]
+    public async Task The_trash_button_of_a_row_deletes_that_row_after_confirmation()
+    {
+        var vm = await AgreementsWithOneAsync("A");
+        var row = UserAgreements(vm)[0];
+        vm.SelectedAgreement = vm.Agreements[0]; // another row is selected: the row's own button wins
+
+        _app.Dialogs.ConfirmAnswer = false;
+        await vm.DeleteCommand.ExecuteAsync(row);
+        Assert.Single(UserAgreements(vm));
+
+        _app.Dialogs.ConfirmAnswer = true;
+        await vm.DeleteCommand.ExecuteAsync(row);
+        Assert.Empty(UserAgreements(vm));
+        Assert.Equal(20, vm.Agreements.Count);
+    }
+
+    [Fact]
+    public async Task Removing_a_category_or_a_degree_asks_first()
+    {
+        var editor = await EditorOnAsync("textile");
+        editor.AddCategoryCommand.Execute(null);
+        editor.AddDegreeCommand.Execute(null);
+
+        _app.Dialogs.ConfirmAnswer = false;
+        editor.RemoveCategoryCommand.Execute(editor.Categories[0]);
+        editor.RemoveDegreeCommand.Execute(editor.Degrees[0]);
+        Assert.Equal((1, 1), (editor.Categories.Count, editor.Degrees.Count));
+
+        _app.Dialogs.ConfirmAnswer = true;
+        editor.RemoveCategoryCommand.Execute(editor.Categories[0]);
+        editor.RemoveDegreeCommand.Execute(editor.Degrees[0]);
+        Assert.Equal((0, 0), (editor.Categories.Count, editor.Degrees.Count));
+    }
+
+    [Fact]
+    public async Task Saving_a_salary_table_goes_back_to_the_list()
+    {
+        var shell = _app.Get<MainViewModel>();
+        var editor = await EditorOnAsync("textile");
+        editor.SelectedGridKind = editor.GridKinds[0];
+        editor.TableNumber = "1";
+        editor.StartDate = new DateTime(2022, 6, 1);
+
+        await editor.SaveCommand.ExecuteAsync(null);
+
+        var list = Assert.IsType<SalaryTablesViewModel>(shell.CurrentPage);
+        Assert.Contains(list.Tables, t => t.Id == editor.Id);
+    }
+
+    [Fact]
+    public async Task A_save_that_fails_stays_on_the_form()
+    {
+        var shell = _app.Get<MainViewModel>();
+        var editor = await EditorOnAsync("textile");
+        editor.StartDate = new DateTime(2022, 6, 1); // no table number: the domain refuses
+
+        await editor.SaveCommand.ExecuteAsync(null);
+
+        Assert.Single(_app.Dialogs.Errors);
+        Assert.IsNotType<SalaryTablesViewModel>(shell.CurrentPage);
+    }
+
+    [Fact]
     public async Task Domain_errors_are_shown_not_thrown()
     {
         var vm = _app.Get<AgreementsViewModel>();

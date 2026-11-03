@@ -40,9 +40,9 @@ public sealed partial class AffairsViewModel(IServiceRunner runner, IDialogServi
         SelectedAffair is { } a ? navigator.GoAsync<TimelineViewModel>(t => t.LoadAsync(a.Id)) : Task.CompletedTask;
 
     [RelayCommand]
-    private async Task DeleteAsync()
+    private async Task DeleteAsync(AffairSummaryDto? row)
     {
-        if (SelectedAffair is not { } selected || !Dialogs.Confirm(Labels.ConfirmDelete))
+        if ((row ?? SelectedAffair) is not { } selected || !Dialogs.Confirm(Labels.ConfirmDelete))
         {
             return;
         }

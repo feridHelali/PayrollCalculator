@@ -51,9 +51,9 @@ public sealed partial class AgreementsViewModel(IServiceRunner runner, IDialogSe
     }, Labels.Saved).ConfigureAwait(true);
 
     [RelayCommand]
-    private async Task DeleteAsync()
+    private async Task DeleteAsync(AgreementDto? row)
     {
-        if (SelectedAgreement is not { } selected || !Dialogs.Confirm(Labels.ConfirmDeleteAgreement))
+        if ((row ?? SelectedAgreement) is not { } selected || !Dialogs.Confirm(Labels.ConfirmDeleteAgreement))
         {
             return;
         }
