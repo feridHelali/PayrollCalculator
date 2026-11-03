@@ -19,6 +19,9 @@ public sealed record AffairDto(
     string InitialCategory,
     int InitialDegree);
 
+/// <summary>A step of the gross pay actually received.</summary>
+public sealed record PaidSalaryStepDto(DateOnly From, decimal GrossAmount, string? Note);
+
 public sealed record AffairSummaryDto(
     int Id,
     string AffairNumber,
@@ -109,6 +112,17 @@ public sealed class AffairService(
         {
             throw new DomainException(DomainError.TableNotInAgreement, DomainField.SalaryTable);
         }
+    }
+
+    public async Task<IReadOnlyList<PaidSalaryStepDto>> GetPaidSalaryAsync(int id, CancellationToken ct = default) =>
+        (await Load(id, ct).ConfigureAwait(false)).PaidSalary.Select(s => new PaidSalaryStepDto(s.From, s.GrossAmount, s.Note)).ToList();
+
+    public async Task SavePaidSalaryAsync(int id, IReadOnlyList<PaidSalaryStepDto> steps, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(steps);
+        var affair = await Load(id, ct).ConfigureAwait(false);
+        affair.ReplacePaidSalary(steps.Select(s => new PaidSalaryStepSpec(s.From, s.GrossAmount, s.Note)));
+        await unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
     }
 
     private Task<Affair> Load(int id, CancellationToken ct) =>

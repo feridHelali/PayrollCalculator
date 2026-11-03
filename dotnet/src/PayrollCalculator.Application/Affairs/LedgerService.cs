@@ -21,7 +21,9 @@ public sealed record LedgerRowDto(
     decimal Proration,
     IReadOnlyDictionary<string, decimal?> Amounts,
     decimal Total,
-    LedgerIssue Issue);
+    LedgerIssue Issue,
+    decimal? Paid = null,
+    decimal? Difference = null);
 
 /// <summary>The month-by-month ledger of an affair.</summary>
 public sealed record AffairLedgerDto(
@@ -29,7 +31,10 @@ public sealed record AffairLedgerDto(
     IReadOnlyList<LedgerRowDto> Rows,
     IReadOnlyDictionary<string, decimal> Totals,
     decimal GrandTotal,
-    int UnresolvedMonths)
+    int UnresolvedMonths,
+    decimal TotalPaid = 0m,
+    decimal TotalDifference = 0m,
+    int MonthsWithoutPaid = 0)
 {
     public const string BaseCode = "BASE";
 }
@@ -56,10 +61,15 @@ public sealed class LedgerService(IAffairRepository affairs, ISalaryTableReposit
 
         var ledger = AffairLedgerBuilder.Build(affair, family, chosen)
             ?? throw new DomainException(DomainError.Required, DomainField.SalaryTable);
-        return ToDto(ledger, chosen);
+        return ToDto(ledger, chosen, affair);
     }
 
-    private static AffairLedgerDto ToDto(PayLedger ledger, List<Allowance> chosen)
+    /// <summary>
+    /// Owed (the ledger) minus paid (the affair's paid steps), month by month. The paid step in force on the month's first
+    /// day worked is prorated like the base salary. Months where the employee was paid more stay negative: nothing is
+    /// hidden. Months with no known pay have no difference.
+    /// </summary>
+    private static AffairLedgerDto ToDto(PayLedger ledger, List<Allowance> chosen, Affair affair)
     {
         var columns = new List<LedgerColumnDto> { new(AffairLedgerDto.BaseCode, string.Empty) };
         columns.AddRange(chosen.Select(a => new LedgerColumnDto(AffairLedgerBuilder.CodeOf(a).Value, a.Name)));
@@ -70,12 +80,16 @@ public sealed class LedgerService(IAffairRepository affairs, ISalaryTableReposit
             var baseEntry = byCode[AffairLedgerDto.BaseCode];
             var amounts = columns.ToDictionary(c => c.Code, c => byCode.TryGetValue(c.Code, out var e) ? e.Amount?.Dinars : null);
             var issue = month.Select(e => e.Issue).FirstOrDefault(i => i != LedgerIssue.None);
+            var total = amounts.Values.Sum(v => v ?? 0m);
+            var firstDay = month.Key.FirstDay < affair.EmploymentPeriod.Start ? affair.EmploymentPeriod.Start : month.Key.FirstDay;
+            decimal? paid = affair.PaidOn(firstDay) is { } full ? Money.Round(full * baseEntry.Proration, RoundingRule.HalfUp).Dinars : null;
             return new LedgerRowDto(month.Key, baseEntry.Category.Value, baseEntry.Degree, baseEntry.Rate?.Dinars, baseEntry.Proration, amounts,
-                amounts.Values.Sum(v => v ?? 0m), issue);
+                total, issue, paid, paid is { } p ? total - p : null);
         }).ToList();
 
         var totals = columns.ToDictionary(c => c.Code, c => rows.Sum(r => r.Amounts[c.Code] ?? 0m));
-        return new AffairLedgerDto(columns, rows, totals, totals.Values.Sum(), rows.Count(r => r.Issue != LedgerIssue.None));
+        return new AffairLedgerDto(columns, rows, totals, totals.Values.Sum(), rows.Count(r => r.Issue != LedgerIssue.None),
+            rows.Sum(r => r.Paid ?? 0m), rows.Sum(r => r.Difference ?? 0m), rows.Count(r => r.Paid is null));
     }
 }
 
@@ -89,7 +103,7 @@ public static class LedgerCsv
         ArgumentNullException.ThrowIfNull(ledger);
         var columns = ledger.Columns.Select(c => c.Code == AffairLedgerDto.BaseCode ? baseHeader : c.Name).ToList();
         var sb = new StringBuilder();
-        sb.AppendLine(string.Join(';', Leading.Concat(columns).Append("Total").Append("Issue").Select(Escape)));
+        sb.AppendLine(string.Join(';', Leading.Concat(columns).Append("Total").Append("Paid").Append("Difference").Append("Issue").Select(Escape)));
         foreach (var r in ledger.Rows)
         {
             IEnumerable<string> fields =
@@ -97,6 +111,8 @@ public static class LedgerCsv
                 r.Month.ToString(), r.Category, r.Degree.ToString(CultureInfo.InvariantCulture), r.Proration.ToString("0.####", CultureInfo.InvariantCulture),
                 .. ledger.Columns.Select(c => r.Amounts[c.Code]?.ToString("0.000", CultureInfo.InvariantCulture) ?? string.Empty),
                 r.Total.ToString("0.000", CultureInfo.InvariantCulture),
+                r.Paid?.ToString("0.000", CultureInfo.InvariantCulture) ?? string.Empty,
+                r.Difference?.ToString("0.000", CultureInfo.InvariantCulture) ?? string.Empty,
                 r.Issue == LedgerIssue.None ? string.Empty : r.Issue.ToString(),
             ];
             sb.AppendLine(string.Join(';', fields.Select(Escape)));
@@ -104,7 +120,9 @@ public static class LedgerCsv
 
         sb.AppendLine(string.Join(';', new[] { "Total", string.Empty, string.Empty, string.Empty }
             .Concat(ledger.Columns.Select(c => ledger.Totals[c.Code].ToString("0.000", CultureInfo.InvariantCulture)))
-            .Append(ledger.GrandTotal.ToString("0.000", CultureInfo.InvariantCulture)).Append(string.Empty)));
+            .Append(ledger.GrandTotal.ToString("0.000", CultureInfo.InvariantCulture))
+            .Append(ledger.TotalPaid.ToString("0.000", CultureInfo.InvariantCulture))
+            .Append(ledger.TotalDifference.ToString("0.000", CultureInfo.InvariantCulture)).Append(string.Empty)));
         return sb.ToString();
     }
 

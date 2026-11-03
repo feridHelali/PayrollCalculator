@@ -367,9 +367,8 @@ public sealed class ViewModelTests : IDisposable
         await prime.SaveCommand.ExecuteAsync(null);
     }
 
-    /// <summary>Task 3, end to end: real grids and primes of the travel agencies (rider 11), one employee, May 2022 to June 2023.</summary>
-    [Fact]
-    public async Task The_monthly_ledger_combines_the_grids_and_the_chosen_primes()
+    /// <summary>Travel agencies (rider 11): two grids, transport (a group) and presence (everyone), one affair May 2022 to June 2023.</summary>
+    private async Task<LedgerViewModel> TravelLedgerAsync()
     {
         var table2022 = await TravelGridAsync("rider-11_table-1.csv", new DateTime(2022, 5, 1));
         await TravelGridAsync("rider-11_table-2.csv", new DateTime(2023, 5, 1));
@@ -394,6 +393,58 @@ public sealed class ViewModelTests : IDisposable
 
         var ledger = _app.Get<LedgerViewModel>();
         await ledger.LoadAsync(affair.Id);
+        return ledger;
+    }
+
+    /// <summary>Arrears: owed minus paid, month by month, overpaid months kept negative.</summary>
+    [Fact]
+    public async Task Paid_steps_give_the_difference_owed_minus_paid_for_each_month()
+    {
+        var ledger = await TravelLedgerAsync();
+        Assert.All(ledger.Rows, r => Assert.Null(r.Difference)); // nothing paid entered yet
+        Assert.Equal(14, ledger.MonthsWithoutPaid);
+
+        ledger.AddPaidStepCommand.Execute(null);
+        ledger.PaidSteps[^1].From = new DateTime(2022, 5, 1);
+        ledger.PaidSteps[^1].GrossAmount = 600m;
+        ledger.PaidSteps[^1].Note = "بطاقة خلاص ماي 2022";
+        ledger.AddPaidStepCommand.Execute(null);
+        ledger.PaidSteps[^1].From = new DateTime(2023, 1, 1);
+        ledger.PaidSteps[^1].GrossAmount = 500m;
+        await ledger.SavePaidCommand.ExecuteAsync(null);
+
+        Assert.Empty(_app.Dialogs.Errors);
+        var may2022 = ledger.Rows[0];
+        Assert.Equal((600m, 504.153m + 11.752m - 600m), (may2022.Paid, may2022.Difference)); // paid more than owed: negative, kept
+        var jan2023 = ledger.Rows[8];
+        Assert.Equal(("2023-01", 500m, 504.153m + 11.752m - 500m), (jan2023.Month, jan2023.Paid, jan2023.Difference));
+        Assert.Equal(8 * 600m + 6 * 500m, ledger.TotalPaid);
+        Assert.Equal(ledger.GrandTotal - ledger.TotalPaid, ledger.TotalDifference);
+        Assert.Equal(0, ledger.MonthsWithoutPaid);
+
+        var reopened = _app.Get<LedgerViewModel>();
+        await reopened.LoadAsync(ledger.Affair!.Id);
+        Assert.Equal([600m, 500m], reopened.PaidSteps.Select(p => p.GrossAmount!.Value));
+        Assert.Equal(ledger.TotalDifference, reopened.TotalDifference);
+    }
+
+    [Fact]
+    public async Task A_paid_step_without_an_amount_is_refused()
+    {
+        var ledger = await TravelLedgerAsync();
+        ledger.AddPaidStepCommand.Execute(null);
+        ledger.PaidSteps[^1].From = new DateTime(2022, 5, 1);
+
+        await ledger.SavePaidCommand.ExecuteAsync(null);
+
+        Assert.Equal(Labels.RateIncomplete, Assert.Single(_app.Dialogs.Errors));
+    }
+
+    /// <summary>Task 3, end to end: real grids and primes of the travel agencies (rider 11), one employee, May 2022 to June 2023.</summary>
+    [Fact]
+    public async Task The_monthly_ledger_combines_the_grids_and_the_chosen_primes()
+    {
+        var ledger = await TravelLedgerAsync();
 
         // The prime for everyone is ticked; the one for a group is left to the expert.
         var transport = ledger.Primes.Single(p => p.Name == "منحة النقل");

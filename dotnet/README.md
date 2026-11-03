@@ -23,7 +23,10 @@ dotnet ef migrations add <Name> -p src/PayrollCalculator.Infrastructure -s src/P
 - **Monthly ledger (الكشف الشهري للأجر والمنح, from the affairs list).** `AffairLedgerBuilder` (Domain) turns the affair's
   salary tables and the primes ticked for the employee into rule events and values them with `PayLedgerBuilder`: base
   from the grid (hourly × 208 h), monthly primes prorated, per-day primes × 26 working days, percentages of the base.
-  48-hour regime only for now. CSV export with one column per prime.
+  The regime is the affair's salary table's (`WeeklyHours`: 48 h = 208 h and 26 days a month, 40 h = 173.333 h and
+  22 days; assumptions to confirm). **Arrears:** the gross pay actually received is entered on the same screen as dated
+  steps; each month shows paid (prorated like the base) and owed − paid, negative months kept. CSV export with one
+  column per prime plus paid and difference.
 - **One migration, `InitialCreate`**, creates the schema and seeds the 20 sectoral agreements (Arabic label, stable
   code, display order) from `Infrastructure/Persistence/AgreementSeed.cs` with EF `HasData`. Seeded agreements are
   read-only in the app. The migrations were squashed in sprint 07, so a database created before that must be reset

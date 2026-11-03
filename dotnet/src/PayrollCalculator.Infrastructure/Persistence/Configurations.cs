@@ -157,6 +157,17 @@ internal sealed class AffairConfiguration : IEntityTypeConfiguration<Affair>
             p.Ignore(r => r.IsOpenEnded);
         });
 
+        b.OwnsMany(a => a.PaidSalary, s =>
+        {
+            s.ToTable("AffairPaidSalary");
+            s.WithOwner().HasForeignKey("AffairId");
+            s.Property<int>("Id");
+            s.HasKey("Id");
+            s.Property(x => x.GrossAmount).HasPrecision(18, 4);
+            s.Property(x => x.Note).HasMaxLength(500);
+        });
+        b.Navigation(a => a.PaidSalary).UsePropertyAccessMode(PropertyAccessMode.Field);
+
         b.ComplexProperty(a => a.InitialPosition, p =>
         {
             p.Property(x => x.Category).HasColumnName("InitialCategory").IsRequired().HasMaxLength(500);

@@ -42,14 +42,53 @@
             </StackPanel>
         </GroupBox>
 
+        <!-- What was actually paid (gross), by steps -->
+        <Expander DockPanel.Dock="Top" Header="{x:Static res:Labels.PaidSalary}" Margin="0,0,0,10" IsExpanded="True">
+            <DockPanel Margin="0,6,0,0">
+                <StackPanel DockPanel.Dock="Top" Style="{StaticResource Toolbar}" Margin="0,0,0,6">
+                    <Button c:Ui.Icon="{x:Static c:Icons.New}" Content="{x:Static res:Labels.AddPaidStep}" Command="{Binding AddPaidStepCommand}" />
+                    <Button Style="{StaticResource PrimaryButton}" c:Ui.Icon="{x:Static c:Icons.Save}" Content="{x:Static res:Labels.SavePaid}" Command="{Binding SavePaidCommand}" />
+                    <TextBlock Text="{x:Static res:Labels.PaidSalaryHint}" VerticalAlignment="Center" Opacity="0.7" Margin="12,0,0,0" />
+                </StackPanel>
+                <DataGrid ItemsSource="{Binding PaidSteps}" CanUserAddRows="False" MaxHeight="180" HorizontalAlignment="Left">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="{x:Static res:Labels.EffectiveFrom}" Width="170">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <DatePicker SelectedDate="{Binding From, UpdateSourceTrigger=PropertyChanged}" Margin="0" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="{x:Static res:Labels.GrossPaid}" Binding="{Binding GrossAmount, StringFormat=0.000, TargetNullValue=''}" Width="140" />
+                        <DataGridTextColumn Header="{x:Static res:Labels.PaidNote}" Binding="{Binding Note}" Width="320" />
+                        <DataGridTemplateColumn Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Style="{StaticResource RowDeleteButton}"
+                                            Command="{Binding DataContext.RemovePaidStepCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </Expander>
+
         <!-- Totals -->
         <Border DockPanel.Dock="Bottom" Padding="10,8" Margin="0,10,0,0" BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="4">
             <DockPanel>
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
                     <TextBlock Text="{x:Static res:Labels.GrandTotal}" FontWeight="SemiBold" Margin="0,0,8,0" />
                     <TextBlock Text="{Binding GrandTotal, StringFormat=0.000}" FontWeight="SemiBold" />
+                    <TextBlock Text="{x:Static res:Labels.TotalPaid}" Margin="24,0,8,0" />
+                    <TextBlock Text="{Binding TotalPaid, StringFormat=0.000}" />
+                    <TextBlock Text="{x:Static res:Labels.TotalDifference}" FontWeight="SemiBold" Margin="24,0,8,0" />
+                    <TextBlock Text="{Binding TotalDifference, StringFormat=0.000}" FontWeight="SemiBold" />
                     <TextBlock Text="{x:Static res:Labels.UnresolvedMonths}" Margin="24,0,8,0" />
                     <TextBlock Text="{Binding UnresolvedMonths}" />
+                    <TextBlock Text="{x:Static res:Labels.MonthsWithoutPaid}" Margin="24,0,8,0" />
+                    <TextBlock Text="{Binding MonthsWithoutPaid}" />
                 </StackPanel>
                 <ItemsControl ItemsSource="{Binding Totals}" Margin="24,0,0,0">
                     <ItemsControl.ItemsPanel>
@@ -76,6 +115,8 @@
                 <DataGridTextColumn Header="{x:Static res:Labels.GridRate}" Binding="{Binding BaseRate, StringFormat=0.000}" Width="Auto" />
                 <DataGridTextColumn Header="{x:Static res:Labels.Proration}" Binding="{Binding Proration}" Width="Auto" />
                 <DataGridTextColumn Header="{x:Static res:Labels.MonthTotal}" Binding="{Binding Total, StringFormat=0.000}" Width="Auto" FontWeight="SemiBold" />
+                <DataGridTextColumn Header="{x:Static res:Labels.GrossPaid}" Binding="{Binding Paid, StringFormat=0.000, TargetNullValue='—'}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.Difference}" Binding="{Binding Difference, StringFormat=0.000, TargetNullValue='—'}" Width="Auto" FontWeight="SemiBold" />
                 <DataGridTextColumn Header="{x:Static res:Labels.Status}" Binding="{Binding Issue, Converter={StaticResource LedgerIssueText}}" Width="*" />
             </DataGrid.Columns>
         </DataGrid>

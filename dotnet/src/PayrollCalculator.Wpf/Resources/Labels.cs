@@ -32,6 +32,16 @@ public static class Labels
     public const string GridRate = "مقدار الجدول";
     public const string Proration = "نسبة الشهر";
     public const string MonthTotal = "مجموع الشهر";
+    public const string PaidSalary = "الأجر الخام المدفوع فعليا";
+    public const string PaidSalaryHint = "كل مبلغ يطبق من تاريخه إلى المبلغ الموالي، ويحتسب جزئيا في الأشهر غير الكاملة";
+    public const string AddPaidStep = "إضافة مبلغ مدفوع";
+    public const string SavePaid = "حفظ وإعادة الاحتساب";
+    public const string GrossPaid = "المدفوع (خام)";
+    public const string PaidNote = "المرجع (بطاقة الخلاص...)";
+    public const string Difference = "الفارق (المستحق - المدفوع)";
+    public const string TotalPaid = "مجموع المدفوع";
+    public const string TotalDifference = "مجموع الفارق";
+    public const string MonthsWithoutPaid = "أشهر بدون مبلغ مدفوع";
     public const string Allowance = "المنحة";
     public const string AllowanceName = "اسم المنحة";
     public const string AllowanceUnitLabel = "طريقة الاحتساب";
