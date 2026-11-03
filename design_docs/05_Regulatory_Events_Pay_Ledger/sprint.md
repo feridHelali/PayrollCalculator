@@ -1,12 +1,12 @@
-## Sprint 05: regulatory events, the pay ledger and the JORT MCP server
+## Sprint 05: regulatory events and the pay ledger
 
 1. **Context.** Today the user types every version of every grid by hand. The calculation reconstructs only the base
    salary, has no link to the legal texts, and assumes a career fixed at hiring. In practice, every factor that sets a
    salary comes from texts published in the JORT, and each text changes the rules from a given date.
 2. **Objective.** Model each change in the rules as a **dated, cited event**. Rebuild an affair's gross salary month by
    month (base, primes and allowances) by folding those events. Show the result as a **ledger** the user can filter,
-   export (xlsx, csv) and print in a concise form. Feed the events from the JORT PDFs through an **MCP server** that
-   proposes them for a person to review.
+   export (xlsx, csv) and print in a concise form. The events are typed in the app here; sprint 06 adds an **MCP server**
+   that reads them from the JORT PDFs and proposes them for a person to review.
 3. **Read first.** [`design_review.md`](design_review.md) (inconsistencies in the idea and in the current model) and
    [`event_storming.md`](event_storming.md) (events, policies, proposed model and the domain expert's questions).
 4. **Out of scope.** Comparing owed and paid amounts (arrears), legal interest, the installer. Any of these can follow.
@@ -58,16 +58,11 @@ tests" column gives the scenarios that drive the code.
 | 05.18 | **CSV and XLSX export** | CSV in UTF-8 with a BOM (so Excel shows the Arabic correctly), `;` separator; XLSX with ClosedXML (MIT licence), right-to-left sheet, `0.000` format, one sheet for the ledger, one for the citations | Export tests read the file back: headers, millimes, RTL flag |
 | 05.19 | **Concise print** | WPF `FixedDocument` with a preview: affair header, collapsed periods table, totals, JORT citations as footnotes, snapshot hash in the footer; A4 portrait, Arabic | A document-building test (page count, rows); a visual check of the preview |
 
-### Phase E: JORT MCP server (`tools/PayrollCalculator.JortMcp`)
+### Phase E: JORT MCP server (moved to sprint 06)
 
-| # | Sub-sprint | Content | First tests |
-|---|---|---|---|
-| 05.20 | **Skeleton** | A .NET console app using the official C# MCP SDK (`ModelContextProtocol`), stdio transport, registered in `.mcp.json`; tools `list_documents`, `document_info` (pages, size, detected language) | Tool tests with an in-memory transport |
-| 05.21 | **Reading pages** | `render_page(document, page, dpi)` returns a PNG image (PDFium), since the Arabic text layer cannot be used (design review §1.1); optional `ocr_page` (Tesseract `ara` + `fra`); `find_amounts` (the numbers on the page, from the text layer, which reads digits correctly) | Rendering a sample page; extracting 7.930 / 8.445 / 9.036 from the 2024 order |
-| 05.22 | **Proposal tools** | `propose_legal_source`, `propose_grid`, `propose_revaluation`, `propose_allowance`: validated against the Domain assembly, written as **Draft** events with their citation. There is no approve tool | A proposal with a missing cell is returned with the list of errors; a valid proposal shows up as a draft |
-| 05.23 | **Validation tools** | `check_grid` (complete, amounts increase with the degree, plausible for the unit), `compare_published_vs_computed` | Detects a misread digit that breaks the monotony of a grid |
-| 05.24 | **Review inbox in the app** | Drafts listed by source; for each one, the page image next to the extracted values; approve, reject or fix | Approving moves a draft into the ledger; rejecting keeps it out |
-| 05.25 | **Extraction workflow** | A prompt or skill describing how to read a JORT order; an evaluation on the 3 sample PDFs against values checked by hand | The score on the sample set is recorded in this file |
+The MCP server, its connector and the review inbox now have their own sprint:
+[`../06_JORT_MCP_Server_Connector/sprint.md`](../06_JORT_MCP_Server_Connector/sprint.md). Sprint 05 provides what that
+sprint writes into: the rule events, the Draft / Approved status and the application services (05.4, 05.11 and 05.14).
 
 ### Phase F: closing
 
@@ -79,19 +74,18 @@ tests" column gives the scenarios that drive the code.
 
 ## Delivery order
 
-Phase B (05.2 → 05.10) is valuable on its own, and it can be tested from the golden case alone. I suggest three
+Phase B (05.2 → 05.10) is valuable on its own, and it can be tested from the golden case alone. I suggest two
 deliverables:
 
 1. **05.0 – 05.13**: the new model, with the data migrated and the ledger correct (no new screen yet).
 2. **05.14 – 05.19**: the ledger screens, the export and the print.
-3. **05.20 – 05.25**: the MCP server and the review inbox.
 
 ## Definition of done
 
 - The golden case passes end to end.
 - Every ledger amount can be traced to one or more approved events and their JORT citation.
 - No monetary amount is a `double`, and rounding happens only where an event or a policy says so.
-- No value proposed by the MCP reaches the ledger without a person approving it.
+- Only approved events reach the ledger (Draft events, which sprint 06 will create from the PDFs, never do).
 - Warnings are errors, all tests pass, and all new UI text is in `Labels` (Arabic).
 
 ## Risks
@@ -99,9 +93,9 @@ deliverables:
 | Risk | Mitigation |
 |---|---|
 | The rules (proration, seniority, primes) are not known yet | 05.0 and 05.1 come first; each rule is a strategy (`IProrationPolicy`, `IDegreeProgressionPolicy`, `IAllowanceBasis`) that can be swapped without touching the rest |
-| Misreads of the scans (OCR or vision model) | Human review is mandatory (05.24); validation tools (05.23); the published-vs-computed check |
+| Misreads of the scans (OCR or vision model) | Covered in sprint 06 (mandatory human review, validation tools); here, the published-vs-computed check (05.6) |
 | Migrating existing data changes results | A parity test (05.12) with every difference explained; the old calculator stays until parity holds |
-| The size of the sprint | Three deliverables (above), each of them usable |
+| The size of the sprint | Two deliverables (above), each of them usable |
 
 ## Decisions (filled in during 05.0)
 
@@ -116,4 +110,4 @@ deliverables:
 | 7 | Hours per month per regime | |
 | 8 | Effect of an unpaid absence on seniority | |
 | 9 | Owed vs paid | |
-| 10 | MCP: local PDFs or IORT; which client | |
+| 10 | MCP: local PDFs or IORT; which client | Moved to sprint 06 |
