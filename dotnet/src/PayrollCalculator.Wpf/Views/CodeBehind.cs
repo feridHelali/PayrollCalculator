@@ -62,6 +62,11 @@ public partial class SalaryTablesView : UserControl
         (DataContext as SalaryTablesViewModel)?.EditCommand.Execute(null);
 }
 
+public partial class LedgerView : UserControl
+{
+    public LedgerView() => InitializeComponent();
+}
+
 public partial class AllowancesView : UserControl
 {
     public AllowancesView() => InitializeComponent();

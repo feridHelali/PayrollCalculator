@@ -20,6 +20,10 @@ dotnet ef migrations add <Name> -p src/PayrollCalculator.Infrastructure -s src/P
 
 - The database is created and migrated on startup at `%LOCALAPPDATA%\PayrollCalculator\payroll.db`. Set the
   `PAYROLL_DB_PATH` environment variable to use another file.
+- **Monthly ledger (الكشف الشهري للأجر والمنح, from the affairs list).** `AffairLedgerBuilder` (Domain) turns the affair's
+  salary tables and the primes ticked for the employee into rule events and values them with `PayLedgerBuilder`: base
+  from the grid (hourly × 208 h), monthly primes prorated, per-day primes × 26 working days, percentages of the base.
+  48-hour regime only for now. CSV export with one column per prime.
 - **One migration, `InitialCreate`**, creates the schema and seeds the 20 sectoral agreements (Arabic label, stable
   code, display order) from `Infrastructure/Persistence/AgreementSeed.cs` with EF `HasData`. Seeded agreements are
   read-only in the app. The migrations were squashed in sprint 07, so a database created before that must be reset

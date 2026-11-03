@@ -1,5 +1,6 @@
 using PayrollCalculator.Domain.Allowances;
 using PayrollCalculator.Domain.Calculation;
+using PayrollCalculator.Domain.Ledger;
 using PayrollCalculator.Domain.SalaryTables;
 using PayrollCalculator.Domain.Users;
 using PayrollCalculator.Application.Common;
@@ -20,6 +21,17 @@ public static class Labels
     public const string AllAgreements = "كل الاتفاقيات";
     public const string SalaryTables = "جداول الأجور";
     public const string Allowances = "المنح والمنافع";
+    public const string Ledger = "الكشف الشهري للأجر والمنح";
+    public const string Calculate = "احتساب";
+    public const string LedgerCalculated = "تم احتساب الكشف";
+    public const string PrimesForEmployee = "المنح المستحقة لهذا العامل";
+    public const string NoPrimesForAgreement = "لا توجد منح مسجلة لهذه الاتفاقية (قائمة المنح والمنافع)";
+    public const string GrandTotal = "المجموع العام";
+    public const string BaseSalary = "الأجر الأساسي";
+    public const string Month = "الشهر";
+    public const string GridRate = "مقدار الجدول";
+    public const string Proration = "نسبة الشهر";
+    public const string MonthTotal = "مجموع الشهر";
     public const string Allowance = "المنحة";
     public const string AllowanceName = "اسم المنحة";
     public const string AllowanceUnitLabel = "طريقة الاحتساب";
@@ -304,6 +316,17 @@ public static class Labels
         UserStatus.MustChangePassword => "في انتظار تغيير كلمة المرور",
         UserStatus.Locked => "مقفل مؤقتا",
         _ => status.ToString(),
+    };
+
+    public static string LedgerIssueText(LedgerIssue issue) => issue switch
+    {
+        LedgerIssue.None => "✓",
+        LedgerIssue.NoGridInForce => "لا يوجد جدول أجور ساري المفعول",
+        LedgerIssue.CategoryNotInGrid => "الصنف غير موجود في الجدول",
+        LedgerIssue.SalaryMissing => "لا يوجد مبلغ لهذا الصنف وهذه الدرجة",
+        LedgerIssue.RegimeUnknown => "نظام العمل غير معروف (عدد الساعات)",
+        LedgerIssue.BaseMissing => "الأجر الأساسي غير معروف لاحتساب النسبة",
+        _ => issue.ToString(),
     };
 
     public static string AllowanceUnitText(AllowanceUnit? unit) => unit switch

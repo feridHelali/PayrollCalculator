@@ -1,0 +1,83 @@
+<UserControl x:Class="PayrollCalculator.Wpf.Views.LedgerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:PayrollCalculator.Wpf.ViewModels"
+             xmlns:v="clr-namespace:PayrollCalculator.Wpf.Views"
+             xmlns:res="clr-namespace:PayrollCalculator.Wpf.Resources"
+             xmlns:c="clr-namespace:PayrollCalculator.Wpf.Controls"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:LedgerViewModel}">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <StackPanel DockPanel.Dock="Left" Style="{StaticResource Toolbar}" Margin="0">
+                <Button Style="{StaticResource PrimaryButton}" c:Ui.Icon="{x:Static c:Icons.Timeline}" Content="{x:Static res:Labels.Calculate}" Command="{Binding CalculateCommand}" />
+                <Button c:Ui.Icon="{x:Static c:Icons.Export}" Content="{x:Static res:Labels.ExportCsv}" Command="{Binding ExportCsvCommand}" />
+                <Button c:Ui.Icon="{x:Static c:Icons.Back}" Content="{x:Static res:Labels.Back}" Command="{Binding BackCommand}" />
+            </StackPanel>
+            <StackPanel Margin="16,0,0,12">
+                <TextBlock Style="{StaticResource PageTitle}" Text="{Binding Title}" Margin="0" />
+                <TextBlock Text="{Binding Affair.Claimant}" Opacity="0.8" />
+            </StackPanel>
+        </DockPanel>
+
+        <!-- Which primes apply to this employee -->
+        <GroupBox DockPanel.Dock="Top" Header="{x:Static res:Labels.PrimesForEmployee}" Padding="6" Margin="0,0,0,10">
+            <StackPanel>
+                <TextBlock Text="{x:Static res:Labels.NoPrimesForAgreement}" Opacity="0.7"
+                           Visibility="{Binding HasPrimes, Converter={StaticResource InverseBoolToVisibility}}" />
+                <ItemsControl ItemsSource="{Binding Primes}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Content="{Binding Text}" IsChecked="{Binding IsSelected}" Margin="0,2,18,2" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Totals -->
+        <Border DockPanel.Dock="Bottom" Padding="10,8" Margin="0,10,0,0" BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="4">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                    <TextBlock Text="{x:Static res:Labels.GrandTotal}" FontWeight="SemiBold" Margin="0,0,8,0" />
+                    <TextBlock Text="{Binding GrandTotal, StringFormat=0.000}" FontWeight="SemiBold" />
+                    <TextBlock Text="{x:Static res:Labels.UnresolvedMonths}" Margin="24,0,8,0" />
+                    <TextBlock Text="{Binding UnresolvedMonths}" />
+                </StackPanel>
+                <ItemsControl ItemsSource="{Binding Totals}" Margin="24,0,0,0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" Margin="0,0,18,0" Opacity="0.85" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DockPanel>
+        </Border>
+
+        <!-- One row per month, one column per component -->
+        <DataGrid ItemsSource="{Binding Rows}" IsReadOnly="True" EnableRowVirtualization="True" FrozenColumnCount="3"
+                  v:LedgerColumns.InsertAt="5" v:LedgerColumns.Columns="{Binding Columns}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{x:Static res:Labels.Month}" Binding="{Binding Month}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.Category}" Binding="{Binding Category}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.Degree}" Binding="{Binding Degree}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.GridRate}" Binding="{Binding BaseRate, StringFormat=0.000}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.Proration}" Binding="{Binding Proration}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.MonthTotal}" Binding="{Binding Total, StringFormat=0.000}" Width="Auto" FontWeight="SemiBold" />
+                <DataGridTextColumn Header="{x:Static res:Labels.Status}" Binding="{Binding Issue, Converter={StaticResource LedgerIssueText}}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

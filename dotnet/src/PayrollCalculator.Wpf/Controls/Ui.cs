@@ -33,6 +33,7 @@ public static class Icons
     public const string SalaryTables = "";   // ViewAll (grid): the categories × degrees grid
     public const string Agreements = "";     // Library: the agreements' texts
     public const string Allowances = "";     // PaymentCard: the primes and allowances
+    public const string Ledger = "";         // Document: the monthly ledger of an affair
     public const string Users = "";          // People
     public const string User = "";           // Contact
     public const string AddUser = "";        // AddFriend

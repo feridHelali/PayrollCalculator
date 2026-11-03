@@ -13,6 +13,7 @@
 
             <conv:SalaryTypeTextConverter x:Key="SalaryTypeText" />
             <conv:AllowanceUnitTextConverter x:Key="AllowanceUnitText" />
+            <conv:LedgerIssueTextConverter x:Key="LedgerIssueText" />
             <conv:IssueTextConverter x:Key="IssueText" />
             <conv:DateOnlyTextConverter x:Key="DateText" />
             <conv:UserStatusTextConverter x:Key="UserStatusText" />
@@ -31,6 +32,7 @@
             <DataTemplate DataType="{x:Type vm:AffairsViewModel}"><v:AffairsView /></DataTemplate>
             <DataTemplate DataType="{x:Type vm:AffairEditorViewModel}"><v:AffairEditorView /></DataTemplate>
             <DataTemplate DataType="{x:Type vm:TimelineViewModel}"><v:TimelineView /></DataTemplate>
+            <DataTemplate DataType="{x:Type vm:LedgerViewModel}"><v:LedgerView /></DataTemplate>
             <DataTemplate DataType="{x:Type vm:UsersViewModel}"><v:UsersView /></DataTemplate>
             <DataTemplate DataType="{x:Type vm:AboutViewModel}"><v:AboutView /></DataTemplate>
             <DataTemplate DataType="{x:Type vm:ChangePasswordViewModel}"><v:ChangePasswordView /></DataTemplate>

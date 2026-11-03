@@ -56,7 +56,7 @@ public sealed partial class MainViewModel : PageViewModel
 
     public NavSection ActiveSection => _navigator.Current switch
     {
-        AffairsViewModel or AffairEditorViewModel or TimelineViewModel => NavSection.Affairs,
+        AffairsViewModel or AffairEditorViewModel or TimelineViewModel or LedgerViewModel => NavSection.Affairs,
         SalaryTablesViewModel or SalaryTableEditorViewModel => NavSection.SalaryTables,
         AllowancesViewModel or AllowanceEditorViewModel => NavSection.Allowances,
         AgreementsViewModel => NavSection.Agreements,

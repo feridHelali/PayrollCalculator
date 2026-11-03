@@ -333,6 +333,106 @@ public sealed class ViewModelTests : IDisposable
         Assert.Empty(list.Items);
     }
 
+    private static string TravelDraft(string file, [System.Runtime.CompilerServices.CallerFilePath] string here = "") =>
+        Path.GetFullPath(Path.Combine(Path.GetDirectoryName(here)!, "..", "..", "..", "data", "seed", "drafts", "agences_de_voyages", file));
+
+    private async Task<int> TravelGridAsync(string file, DateTime start)
+    {
+        var grid = await EditorOnAsync("agences_de_voyages");
+        grid.SelectedGridKind = grid.GridKinds[0];
+        grid.TableNumber = "1";
+        grid.StartDate = start;
+        _app.Dialogs.FileToOpen = TravelDraft(file);
+        await grid.ImportCsvCommand.ExecuteAsync(null);
+        await grid.SaveCommand.ExecuteAsync(null);
+        return grid.Id;
+    }
+
+    private async Task TravelPrimeAsync(string name, PayrollCalculator.Domain.Allowances.AllowanceUnit unit, string? appliesTo, params (int Year, decimal Value)[] rates)
+    {
+        var prime = _app.Get<AllowanceEditorViewModel>();
+        await prime.LoadAsync(null);
+        prime.SelectedAgreementId = prime.Agreements.Single(a => a.Code == "agences_de_voyages").Id;
+        prime.Name = name;
+        prime.Unit = unit;
+        prime.AppliesTo = appliesTo;
+        foreach (var (year, value) in rates)
+        {
+            prime.AddRateCommand.Execute(null);
+            prime.Rates[^1].EffectiveFrom = new DateTime(year, 5, 1);
+            prime.Rates[^1].Value = value;
+            prime.Rates[^1].Source = "الرائد الرسمي عدد 120 لسنة 2022، ص 3265";
+        }
+
+        await prime.SaveCommand.ExecuteAsync(null);
+    }
+
+    /// <summary>Task 3, end to end: real grids and primes of the travel agencies (rider 11), one employee, May 2022 to June 2023.</summary>
+    [Fact]
+    public async Task The_monthly_ledger_combines_the_grids_and_the_chosen_primes()
+    {
+        var table2022 = await TravelGridAsync("rider-11_table-1.csv", new DateTime(2022, 5, 1));
+        await TravelGridAsync("rider-11_table-2.csv", new DateTime(2023, 5, 1));
+        await TravelPrimeAsync("منحة النقل", PayrollCalculator.Domain.Allowances.AllowanceUnit.PerMonth, "أعوان التنفيذ والتسيير", (2022, 75.089m), (2023, 79.970m));
+        await TravelPrimeAsync("منحة الحضور", PayrollCalculator.Domain.Allowances.AllowanceUnit.PerDayWorked, null, (2022, 0.452m), (2023, 0.481m));
+        Assert.Empty(_app.Dialogs.Errors);
+
+        var affair = _app.Get<AffairEditorViewModel>();
+        await affair.LoadAsync(null);
+        affair.AffairNumber = "2026-7";
+        affair.Claimant = "Salem";
+        affair.StartDate = new DateTime(2022, 5, 1);
+        affair.EndDate = new DateTime(2023, 6, 30);
+        affair.SelectedAgreementId = affair.Agreements.Single(a => a.Code == "agences_de_voyages").Id;
+        await affair.PendingLoad;
+        affair.SelectedTableId = table2022;
+        await affair.PendingLoad;
+        affair.InitialCategory = "1";
+        affair.InitialDegree = 1;
+        await affair.SaveCommand.ExecuteAsync(null);
+        Assert.Empty(_app.Dialogs.Errors);
+
+        var ledger = _app.Get<LedgerViewModel>();
+        await ledger.LoadAsync(affair.Id);
+
+        // The prime for everyone is ticked; the one for a group is left to the expert.
+        var transport = ledger.Primes.Single(p => p.Name == "منحة النقل");
+        Assert.False(transport.IsSelected);
+        Assert.True(ledger.Primes.Single(p => p.Name == "منحة الحضور").IsSelected);
+        Assert.Equal(2, ledger.Columns.Count);
+
+        transport.IsSelected = true;
+        await ledger.CalculateCommand.ExecuteAsync(null);
+
+        Assert.Empty(_app.Dialogs.Errors);
+        Assert.Equal(3, ledger.Columns.Count);
+        Assert.Equal(14, ledger.Rows.Count);
+        var may2022 = ledger.Rows[0];
+        var may2023 = ledger.Rows[12];
+        Assert.Equal(("2022-05", "1", 1, 504.153m), (may2022.Month, may2022.Category, may2022.Degree, may2022[ledger.Columns[0].Code]));
+        Assert.Equal(504.153m + 75.089m + 11.752m, may2022.Total);
+        Assert.Equal((2, 550.345m), (may2023.Degree, may2023[ledger.Columns[0].Code])); // new grid and degree 2 from 1 May 2023
+        Assert.Equal(550.345m + 79.970m + 12.506m, may2023.Total);
+        Assert.Equal(0, ledger.UnresolvedMonths);
+        Assert.Equal(ledger.Rows.Sum(r => r.Total), ledger.GrandTotal);
+
+        var csv = Path.Combine(Path.GetTempPath(), $"ledger-{Guid.NewGuid():N}.csv");
+        try
+        {
+            _app.Dialogs.FileToSave = csv;
+            await ledger.ExportCsvCommand.ExecuteAsync(null);
+            var lines = await File.ReadAllLinesAsync(csv);
+            Assert.Contains("منحة النقل", lines[0], StringComparison.Ordinal);
+            Assert.StartsWith("2022-05;1;1;", lines[1], StringComparison.Ordinal);
+            Assert.StartsWith("Total;", lines[^1], StringComparison.Ordinal);
+            Assert.Equal(16, lines.Length); // header, 14 months, totals
+        }
+        finally
+        {
+            File.Delete(csv);
+        }
+    }
+
     [Fact]
     public async Task Domain_errors_are_shown_not_thrown()
     {

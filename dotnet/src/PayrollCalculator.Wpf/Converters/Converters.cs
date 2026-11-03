@@ -7,6 +7,15 @@ using PayrollCalculator.Wpf.Resources;
 
 namespace PayrollCalculator.Wpf.Converters;
 
+public sealed class LedgerIssueTextConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) =>
+        value is PayrollCalculator.Domain.Ledger.LedgerIssue issue ? Labels.LedgerIssueText(issue) : string.Empty;
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
+        throw new NotSupportedException();
+}
+
 public sealed class AllowanceUnitTextConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) =>

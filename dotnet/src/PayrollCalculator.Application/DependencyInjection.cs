@@ -19,6 +19,7 @@ public static class DependencyInjection
         services.AddScoped<AgreementService>();
         services.AddScoped<SalaryTableService>();
         services.AddScoped<AffairService>();
+        services.AddScoped<LedgerService>();
         services.AddScoped<Allowances.AllowanceService>();
 
         services.AddSingleton(PasswordPolicy.Default);

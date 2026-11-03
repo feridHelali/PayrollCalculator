@@ -14,6 +14,7 @@
             <Button Style="{StaticResource PrimaryButton}" c:Ui.Icon="{x:Static c:Icons.New}" Content="{x:Static res:Labels.New}" Command="{Binding NewCommand}" />
             <Button c:Ui.Icon="{x:Static c:Icons.Edit}" Content="{x:Static res:Labels.Edit}" Command="{Binding EditCommand}" />
             <Button c:Ui.Icon="{x:Static c:Icons.Timeline}" Content="{x:Static res:Labels.Timeline}" Command="{Binding TimelineCommand}" />
+            <Button c:Ui.Icon="{x:Static c:Icons.Ledger}" Content="{x:Static res:Labels.Ledger}" Command="{Binding LedgerCommand}" />
             <Button Style="{StaticResource DangerButton}" c:Ui.Icon="{x:Static c:Icons.Delete}" Content="{x:Static res:Labels.Delete}" Command="{Binding DeleteCommand}" />
         </StackPanel>
         <DataGrid ItemsSource="{Binding Affairs}" SelectedItem="{Binding SelectedAffair}" IsReadOnly="True"
