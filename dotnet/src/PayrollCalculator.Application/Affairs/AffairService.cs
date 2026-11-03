@@ -107,7 +107,7 @@ public sealed class AffairService(
         var table = await NotFoundException.OrThrow(tables.GetAsync(tableId, ct), "Salary table", tableId).ConfigureAwait(false);
         if (table.AgreementId != dto.AgreementId)
         {
-            throw new DomainException("The salary table does not belong to the selected agreement.");
+            throw new DomainException(DomainError.TableNotInAgreement, DomainField.SalaryTable);
         }
     }
 

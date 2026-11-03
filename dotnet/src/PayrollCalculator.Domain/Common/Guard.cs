@@ -2,11 +2,11 @@ namespace PayrollCalculator.Domain.Common;
 
 internal static class Guard
 {
-    public static string Required(string? value, string field)
+    public static string Required(string? value, DomainField field)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new DomainException($"{field} is required.");
+            throw new DomainException(DomainError.Required, field);
         }
 
         return value.Trim();
@@ -15,9 +15,9 @@ internal static class Guard
     public static string? Optional(string? value) =>
         string.IsNullOrWhiteSpace(value) ? null : value.Trim();
 
-    public static int Positive(int value, string field) =>
-        value > 0 ? value : throw new DomainException($"{field} must be greater than zero.");
+    public static int Positive(int value, DomainField field) =>
+        value > 0 ? value : throw new DomainException(DomainError.MustBePositive, field);
 
-    public static T NotNegative<T>(T value, string field) where T : System.Numerics.INumber<T> =>
-        value >= T.Zero ? value : throw new DomainException($"{field} cannot be negative.");
+    public static T NotNegative<T>(T value, DomainField field) where T : System.Numerics.INumber<T> =>
+        value >= T.Zero ? value : throw new DomainException(DomainError.CannotBeNegative, field);
 }

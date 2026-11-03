@@ -76,7 +76,7 @@ public sealed class SalaryTableService(ISalaryTableRepository tables, IAgreement
             table = await Load(dto.Id, ct).ConfigureAwait(false);
             if (table.AgreementId != dto.AgreementId)
             {
-                throw new DomainException("A salary table cannot be moved to another agreement.");
+                throw new DomainException(DomainError.TableAgreementLocked, DomainField.Agreement);
             }
 
             table.Describe(dto.TableNumber, dto.SalaryType, dto.ConcernedEmployees, period);

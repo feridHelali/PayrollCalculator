@@ -88,6 +88,9 @@ public sealed partial class MainViewModel : PageViewModel
     [RelayCommand]
     private Task ShowAboutAsync() => _navigator.GoAsync<AboutViewModel>();
 
+    [RelayCommand]
+    private Task ShowChangePasswordAsync() => _navigator.GoAsync<ChangePasswordViewModel>();
+
     /// <summary>Closes the session; the application shell reacts by showing the sign-in window again.</summary>
     [RelayCommand]
     private void SignOut() => _currentUser.SignOut();

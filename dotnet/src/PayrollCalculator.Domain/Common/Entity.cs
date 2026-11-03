@@ -15,9 +15,9 @@ public abstract class Entity
     {
         if (!IsTransient)
         {
-            throw new DomainException("Identity is already assigned.");
+            throw new DomainException(DomainError.IdentityAlreadyAssigned, DomainField.Id);
         }
 
-        Id = Guard.Positive(id, nameof(Id));
+        Id = Guard.Positive(id, DomainField.Id);
     }
 }

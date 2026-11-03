@@ -7,7 +7,7 @@ public sealed record DateRange
     {
         if (end is { } e && e < start)
         {
-            throw new DomainException("End date cannot be before start date.");
+            throw new DomainException(DomainError.EndBeforeStart);
         }
 
         Start = start;
@@ -29,7 +29,7 @@ public sealed record DateRange
     {
         if (End is not { } end)
         {
-            throw new DomainException("Cannot enumerate the months of an open-ended range.");
+            throw new DomainException(DomainError.OpenEndedRange);
         }
 
         var last = YearMonth.Of(end);

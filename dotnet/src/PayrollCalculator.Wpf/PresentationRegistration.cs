@@ -25,6 +25,7 @@ public static class PresentationRegistration
         services.AddTransient<UsersViewModel>();
         services.AddTransient<LoginViewModel>();
         services.AddTransient<AboutViewModel>();
+        services.AddTransient<ChangePasswordViewModel>();
         return services;
     }
 }

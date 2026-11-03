@@ -30,6 +30,7 @@
             <DataTemplate DataType="{x:Type vm:TimelineViewModel}"><v:TimelineView /></DataTemplate>
             <DataTemplate DataType="{x:Type vm:UsersViewModel}"><v:UsersView /></DataTemplate>
             <DataTemplate DataType="{x:Type vm:AboutViewModel}"><v:AboutView /></DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ChangePasswordViewModel}"><v:ChangePasswordView /></DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

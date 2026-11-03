@@ -29,7 +29,7 @@ layoff. The UI is in **Arabic, RTL**. The product spec is `design_docs/00_Incept
 - Write the tests first, in the test project that matches the layer (Domain / Application / Infrastructure / Wpf).
 - Domain logic belongs in the Domain aggregates and services. Application services orchestrate the use cases and return DTOs. The WPF view models call them through `IServiceRunner`, one DI scope per call.
 - Change the schema only through EF migrations.
-- Put user-facing strings in `src/PayrollCalculator.Wpf/Resources/Labels.cs`, in Arabic. The domain raises codes (e.g. `UserError`), never UI text; `Labels` translates them.
+- Put user-facing strings in `src/PayrollCalculator.Wpf/Resources/Labels.cs`, in Arabic. The domain raises codes (`DomainException.Error`/`Field`/`Detail`, `UserError`), never UI text; `Labels.ErrorText` translates them, and a test requires an Arabic text for every code.
 - Styles and colors live in `src/PayrollCalculator.Wpf/Themes/Theme.xaml`. Give buttons an icon with `c:Ui.Icon="{x:Static c:Icons.X}"` (Segoe Fluent glyphs in `Controls/Ui.cs`).
 - Start-up: splash (`Views/SplashWindow`, real stages) → sign-in window → main window (maximized). On an empty database the seeded account is `admin` / `Admin@2026` (forced change at the first sign-in).
 - The version (1.0.0) is set only in `dotnet/Directory.Build.props`; `Services/ProductInfo` reads it for the splash and the About page.

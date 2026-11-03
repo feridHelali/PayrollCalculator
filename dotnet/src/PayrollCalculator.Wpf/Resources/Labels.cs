@@ -1,7 +1,9 @@
 using PayrollCalculator.Domain.Calculation;
 using PayrollCalculator.Domain.SalaryTables;
 using PayrollCalculator.Domain.Users;
+using PayrollCalculator.Application.Common;
 using PayrollCalculator.Application.Users;
+using PayrollCalculator.Domain.Common;
 using PayrollCalculator.Wpf.Services;
 
 namespace PayrollCalculator.Wpf.Resources;
@@ -138,6 +140,73 @@ public static class Labels
         StartupStage.LegacyImport => "استيراد بيانات التطبيق القديم...",
         StartupStage.Ready => "جاهز",
         _ => stage.ToString(),
+    };
+
+    // Errors
+    public const string NotFound = "العنصر المطلوب غير موجود، ربما حُذف. حدّث القائمة ثم أعد المحاولة";
+    public const string PasswordChanged = "تم تغيير كلمة المرور";
+    public const string ChangeMyPassword = "تغيير كلمة المرور";
+    public const string MyCurrentPassword = "كلمة المرور الحالية";
+    public const string DatePlaceholder = "يوم/شهر/سنة";
+
+    /// <summary>The message shown for any expected error, whatever layer raised it.</summary>
+    public static string ErrorText(Exception error) => error switch
+    {
+        UserException user => UserErrorText(user),
+        DomainException domain => DomainErrorText(domain),
+        NotFoundException => NotFound,
+        Microsoft.EntityFrameworkCore.DbUpdateException { InnerException: { } inner } => inner.Message,
+        null => string.Empty,
+        _ => error.Message,
+    };
+
+    public static string DomainErrorText(DomainException error)
+    {
+        ArgumentNullException.ThrowIfNull(error);
+        var field = FieldText(error.Field);
+        var detail = error.Detail is { Length: > 0 } d ? $" «{d}»" : string.Empty;
+        return error.Error switch
+        {
+            DomainError.Required => $"يجب إدخال {field}",
+            DomainError.MustBePositive => $"{field}: يجب أن تكون القيمة أكبر من صفر",
+            DomainError.CannotBeNegative => $"{field}: لا يمكن أن تكون القيمة سالبة",
+            DomainError.EndBeforeStart => "تاريخ النهاية لا يمكن أن يسبق تاريخ البداية",
+            DomainError.PeriodRequired => $"يجب تحديد {field}",
+            DomainError.PeriodMustEnd => $"{field}: يجب إدخال تاريخ النهاية",
+            DomainError.OpenEndedRange => "لا يمكن حساب الأشهر لفترة بدون تاريخ نهاية",
+            DomainError.OutOfRange => $"{field}: قيمة خارج المجال المسموح{detail}",
+            DomainError.Duplicate => $"{field}{detail} موجود مسبقا",
+            DomainError.Unknown => $"{field}{detail} غير موجود",
+            DomainError.IdentityAlreadyAssigned => "المعرّف محدد مسبقا",
+            DomainError.TableNotInAgreement => "جدول الأجور لا ينتمي إلى الاتفاقية المختارة",
+            DomainError.TableAgreementLocked => "لا يمكن نقل جدول الأجور إلى اتفاقية أخرى",
+            _ => "عملية غير مسموح بها: " + error.Message,
+        };
+    }
+
+    public static string FieldText(DomainField field) => field switch
+    {
+        DomainField.Id => "المعرّف",
+        DomainField.AgreementName => AgreementName,
+        DomainField.Agreement => Agreement,
+        DomainField.AffairNumber => AffairNumber,
+        DomainField.Claimant => Claimant,
+        DomainField.EmploymentPeriod => "فترة العمل",
+        DomainField.ProfessionalCategory => Category,
+        DomainField.ProfessionalDegree => Degree,
+        DomainField.TableNumber => TableNumber,
+        DomainField.ApplicationPeriod => "فترة التطبيق",
+        DomainField.CategoryLabel => Category,
+        DomainField.CategoryKey => "مفتاح الصنف",
+        DomainField.Degree => Degree,
+        DomainField.DegreeKey => "مفتاح الدرجة",
+        DomainField.YearsInDegree => YearsInDegree,
+        DomainField.Salary => Amount,
+        DomainField.Month => "الشهر",
+        DomainField.Year => "السنة",
+        DomainField.PasswordHash => Password,
+        DomainField.SalaryTable => SalaryTable,
+        _ => string.Empty,
     };
 
     public static string SignInOutcomeText(SignInOutcome outcome) => outcome switch

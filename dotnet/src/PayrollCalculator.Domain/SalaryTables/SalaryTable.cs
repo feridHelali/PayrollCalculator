@@ -47,18 +47,18 @@ public sealed class SalaryTable : Entity
     public IReadOnlyList<SalaryCell> Cells => _cells;
 
     public static SalaryTable Create(int agreementId, string tableNumber, SalaryType salaryType, string concernedEmployees, DateRange applicationPeriod) =>
-        new(Guard.Positive(agreementId, "Agreement"),
-            Guard.Required(tableNumber, "Table number"),
+        new(Guard.Positive(agreementId, DomainField.Agreement),
+            Guard.Required(tableNumber, DomainField.TableNumber),
             salaryType,
             Guard.Optional(concernedEmployees) ?? string.Empty,
-            applicationPeriod ?? throw new DomainException("Application period is required."));
+            applicationPeriod ?? throw new DomainException(DomainError.PeriodRequired, DomainField.ApplicationPeriod));
 
     public void Describe(string tableNumber, SalaryType salaryType, string concernedEmployees, DateRange applicationPeriod)
     {
-        TableNumber = Guard.Required(tableNumber, "Table number");
+        TableNumber = Guard.Required(tableNumber, DomainField.TableNumber);
         SalaryType = salaryType;
         ConcernedEmployees = Guard.Optional(concernedEmployees) ?? string.Empty;
-        ApplicationPeriod = applicationPeriod ?? throw new DomainException("Application period is required.");
+        ApplicationPeriod = applicationPeriod ?? throw new DomainException(DomainError.PeriodRequired, DomainField.ApplicationPeriod);
     }
 
     public bool IsApplicableOn(DateOnly date) => ApplicationPeriod.Contains(date);
@@ -79,12 +79,12 @@ public sealed class SalaryTable : Entity
 
         foreach (var category in categories)
         {
-            AddCategory(category.Label, Guard.Required(category.Key, "Category key"));
+            AddCategory(category.Label, Guard.Required(category.Key, DomainField.CategoryKey));
         }
 
         foreach (var degree in degrees)
         {
-            AddDegree(degree.Number, degree.YearsInDegree, Guard.Required(degree.Key, "Degree key"));
+            AddDegree(degree.Number, degree.YearsInDegree, Guard.Required(degree.Key, DomainField.DegreeKey));
         }
 
         foreach (var cell in cells)
@@ -97,7 +97,7 @@ public sealed class SalaryTable : Entity
 
     public SalaryCategory AddCategory(string label, string? key = null)
     {
-        var clean = Guard.Required(label, "Category label");
+        var clean = Guard.Required(label, DomainField.CategoryLabel);
         EnsureUniqueLabel(clean, exceptKey: null);
         var category = new SalaryCategory(key ?? NewKey(), clean, _categories.Count == 0 ? 0 : _categories.Max(c => c.Position) + 1);
         EnsureUniqueKey(category.Key);
@@ -107,7 +107,7 @@ public sealed class SalaryTable : Entity
 
     public void RenameCategory(string key, string label)
     {
-        var clean = Guard.Required(label, "Category label");
+        var clean = Guard.Required(label, DomainField.CategoryLabel);
         EnsureUniqueLabel(clean, exceptKey: key);
         Category(key).Label = clean;
     }
@@ -125,11 +125,11 @@ public sealed class SalaryTable : Entity
 
     public DegreeStep AddDegree(int number, int yearsInDegree, string? key = null)
     {
-        Guard.Positive(number, "Degree");
-        Guard.NotNegative(yearsInDegree, "Years in degree");
+        Guard.Positive(number, DomainField.Degree);
+        Guard.NotNegative(yearsInDegree, DomainField.YearsInDegree);
         if (_degrees.Any(d => d.Number == number))
         {
-            throw new DomainException($"Degree {number} already exists.");
+            throw new DomainException(DomainError.Duplicate, DomainField.Degree, number.ToString(System.Globalization.CultureInfo.InvariantCulture));
         }
 
         var degree = new DegreeStep(key ?? NewKey(), number, yearsInDegree);
@@ -139,7 +139,7 @@ public sealed class SalaryTable : Entity
     }
 
     public void ChangeYearsInDegree(string key, int yearsInDegree) =>
-        Degree(key).YearsInDegree = Guard.NotNegative(yearsInDegree, "Years in degree");
+        Degree(key).YearsInDegree = Guard.NotNegative(yearsInDegree, DomainField.YearsInDegree);
 
     public void RemoveDegree(string key)
     {
@@ -153,7 +153,7 @@ public sealed class SalaryTable : Entity
     {
         _ = Category(categoryKey);
         _ = Degree(degreeKey);
-        Guard.NotNegative(amount, "Salary");
+        Guard.NotNegative(amount, DomainField.Salary);
 
         var cell = FindCell(categoryKey, degreeKey);
         if (cell is null)
@@ -187,16 +187,16 @@ public sealed class SalaryTable : Entity
         _cells.FirstOrDefault(c => c.CategoryKey == categoryKey && c.DegreeKey == degreeKey);
 
     private SalaryCategory Category(string key) =>
-        _categories.FirstOrDefault(c => c.Key == key) ?? throw new DomainException($"Unknown category '{key}'.");
+        _categories.FirstOrDefault(c => c.Key == key) ?? throw new DomainException(DomainError.Unknown, DomainField.CategoryKey, key);
 
     private DegreeStep Degree(string key) =>
-        _degrees.FirstOrDefault(d => d.Key == key) ?? throw new DomainException($"Unknown degree '{key}'.");
+        _degrees.FirstOrDefault(d => d.Key == key) ?? throw new DomainException(DomainError.Unknown, DomainField.DegreeKey, key);
 
     private void EnsureUniqueLabel(string label, string? exceptKey)
     {
         if (_categories.Any(c => c.Key != exceptKey && string.Equals(c.Label, label, StringComparison.Ordinal)))
         {
-            throw new DomainException($"Category '{label}' already exists.");
+            throw new DomainException(DomainError.Duplicate, DomainField.CategoryLabel, label);
         }
     }
 
@@ -204,7 +204,7 @@ public sealed class SalaryTable : Entity
     {
         if (_categories.Any(c => c.Key == key) || _degrees.Any(d => d.Key == key))
         {
-            throw new DomainException($"Key '{key}' is already used in this table.");
+            throw new DomainException(DomainError.Duplicate, DomainField.CategoryKey, key);
         }
     }
 

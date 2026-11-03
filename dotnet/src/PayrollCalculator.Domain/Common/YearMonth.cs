@@ -9,12 +9,12 @@ public readonly record struct YearMonth : IComparable<YearMonth>
     {
         if (month is < 1 or > 12)
         {
-            throw new DomainException("Month must be between 1 and 12.");
+            throw new DomainException(DomainError.OutOfRange, DomainField.Month, month.ToString(System.Globalization.CultureInfo.InvariantCulture));
         }
 
         if (year is < 1 or > 9999)
         {
-            throw new DomainException("Year is out of range.");
+            throw new DomainException(DomainError.OutOfRange, DomainField.Year, year.ToString(System.Globalization.CultureInfo.InvariantCulture));
         }
 
         Year = year;

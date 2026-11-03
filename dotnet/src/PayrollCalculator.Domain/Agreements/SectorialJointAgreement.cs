@@ -16,9 +16,9 @@ public sealed class SectorialJointAgreement : Entity
     public string? Description { get; private set; }
 
     public static SectorialJointAgreement Create(string name, string? description) =>
-        new(Guard.Required(name, "Agreement name"), Guard.Optional(description));
+        new(Guard.Required(name, DomainField.AgreementName), Guard.Optional(description));
 
-    public void Rename(string name) => Name = Guard.Required(name, "Agreement name");
+    public void Rename(string name) => Name = Guard.Required(name, DomainField.AgreementName);
 
     public void ChangeDescription(string? description) => Description = Guard.Optional(description);
 }

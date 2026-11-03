@@ -71,7 +71,7 @@ public sealed class User : Entity
 
         var label = displayName.Trim();
         return new User(normalized, label.Length > MaxDisplayNameLength ? label[..MaxDisplayNameLength] : label,
-            Guard.Required(temporaryPasswordHash, "Password hash"))
+            Guard.Required(temporaryPasswordHash, DomainField.PasswordHash))
         {
             MustChangePassword = true,
         };
@@ -123,7 +123,7 @@ public sealed class User : Entity
     /// <summary>The user's own change: the new password is permanent. The policy is checked before, where the plaintext exists.</summary>
     public void ChangePassword(string newPasswordHash, DateTimeOffset now)
     {
-        PasswordHash = Guard.Required(newPasswordHash, "Password hash");
+        PasswordHash = Guard.Required(newPasswordHash, DomainField.PasswordHash);
         MustChangePassword = false;
         FailedAttempts = 0;
         LockedUntil = null;
@@ -133,7 +133,7 @@ public sealed class User : Entity
     /// <summary>An administrator's reset: a temporary password, to be changed at the next sign-in. Also unlocks.</summary>
     public void ResetPassword(string temporaryPasswordHash)
     {
-        PasswordHash = Guard.Required(temporaryPasswordHash, "Password hash");
+        PasswordHash = Guard.Required(temporaryPasswordHash, DomainField.PasswordHash);
         MustChangePassword = true;
         FailedAttempts = 0;
         LockedUntil = null;

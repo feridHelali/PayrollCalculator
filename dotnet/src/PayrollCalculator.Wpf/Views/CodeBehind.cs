@@ -14,6 +14,29 @@ public partial class UsersView : UserControl
     public UsersView() => InitializeComponent();
 }
 
+/// <summary>Passes the three passwords to the view model as arguments, then clears the boxes.</summary>
+public partial class ChangePasswordView : UserControl
+{
+    public ChangePasswordView() => InitializeComponent();
+
+    private async void OnChange(object sender, System.Windows.RoutedEventArgs e)
+    {
+        if (DataContext is not ChangePasswordViewModel page)
+        {
+            return;
+        }
+
+        var ok = await page.ChangeAsync(CurrentPasswordBox.Password, NewPasswordBox.Password, ConfirmPasswordBox.Password)
+            .ConfigureAwait(true);
+        NewPasswordBox.Clear();
+        ConfirmPasswordBox.Clear();
+        if (ok)
+        {
+            CurrentPasswordBox.Clear();
+        }
+    }
+}
+
 public partial class AboutView : UserControl
 {
     public AboutView() => InitializeComponent();

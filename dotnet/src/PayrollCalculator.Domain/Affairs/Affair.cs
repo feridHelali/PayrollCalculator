@@ -7,8 +7,8 @@ public sealed record ProfessionalPosition
 {
     public ProfessionalPosition(string category, int degree)
     {
-        Category = Guard.Required(category, "Professional category");
-        Degree = Guard.Positive(degree, "Professional degree");
+        Category = Guard.Required(category, DomainField.ProfessionalCategory);
+        Degree = Guard.Positive(degree, DomainField.ProfessionalDegree);
     }
 
     public string Category { get; }
@@ -61,11 +61,11 @@ public sealed class Affair : Entity
         int agreementId, int? salaryTableId, string initialCategory, int initialDegree)
     {
         var affair = new Affair(
-            Guard.Required(affairNumber, "Affair number"),
+            Guard.Required(affairNumber, DomainField.AffairNumber),
             Guard.Optional(title) ?? string.Empty,
-            Guard.Required(claimant, "Claimant"),
+            Guard.Required(claimant, DomainField.Claimant),
             ValidPeriod(employmentPeriod),
-            Guard.Positive(agreementId, "Agreement"),
+            Guard.Positive(agreementId, DomainField.Agreement),
             salaryTableId,
             new ProfessionalPosition(initialCategory, initialDegree));
         return affair;
@@ -73,9 +73,9 @@ public sealed class Affair : Entity
 
     public void Describe(string affairNumber, string title, string claimant)
     {
-        AffairNumber = Guard.Required(affairNumber, "Affair number");
+        AffairNumber = Guard.Required(affairNumber, DomainField.AffairNumber);
         Title = Guard.Optional(title) ?? string.Empty;
-        Claimant = Guard.Required(claimant, "Claimant");
+        Claimant = Guard.Required(claimant, DomainField.Claimant);
     }
 
     public void ChangeEmploymentPeriod(DateRange period) => EmploymentPeriod = ValidPeriod(period);
@@ -90,7 +90,7 @@ public sealed class Affair : Entity
             return;
         }
 
-        AgreementId = Guard.Positive(agreementId, "Agreement");
+        AgreementId = Guard.Positive(agreementId, DomainField.Agreement);
         SalaryTableId = null;
     }
 
@@ -98,8 +98,8 @@ public sealed class Affair : Entity
 
     private static DateRange ValidPeriod(DateRange? period) => period switch
     {
-        null => throw new DomainException("Employment period is required."),
-        { IsOpenEnded: true } => throw new DomainException("Employment period must have an end date."),
+        null => throw new DomainException(DomainError.PeriodRequired, DomainField.EmploymentPeriod),
+        { IsOpenEnded: true } => throw new DomainException(DomainError.PeriodMustEnd, DomainField.EmploymentPeriod),
         _ => period,
     };
 }

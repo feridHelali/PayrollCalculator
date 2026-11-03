@@ -39,7 +39,8 @@ public sealed class UserException : DomainException
 
     public UserException(string message, Exception innerException) : base(message, innerException) => Violations = [];
 
-    public UserError Error { get; }
+    /// <summary>The user-specific code; it takes the place of <see cref="DomainException.Error"/> (left <c>Unspecified</c>).</summary>
+    public new UserError Error { get; }
 
     /// <summary>Filled when <see cref="Error"/> is <see cref="UserError.PasswordRejected"/>.</summary>
     public IReadOnlyList<PasswordViolation> Violations { get; }
