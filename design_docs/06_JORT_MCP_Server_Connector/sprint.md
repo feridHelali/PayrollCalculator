@@ -1,5 +1,9 @@
 ## Sprint 06: JORT MCP server and connector
 
+> **Deferred.** For the first release, the light seed loop (sprint 07, 07.13) replaces this sprint: an LLM with vision
+> writes the seed JSON, `seed verify` checks it, and a person reviews the diff. This plan stays for when the library grows
+> or other people enter texts. See `../07_Reference_Data_Seed/approaches_compared.md`.
+
 1. **Context.** Every rule that sets a salary is published in the JORT as a PDF: agreements, riders, ministerial orders.
    Sprint 05 models these rules as dated, cited events that a person approves, but the user still has to type them in.
    The Arabic PDFs have no usable text layer. `pdftotext` returns the digits but garbled words (see
@@ -81,7 +85,7 @@ flowchart LR
 | | `propose_allowance` | write | Introduce, revalue or abolish a prime or allowance |
 | | `propose_career_rule`, `propose_working_time` | write | Time spent in each degree; hours per regime |
 | | `withdraw_draft` | write | Withdraw its own draft before review |
-| Checks | `check_grid` | read-only | Complete; amounts increase with the degree and the category; plausible for the unit (hourly vs monthly) |
+| Checks | `check_grid` | read-only | Complete; amounts increase with the degree and the category (a decrease marks the cell "to check" with a reason, never corrected silently; sprint 07 G2); plausible for the unit (hourly vs monthly) |
 | | `compare_published_vs_computed` | read-only | Percentage against published amounts, with the gap in millimes |
 
 Every write tool:
@@ -125,7 +129,7 @@ All of them are to do and written test first.
 | 06.9 | **Proposals: revaluations, allowances, career, working time** | The remaining proposal tools; `withdraw_draft` | A staged order (2024, 2025, 2026) gives 3 drafts with the same citation |
 | 06.10 | **Checks** | `check_grid`, `compare_published_vs_computed` | A misread digit that breaks the increase from one degree to the next is caught; the gap 81.462 / 81.463 is reported as 1 millime |
 | 06.11 | **Review inbox in the app** | List of drafts by source; the page image next to the values; approve, reject or correct and approve; refresh when the drafts change | An approved draft reaches the ledger; a rejected one never does |
-| 06.12 | **Connector packaging** | v1: an MCP bundle (`.mcpb`) for Claude Desktop, with a manifest asking for the database path and the library folder; and a `.mcp.json` snippet for Claude Code. v2 (optional): Streamable HTTP with OAuth for a remote connector | The manifest validates; the server starts from the bundle on a clean machine |
+| 06.12 | **Connector packaging** | v1: an MCP bundle (`.mcpb`) for Claude Desktop, with a manifest asking for the database path and the library folder; a `.mcp.json` snippet for Claude Code and an `opencode.json` snippet for OpenCode (sprint 07, G9). v2 (optional): Streamable HTTP with OAuth for a remote connector | The manifest validates; the server starts from the bundle on a clean machine |
 | 06.13 | **IORT (optional, after 06.0)** | Download a text from its JORT reference into the library; allow-list for the IORT domain only | Decided in 06.0 |
 | 06.14 | **Prompts and the extraction workflow** | `extract_document`, `extract_library`, `review_hints` | The prompts list their tools; dry run on one document |
 | 06.15 | **Evaluation on the sample library** | Values checked by hand for the sample PDFs (`design_docs/PDF Conventions`); a script runs the extraction and scores it (precision and recall per cell, citations correct) | Score recorded here; the target is set in 06.0 |

@@ -23,7 +23,7 @@ tests" column gives the scenarios that drive the code.
 | # | Sub-sprint | Output | First tests |
 |---|---|---|---|
 | 05.0 | **Event-storming workshop.** Go through `event_storming.md` with the domain expert, answer the 10 hotspots, and fix the vocabulary (Arabic / French / code) | Decisions recorded in this file; `ubiquitous_language.md` | — |
-| 05.1 | **Golden case.** One real affair, worked out by hand by the expert from a real agreement (textile, 2015–2026): career, components, expected amounts by month, in a spreadsheet | `tests/fixtures/golden_textile.xlsx` plus the cited texts | The end-to-end acceptance test (red until 05.9) |
+| 05.1 | **Golden case.** One real affair, worked out by hand by the expert from a real agreement (first one: `golden_case_01.md`, Ste Yosra, 1998–2008): career, components, expected amounts by month, in a spreadsheet | `tests/fixtures/golden_textile.xlsx` plus the cited texts | The end-to-end acceptance test (red until 05.9) |
 
 ### Phase B: domain kernel (`PayrollCalculator.Domain`)
 
@@ -70,6 +70,9 @@ tests" column gives the scenarios that drive the code.
 - **Not done:** removing the old `SalaryTable` / `SalaryTimelineCalculator`. The current screens still use them, so they go when the ledger screens replace those screens (05.15 – 05.17), not before.
 
 ### Phase D: application and UI (`Application`, `Wpf`)
+
+> Since sprint 07 (R1): the current data is a sample, so Phase D drops the old `SalaryTable` model outright instead
+> of migrating it at start-up. New databases start from the seed ([`../07_Reference_Data_Seed/sprint.md`](../07_Reference_Data_Seed/sprint.md)).
 
 | # | Sub-sprint | Content | First tests |
 |---|---|---|---|
