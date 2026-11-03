@@ -63,7 +63,10 @@
       "agences_de_voyages"
     ],
     "language": "ar",
-    "notes": "JORT 41 of 23 May 1997: publishes the travel agencies agreement (signed 22 April 1997, approved 15 May 1997), per the recitals of riders 9 and 11. Old font: words not decoded. Scanned pages 15-16 and 26-30 probably hold its grids: to transcribe."
+    "notes": "JORT 41 of 23 May 1997: publishes the travel agencies agreement (signed 22 April 1997, approved 15 May 1997). Classification of categories on pp. 932-933 (PDF 14-15), three grids (1996, 1997, 1998) on p. 934 (PDF 16), transcribed in data/seed/drafts/agences_de_voyages. PDF pages 26-30 are an unrelated list of names. Old font: words not decoded. To confirm by a person.",
+    "kind": "Agreement",
+    "signedOn": "1997-04-22",
+    "title": "الاتفاقية المشتركة القطاعية لوكالات الأسفار (القرار المؤرخ في 15 ماي 1997)"
   },
   {
     "key": "unidentified-01",

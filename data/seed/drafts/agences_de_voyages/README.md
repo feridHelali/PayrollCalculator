@@ -29,11 +29,15 @@ stands for the «-» of the text.
 
 | File | In force from | Source |
 |---|---|---|
+| `agreement-1997_table-1.csv` | 1996-05-01 | agreement of 22 April 1997, table 1, JORT 41/1997 p. 934 |
+| `agreement-1997_table-2.csv` | 1997-05-01 | same, table 2 |
+| `agreement-1997_table-3.csv` | 1998-05-01 | same, table 3 |
 | `rider-09_table-1.csv` | 2017-05-01 | rider 9, JORT 62/2017 p. 2496 |
 | `rider-11_table-1.csv` | 2022-05-01 | rider 11, table 1, JORT 120/2022 p. 3266 |
 | `rider-11_table-2.csv` | 2023-05-01 | rider 11, table 2, JORT 120/2022 p. 3267 |
 
 **Checks:**
+- **The 1997 tables** are printed in millimes with no separator (175032 = 175.032). In each category, every degree adds the same step: 1.500, 1.600, 1.700, 2.100, 2.600, 3.000, 3.500, 4.400, 4.800 and 5.200 TND for categories 1 to 10. Each year adds a fixed amount per category, the same in 1997 and 1998: 8.000, 11.000, 12.500, 13.500, 14.500, 15.500, 17.000, 19.000, 20.000 and 21.000 TND. These are fixed-amount raises, not percentages. All 390 cells agree.
 - **Degrees and categories:** in all three grids, no amount is lower than the one of the degree before it, or of the category before it.
 - **2023 against 2022:** every cell of 2023 = the 2022 cell × 1.065 (rider 11, article 2), within one millime.
 - **2022 against 2017:** every cell of 2022 = the 2017 cell × 1.219318 (all 130 cells agree to ±0.000002). That is 1.07 × 1.07 × 1.065, which points to two raises of 7 % between 2017 and 2022 (rider 10?) before rider 11's 6.5 %.
@@ -63,3 +67,10 @@ The transport amounts include the transport prime of decree 503 of 16 March 1982
 
 - **2022 raise:** +6.5 % of the base salaries, computed on the 2019 base salary. **2023 raise:** +6.5 %, on the 2022 base. Both apply from 1 May.
 - **Backdating:** firms that had given less than the agreed raise owe the difference from 1 May 2022.
+
+## Classifying an employee (agreement of 1997)
+
+JORT 41/1997 pp. 932–933 (PDF pages 14–15; page 15 is a scan) define each category: the diploma or experience
+required, the duties, and examples of jobs. This is the text to read when placing an employee in a category (golden
+case Y3). For example, category 9 (cadres) is a holder of a licence or equivalent who runs a department; category 10 is
+the person who heads and supervises the agency's activities. To transcribe when the classification screen is built.
