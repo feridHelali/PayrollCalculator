@@ -77,6 +77,7 @@ public enum DomainField
     ImportFile,
     AllowanceName,
     EffectiveDate,
+    WeeklyHours,
 }
 
 /// <summary>Raised when an operation would break a business invariant.</summary>

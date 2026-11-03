@@ -64,6 +64,7 @@ internal sealed class SalaryTableConfiguration : IEntityTypeConfiguration<Salary
         b.Property(t => t.TableNumber).IsRequired().HasMaxLength(50);
         b.Property(t => t.SalaryType).HasConversion<string>().HasMaxLength(20);
         b.Property(t => t.ConcernedEmployees).HasMaxLength(1000);
+        b.Property(t => t.WeeklyHours).HasDefaultValue(SalaryTable.DefaultWeeklyHours);
         b.HasOne<SectorialJointAgreement>().WithMany().HasForeignKey(t => t.AgreementId).OnDelete(DeleteBehavior.Cascade);
         b.HasIndex(t => new { t.AgreementId, t.TableNumber });
 

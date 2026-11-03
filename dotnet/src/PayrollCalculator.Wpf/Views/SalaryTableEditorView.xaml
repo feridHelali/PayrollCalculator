@@ -60,6 +60,8 @@
                       SelectedItem="{Binding SelectedGridKind}" IsEnabled="{Binding HasGridKinds}" />
             <Label Grid.Row="4" Grid.Column="2" Content="{x:Static res:Labels.DefaultRegime}" />
             <TextBlock Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" Text="{Binding DefaultRegimeText}" />
+            <Label Grid.Row="4" Grid.Column="4" Content="{x:Static res:Labels.WeeklyHours}" />
+            <ComboBox Grid.Row="5" Grid.Column="4" ItemsSource="{Binding WeeklyHoursOptions}" SelectedItem="{Binding WeeklyHours}" />
         </Grid>
 
         <!-- Degrees (columns of the grid) -->

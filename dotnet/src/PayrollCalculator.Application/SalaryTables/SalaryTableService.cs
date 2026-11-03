@@ -22,7 +22,8 @@ public sealed record SalaryTableDto(
     DateOnly? EndDate,
     IReadOnlyList<CategoryDto> Categories,
     IReadOnlyList<DegreeDto> Degrees,
-    IReadOnlyList<CellDto> Cells);
+    IReadOnlyList<CellDto> Cells,
+    int WeeklyHours = SalaryTable.DefaultWeeklyHours);
 
 /// <summary>Row of the salary tables list.</summary>
 public sealed record SalaryTableSummaryDto(
@@ -68,6 +69,7 @@ public sealed class SalaryTableService(ISalaryTableRepository tables, IAgreement
         if (dto.Id == 0)
         {
             table = SalaryTable.Create(dto.AgreementId, dto.TableNumber, dto.SalaryType, dto.ConcernedEmployees, period);
+            table.ChangeWorkingTime(dto.WeeklyHours);
             RebuildGrid(table, dto);
             tables.Add(table);
         }
@@ -80,6 +82,7 @@ public sealed class SalaryTableService(ISalaryTableRepository tables, IAgreement
             }
 
             table.Describe(dto.TableNumber, dto.SalaryType, dto.ConcernedEmployees, period);
+            table.ChangeWorkingTime(dto.WeeklyHours);
             RebuildGrid(table, dto);
         }
 
@@ -107,5 +110,6 @@ public sealed class SalaryTableService(ISalaryTableRepository tables, IAgreement
         t.ApplicationPeriod.Start, t.ApplicationPeriod.End,
         t.Categories.Select(c => new CategoryDto(c.Key, c.Label)).ToList(),
         t.Degrees.Select(d => new DegreeDto(d.Key, d.Number, d.YearsInDegree)).ToList(),
-        t.Cells.Select(c => new CellDto(c.CategoryKey, c.DegreeKey, c.Amount)).ToList());
+        t.Cells.Select(c => new CellDto(c.CategoryKey, c.DegreeKey, c.Amount)).ToList(),
+        t.WeeklyHours);
 }

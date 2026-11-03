@@ -117,6 +117,12 @@ public sealed partial class SalaryTableEditorViewModel(IServiceRunner runner, ID
     [ObservableProperty]
     public partial string ConcernedEmployees { get; set; } = string.Empty;
 
+    /// <summary>The regimes offered; the grid kind picks its default.</summary>
+    public IReadOnlyList<int> WeeklyHoursOptions { get; } = [48, 40];
+
+    [ObservableProperty]
+    public partial int WeeklyHours { get; set; } = 48;
+
     [ObservableProperty]
     public partial DateTime? StartDate { get; set; }
 
@@ -165,6 +171,7 @@ public sealed partial class SalaryTableEditorViewModel(IServiceRunner runner, ID
         }
 
         SalaryType = newValue.Unit == PayUnit.Hourly ? SalaryType.Hourly : SalaryType.Monthly;
+        WeeklyHours = newValue.DefaultWeeklyHours;
         // Keep what the user typed; replace only an empty field or the previous kind's name.
         if (string.IsNullOrWhiteSpace(ConcernedEmployees) || ConcernedEmployees == oldValue?.Name)
         {
@@ -266,7 +273,8 @@ public sealed partial class SalaryTableEditorViewModel(IServiceRunner runner, ID
             Id, agreementId, TableNumber, SalaryType, ConcernedEmployees, start, ToDate(EndDate),
             Categories.Select(c => new CategoryDto(c.Key, c.Label)).ToList(),
             Degrees.Select(d => new DegreeDto(d.Key, d.Number, d.YearsInDegree)).ToList(),
-            Categories.SelectMany(c => c.Amounts.Where(a => degreeKeys.Contains(a.Key)).Select(a => new CellDto(c.Key, a.Key, a.Value))).ToList());
+            Categories.SelectMany(c => c.Amounts.Where(a => degreeKeys.Contains(a.Key)).Select(a => new CellDto(c.Key, a.Key, a.Value))).ToList(),
+            WeeklyHours);
 
         if (await TryAsync(async () =>
                 Id = await Runner.RunAsync<SalaryTableService, int>(s => s.SaveAsync(dto)).ConfigureAwait(true),
@@ -285,6 +293,7 @@ public sealed partial class SalaryTableEditorViewModel(IServiceRunner runner, ID
         Id = dto.Id;
         TableNumber = dto.TableNumber;
         SalaryType = dto.SalaryType;
+        WeeklyHours = dto.WeeklyHours;
         ConcernedEmployees = dto.ConcernedEmployees;
         SelectedAgreementId = dto.AgreementId; // after the employees, so a matching grid kind is shown as selected
         _filling = false;

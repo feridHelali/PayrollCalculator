@@ -52,6 +52,7 @@ public static class Labels
     public const string Monthly = "بالشهر";
     public const string Hourly = "بالساعة";
     public const string GridKind = "نوع الجدول";
+    public const string WeeklyHours = "نظام العمل (ساعة في الأسبوع)";
     public const string ImportCsv = "استيراد من ملف CSV";
     public const string CsvFilter = "CSV (*.csv)|*.csv";
     public const string ConfirmReplaceGrid = "سيتم تعويض الأصناف والدرجات الحالية بمحتوى الملف. هل تريد المواصلة؟";
@@ -273,6 +274,7 @@ public static class Labels
         DomainField.AgreementCode => "رمز الاتفاقية",
         DomainField.AllowanceName => AllowanceName,
         DomainField.EffectiveDate => "تاريخ التطبيق",
+        DomainField.WeeklyHours => WeeklyHours,
         DomainField.ImportFile => "الملف",
         _ => string.Empty,
     };

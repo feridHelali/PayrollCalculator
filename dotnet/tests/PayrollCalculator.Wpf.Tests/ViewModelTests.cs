@@ -434,6 +434,24 @@ public sealed class ViewModelTests : IDisposable
     }
 
     [Fact]
+    public async Task The_grid_kind_sets_the_weekly_hours_and_a_saved_table_keeps_them()
+    {
+        var editor = await EditorOnAsync("banques_et_institutions_financieres");
+        Assert.Equal(48, editor.WeeklyHours);
+
+        editor.SelectedGridKind = editor.GridKinds[0];
+        Assert.Equal(40, editor.WeeklyHours);
+        editor.TableNumber = "1";
+        editor.StartDate = new DateTime(2024, 1, 1);
+        await editor.SaveCommand.ExecuteAsync(null);
+        Assert.Empty(_app.Dialogs.Errors);
+
+        var reopened = _app.Get<SalaryTableEditorViewModel>();
+        await reopened.LoadAsync(editor.Id);
+        Assert.Equal(40, reopened.WeeklyHours);
+    }
+
+    [Fact]
     public async Task Domain_errors_are_shown_not_thrown()
     {
         var vm = _app.Get<AgreementsViewModel>();

@@ -84,4 +84,41 @@ public class AffairLedgerBuilderTests
     public void An_affair_without_a_salary_table_has_no_ledger() =>
         Assert.Null(AffairLedgerBuilder.Build(Affair(99, new DateOnly(2022, 5, 1), new DateOnly(2022, 6, 30)),
             [Table(10, new DateOnly(2022, 5, 1), 1m, 2m)], []));
+
+    [Fact]
+    public void A_40_hour_grid_uses_173_333_hours_and_22_working_days()
+    {
+        var table = Table(30, new DateOnly(2024, 1, 1), 3.000m, 3.100m, SalaryType.Hourly);
+        table.ChangeWorkingTime(40);
+
+        var ledger = AffairLedgerBuilder.Build(Affair(30, new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31)), [table],
+            [Prime(1, "منحة الحضور", AllowanceUnit.PerDayWorked, (2023, 0.500m))])!;
+
+        Assert.Equal(520.000m, Amount(ledger, "BASE", 2024, 1));      // 3.000 × 40 × 52 / 12
+        Assert.Equal(11.000m, Amount(ledger, "PRIME_1", 2024, 1));    // 0.500 × 22 working days
+        Assert.True(ledger.IsComplete);
+    }
+
+    [Theory]
+    [InlineData(48, 208, 26)]
+    [InlineData(40, 173.333, 22)]
+    [InlineData(45, 195, 24.38)]
+    public void A_weekly_regime_gives_the_hours_and_working_days_of_a_full_month(int weekly, double hours, double days)
+    {
+        var profile = WorkRegimeProfile.For(weekly);
+
+        Assert.Equal((decimal)hours, decimal.Round(profile.HoursPerMonth, 3));
+        Assert.Equal((decimal)days, profile.WorkingDaysPerMonth);
+        Assert.Equal("H" + weekly, profile.Code.Value);
+    }
+
+    [Fact]
+    public void A_table_regime_is_between_1_and_60_hours_a_week()
+    {
+        var table = Table(40, new DateOnly(2024, 1, 1), 1m, 2m);
+
+        Assert.Equal(SalaryTable.DefaultWeeklyHours, table.WeeklyHours);
+        Assert.Throws<DomainException>(() => table.ChangeWorkingTime(0));
+        Assert.Throws<DomainException>(() => table.ChangeWorkingTime(61));
+    }
 }

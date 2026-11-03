@@ -40,6 +40,11 @@ public sealed class SalaryTable : Entity
 
     public DateRange ApplicationPeriod { get; private set; }
 
+    /// <summary>The work regime the grid is written for, in hours per week (the texts say «نظام عمل 48 ساعة في الأسبوع»).</summary>
+    public int WeeklyHours { get; private set; } = DefaultWeeklyHours;
+
+    public const int DefaultWeeklyHours = 48;
+
     public IReadOnlyList<SalaryCategory> Categories => _categories.OrderBy(c => c.Position).ToList();
 
     public IReadOnlyList<DegreeStep> Degrees => _degrees.OrderBy(d => d.Number).ToList();
@@ -60,6 +65,11 @@ public sealed class SalaryTable : Entity
         ConcernedEmployees = Guard.Optional(concernedEmployees) ?? string.Empty;
         ApplicationPeriod = applicationPeriod ?? throw new DomainException(DomainError.PeriodRequired, DomainField.ApplicationPeriod);
     }
+
+    public void ChangeWorkingTime(int weeklyHours) =>
+        WeeklyHours = weeklyHours is >= 1 and <= 60
+            ? weeklyHours
+            : throw new DomainException(DomainError.OutOfRange, DomainField.WeeklyHours, weeklyHours.ToString(System.Globalization.CultureInfo.InvariantCulture));
 
     public bool IsApplicableOn(DateOnly date) => ApplicationPeriod.Contains(date);
 

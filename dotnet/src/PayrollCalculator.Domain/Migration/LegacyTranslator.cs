@@ -83,7 +83,8 @@ public static class LegacyTranslator
     }
 
     /// <returns>The career of the affair, or null when it has no salary table.</returns>
-    public static IReadOnlyList<CareerEvent>? CareerEvents(Affair affair, SalaryTable? table, ICollection<TranslationWarning> warnings)
+    public static IReadOnlyList<CareerEvent>? CareerEvents(Affair affair, SalaryTable? table, ICollection<TranslationWarning> warnings,
+        RegimeCode? regime = null)
     {
         ArgumentNullException.ThrowIfNull(affair);
         ArgumentNullException.ThrowIfNull(warnings);
@@ -95,7 +96,7 @@ public static class LegacyTranslator
 
         return
         [
-            new Hired(affair.EmploymentPeriod.Start, LineOf(table.TableNumber), CodeOf(affair.InitialPosition.Category), affair.InitialPosition.Degree, Regime),
+            new Hired(affair.EmploymentPeriod.Start, LineOf(table.TableNumber), CodeOf(affair.InitialPosition.Category), affair.InitialPosition.Degree, regime ?? Regime),
             new Separated(affair.EmploymentPeriod.End!.Value),
         ];
     }

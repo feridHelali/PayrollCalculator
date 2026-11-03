@@ -506,6 +506,11 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("WeeklyHours")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(48);
+
                     b.ComplexProperty(typeof(Dictionary<string, object>), "ApplicationPeriod", "PayrollCalculator.Domain.SalaryTables.SalaryTable.ApplicationPeriod#DateRange", b1 =>
                         {
                             b1.IsRequired();
