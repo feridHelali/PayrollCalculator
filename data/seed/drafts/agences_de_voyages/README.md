@@ -70,7 +70,26 @@ The transport amounts include the transport prime of decree 503 of 16 March 1982
 
 ## Classifying an employee (agreement of 1997)
 
-JORT 41/1997 pp. 932–933 (PDF pages 14–15; page 15 is a scan) define each category: the diploma or experience
-required, the duties, and examples of jobs. This is the text to read when placing an employee in a category (golden
-case Y3). For example, category 9 (cadres) is a holder of a licence or equivalent who runs a department; category 10 is
-the person who heads and supervises the agency's activities. To transcribe when the classification screen is built.
+`agreement-1997_categories.json` is the classification table of JORT 41/1997 p. 933 (a scanned page). For each category
+it gives its group, its definition and entry conditions, and examples of jobs.
+
+- **Categories 5–10 are transcribed. Categories 1–4 are missing from this file:** the table starts at category 5. They
+  have to come from another copy of the issue, or from a later rider.
+- **«مسؤول الإعلامية» (IT lead) is category 8**: supervision staff (التسيير), someone who has completed the first stage of
+  higher education. Golden case Y3 needed this, for the travel agencies sector.
+- **Reclassification (art. 50):**
+  - when the agreement came into force, every worker was placed according to the duties they actually performed;
+  - after a reclassification, the worker is placed at the degree whose salary equals their former base salary
+    (seniority prime included), or failing that, at the next higher one.
+
+## Primes and other amounts of the 1997 agreement (JORT 41/1997 pp. 931–932)
+
+| Art. | Prime | Amount | Who, and conditions |
+|---|---|---|---|
+| 45 | Transport (منحة النقل) | 14 TND/month (execution and supervision staff), 19 TND/month (cadres) | Includes the transport prime of decree 503 of 16 March 1982, amended by decree 691 of 19 July 1986 |
+| 46 | Presence (منحة الحضور) | 0.103 TND per day actually worked | Paid monthly |
+| 47 | Meal (منحة الأكل) | 2.500 TND | Drivers and reception staff who meet or see off customers and must stay on duty at mealtimes at airports or ports; not for staff who normally work there |
+| 48 | Care and maintenance (منحة العناية والصيانة) | 15 TND/month | Warehouse technicians and drivers; can be withheld for the month of a serious second-degree fault |
+| 44 | Production and end-of-year (منحة الإنتاج وآخر السنة) | up to 45 days' pay a year, paid every six months, in proportion to time actually worked (annual leave included) | Annual score out of 20: production 0–6, punctuality 0–5, conduct 0–5, care of property and dealings with customers 0–4. One month's pay whatever the score; plus half a month for 20/20, ten days above 15 and below 20, five days from 10 to 15. "Pay" here means base salary + transport + presence. Can be withheld after a sanction of the second degree. Under 15/20, the worker can ask the advisory committee for a review. |
+| 43 | Retirement (منحة التقاعد) | 2 months' pay for 10–15 years with the last employer; 3 months for more than 15 and up to 20; 5 months for more than 20 and up to 25; 6 months for more than 25 | Beginning of the article to check on p. 931 |
+| 52 | In force | from 1 May 1996 | Signed in Tunis on 22 April 1997 |
