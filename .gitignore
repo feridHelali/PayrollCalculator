@@ -1,2 +1,10 @@
 node_modules
 out/
+# secrets and local tool config
+.env
+.env.*
+.continue/
+
+# .NET build output
+[Oo]bj/
+[Bb]in/
