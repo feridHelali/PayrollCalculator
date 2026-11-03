@@ -63,7 +63,7 @@
       "agences_de_voyages"
     ],
     "language": "ar",
-    "notes": "Read from the page-1 text layer (digits decoded); to confirm on the page image. An issue of 1997 (table of contents on page 1). Files 09 and 11 cite the travel agencies agreement as signed on 22 April 1997, approved on 15 May 1997 and published in this issue."
+    "notes": "JORT 41 of 23 May 1997: publishes the travel agencies agreement (signed 22 April 1997, approved 15 May 1997), per the recitals of riders 9 and 11. Old font: words not decoded. Scanned pages 15-16 and 26-30 probably hold its grids: to transcribe."
   },
   {
     "key": "unidentified-01",
@@ -168,7 +168,9 @@
       "agences_de_voyages"
     ],
     "language": "ar",
-    "notes": "Read from the page-1 text layer (digits decoded); to confirm on the page image. Erratum (إصلاح خطأ) to an order of 22 March 2017; first page is JORT p. 2494. Concerns the agreement signed on 22 April 1997 (travel agencies, see unidentified-00)."
+    "notes": "Rider 9 (signed 11 July 2017), in force 1 May 2017; JORT 62/2017 pp. 2494-2496 (page 1 also carries an unrelated erratum). Grid on PDF page 3, transcribed in data/seed/drafts/agences_de_voyages. To confirm by a person.",
+    "signedOn": "2017-07-31",
+    "title": "قرار وزير الشؤون الاجتماعية المؤرخ في 31 جويلية 2017 المتعلق بالمصادقة على الملحق التعديلي عدد 9 للاتفاقية المشتركة القطاعية لوكالات الأسفار"
   },
   {
     "key": "unidentified-10",
@@ -184,7 +186,7 @@
     },
     "agreements": [],
     "language": "ar",
-    "notes": "Read from the page-1 text layer (digits decoded); to confirm on the page image. Order of the Minister of Social Affairs; first page is JORT p. 5132. Concerns an agreement signed on 4 November 2002, approved on 25 November 2002 (JORT 101 of 13 December 2002). Agreement not identified yet."
+    "notes": "Read from the page-1 text layer (digits decoded); to confirm on the page image. Order of the Minister of Social Affairs; first page is JORT p. 5132. Concerns an agreement signed on 4 November 2002, approved on 25 November 2002 (JORT 101 of 13 December 2002). Agreement not identified yet. Same order date and JORT issue as travel agencies rider 10, but it concerns an agreement signed 4 November 2002, so probably another sector (the same issue carried several orders)."
   },
   {
     "key": "unidentified-11",
@@ -192,9 +194,8 @@
     "bytes": 2748659,
     "pages": 5,
     "status": "partial",
-    "kind": "Decree",
-    "number": "2022-790",
-    "signedOn": "2022-11-04",
+    "kind": "MinisterialOrder",
+    "signedOn": "2022-10-20",
     "jort": {
       "number": 120,
       "date": "2022-11-08"
@@ -203,6 +204,7 @@
       "agences_de_voyages"
     ],
     "language": "ar",
-    "notes": "Read from the page-1 text layer (digits decoded); to confirm on the page image. Text number 790 of 2022 (decree or order, to confirm); first page is JORT p. 3263. Travel agencies agreement (signed 22 April 1997), riders including one signed on 31 October 2018."
+    "notes": "Rider 11 (signed 14 September 2022), in force 1 May 2022; JORT 120/2022 pp. 3263-3267 (page 1 starts with unrelated decrees). Two grids on PDF pages 4-5 and the primes on p. 3265, transcribed in data/seed/drafts/agences_de_voyages. To confirm by a person.",
+    "title": "قرار وزير الشؤون الاجتماعية المؤرخ في 20 أكتوبر 2022 المتعلق بالمصادقة على الملحق التعديلي عدد 11 للاتفاقية المشتركة القطاعية لوكالات الأسفار"
   }
 ]

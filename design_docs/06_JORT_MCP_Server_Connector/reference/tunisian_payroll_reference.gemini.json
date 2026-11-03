@@ -1,0 +1,65 @@
+{
+  "_note": "Reference proposed by Gemini (2026-11-03), kept as given for the MCP prompts. NOT validated: see README.md next to this file before using any value.",
+  "country": "TN",
+  "currency": "TND",
+  "legal_framework": "Code du Travail Tunisien & Conventions Collectives Sectorielles",
+  "global_payroll_invariants": {
+    "social_security": {
+      "provider": "CNSS",
+      "rates": {
+        "employee_contribution_rate": 0.0918,
+        "employer_contribution_rate": 0.1657,
+        "employer_accident_rate_default": 0.005,
+        "total_employer_rate_standard": 0.1707
+      },
+      "taxable_base": "Salaire Brut (Salaire de base + Indemnités non exonérées)"
+    },
+    "income_tax": {
+      "provider": "Recette de Finance - CSS & IR",
+      "contribution_sociale_solidarite_rate": 0.01,
+      "annual_tax_brackets_2026": [
+        { "min": 0, "max": 5000, "rate": 0.00 },
+        { "min": 5000, "max": 20000, "rate": 0.26 },
+        { "min": 20000, "max": 30000, "rate": 0.28 },
+        { "min": 30000, "max": 50000, "rate": 0.32 },
+        { "min": 50000, "max": null, "rate": 0.35 }
+      ],
+      "standard_deductions": {
+        "professional_expenses_rate": 0.10,
+        "professional_expenses_max_annual": 2000,
+        "chef_famille_annual_deduction": 300,
+        "per_child_annual_deduction": 100,
+        "max_children_deduction": 4
+      }
+    }
+  },
+  "standard_allowances_registry": [
+    { "code": "prime_transport", "label_fr": "Indemnité de transport", "label_ar": "منحة النقل", "is_cnss_taxable": true, "is_ir_taxable": true, "calculation_type": "fixed_monthly" },
+    { "code": "prime_presence", "label_fr": "Indemnité de présence", "label_ar": "منحة الحضور", "is_cnss_taxable": true, "is_ir_taxable": true, "calculation_type": "fixed_monthly" },
+    { "code": "indemnite_panier", "label_fr": "Indemnité de panier", "label_ar": "منحة القفة", "is_cnss_taxable": false, "is_ir_taxable": false, "exoneration_ceiling_daily": 5.000, "calculation_type": "per_working_day" },
+    {
+      "code": "prime_anciennete", "label_fr": "Prime d'ancienneté", "label_ar": "منحة الأقدمية", "is_cnss_taxable": true, "is_ir_taxable": true,
+      "calculation_type": "percentage_of_base_salary",
+      "standard_scale_years": [
+        { "years_min": 3, "years_max": 6, "percentage": 0.05 },
+        { "years_min": 6, "years_max": 9, "percentage": 0.10 },
+        { "years_min": 9, "years_max": 12, "percentage": 0.15 },
+        { "years_min": 12, "years_max": 20, "percentage": 0.20 },
+        { "years_min": 20, "years_max": null, "percentage": 0.25 }
+      ]
+    }
+  ],
+  "labor_court_prudhomme_rules": {
+    "notice_period_compensation": { "label_fr": "Indemnité de préavis", "label_ar": "غرامة مهلة الإخطار", "standard_duration_months": 1, "basis": "Dernier salaire brut global" },
+    "legal_severance_pay": {
+      "label_fr": "Indemnité légale de licenciement", "label_ar": "غرامة طرد / مكافأة نهاية الخدمة",
+      "rule": "1 jour de salaire par mois d'ancienneté effective", "maximum_months_limit": 3,
+      "basis": "Moyenne du salaire brut des 12 derniers mois ou dernier salaire brut (le plus avantageux)"
+    },
+    "unfair_dismissal_damage_ceilings": {
+      "label_fr": "Indemnité pour licenciement abusif", "label_ar": "تعويض عن الطرد التعسفي",
+      "rule_article_14_vicies": "Décidé par le juge, généralement compris entre 1 et 2 mois de salaire par année d'ancienneté",
+      "absolute_maximum_months_limit": 36
+    }
+  }
+}

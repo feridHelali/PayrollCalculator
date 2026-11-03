@@ -1,0 +1,65 @@
+# Drafts: travel agencies agreement (الاتفاقية المشتركة القطاعية لوكالات الأسفار)
+
+**Status: draft, read from the page images; to be checked by a person against the PDF before it is used.**
+
+## The agreement and its riders (from the recitals of rider 11)
+
+| Text | Signed | Approved by order of | JORT |
+|---|---|---|---|
+| Agreement | 22 April 1997 | 15 May 1997 | n° 41, 23 May 1997 (file `unidentified-00`) |
+| Rider 1 | 30 June 1999 | 14 July 1999 | n° 59, 23 July 1999 |
+| Rider 2 | 14 November 2002 | 25 November 2002 | n° 101, 13 December 2002 |
+| Rider 3 | 29 December 2005 | 17 January 2006 | n° 7, 24 January 2006 |
+| Rider 4 | 28 January 2009 | 17 February 2009 | n° 16, 24 February 2009 |
+| Rider 5 | 30 March 2012 | 17 May 2012 | n° 40, 22 May 2012 |
+| Rider 6 | 27 February 2013 | 8 March 2013 | n° 22, 15 March 2013 |
+| Rider 7 | 22 July 2014 | 18 August 2014 | n° 68, 22 August 2014 |
+| Rider 8 | 17 October 2016 | 22 November 2016 | n° 96, 25 November 2016 |
+| Rider 9 | 11 July 2017 | 31 July 2017 | n° 62, 4 August 2017 (file `unidentified-09`) |
+| Rider 10 | 31 October 2018 | 30 November 2018 | n° 99, 11 December 2018 (not in the library: `unidentified-10` is from the same issue but for another agreement) |
+| Rider 11 | 14 September 2022 | 20 October 2022 | n° 120, 8 November 2022 (file `unidentified-11`) |
+
+To rebuild salaries from 1997 on, the library still needs the riders whose grids are missing: 1–8 and 10.
+
+## Grids (monthly, 48-hour week, 10 categories × 13 degrees)
+
+Categories 1–5 are execution staff (التنفيذ), 6–8 supervision staff (التسيير), 9–10 cadres (الإطارات). Time in
+degree: 1 year for degree 1, 2 years for degrees 2–7, 3 years for degrees 8–12; degree 13 is the last. In the CSV, `0`
+stands for the «-» of the text.
+
+| File | In force from | Source |
+|---|---|---|
+| `rider-09_table-1.csv` | 2017-05-01 | rider 9, JORT 62/2017 p. 2496 |
+| `rider-11_table-1.csv` | 2022-05-01 | rider 11, table 1, JORT 120/2022 p. 3266 |
+| `rider-11_table-2.csv` | 2023-05-01 | rider 11, table 2, JORT 120/2022 p. 3267 |
+
+**Checks:**
+- **Degrees and categories:** in all three grids, no amount is lower than the one of the degree before it, or of the category before it.
+- **2023 against 2022:** every cell of 2023 = the 2022 cell × 1.065 (rider 11, article 2), within one millime.
+- **2022 against 2017:** every cell of 2022 = the 2017 cell × 1.219318 (all 130 cells agree to ±0.000002). That is 1.07 × 1.07 × 1.065, which points to two raises of 7 % between 2017 and 2022 (rider 10?) before rider 11's 6.5 %.
+- **Read with care:**
+  - table 1 of 2022, category 8, degree 7: the last glyph is damaged. It's read as 8 (1006.238), the same broken 8 as in 915.568 above it. This agrees with the row's progression and with 2023 (1071.644).
+  - table 2 of 2023: the degree-13 column is clipped at the page edge; its leading digits are restored from the 6.5 % rule.
+
+## Primes (not grids)
+
+| Prime | From 1 May 2017 (rider 9) | From 1 May 2022 (rider 11) | From 1 May 2023 (rider 11) |
+|---|---|---|---|
+| Transport (منحة النقل), execution and supervision staff, per month | 61.583 | 75.089 | 79.970 |
+| Transport (منحة النقل), cadres, per month | 66.583 | 81.186 | 86.463 |
+| Presence (منحة الحضور), per day actually worked | 0.424 | 0.452 | 0.481 |
+| Presence (منحة الحضور), plus per month | 3.180 | 3.387 | 3.607 |
+| Drivers' flat overtime prime (السواق), October to May, per month | — | 42.600 | 45.369 |
+| Drivers' flat overtime prime, June to September, per month | — | 106.500 | 113.423 |
+
+The transport amounts include the transport prime of decree 503 of 16 March 1982.
+
+**Entering them in the app** (المنح والمنافع):
+- **Transport:** two primes, one per group, with «المنتفعون» = «أعوان التنفيذ والتسيير» or «الإطارات».
+- **Presence:** two primes, a «عن كل يوم عمل» one and a monthly one.
+- **Drivers:** one prime per season, with the season written in «شروط الإسناد».
+
+## Rules of rider 11 worth knowing
+
+- **2022 raise:** +6.5 % of the base salaries, computed on the 2019 base salary. **2023 raise:** +6.5 %, on the 2022 base. Both apply from 1 May.
+- **Backdating:** firms that had given less than the agreed raise owe the difference from 1 May 2022.
