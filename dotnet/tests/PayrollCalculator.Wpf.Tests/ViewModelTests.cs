@@ -207,6 +207,63 @@ public sealed class ViewModelTests : IDisposable
         Assert.IsNotType<SalaryTablesViewModel>(shell.CurrentPage);
     }
 
+    private static string Draft(string file, [System.Runtime.CompilerServices.CallerFilePath] string here = "") =>
+        Path.GetFullPath(Path.Combine(Path.GetDirectoryName(here)!, "..", "..", "..", "data", "seed", "drafts",
+            "vetements_tisses_et_prets_a_porter", file));
+
+    [Fact]
+    public async Task The_rider_18_monthly_draft_imports_into_the_editor_and_saves()
+    {
+        var editor = await EditorOnAsync("vetements_tisses_et_prets_a_porter");
+        editor.SelectedGridKind = editor.GridKinds.Single(k => k.Code == "mensuel_cadres_maitrise");
+        editor.TableNumber = "2";
+        editor.StartDate = new DateTime(2024, 1, 1);
+        _app.Dialogs.FileToOpen = Draft("rider-18_table-2.csv");
+
+        await editor.ImportCsvCommand.ExecuteAsync(null);
+
+        Assert.Empty(_app.Dialogs.Errors);
+        Assert.Equal((18, 18), (editor.Categories.Count, editor.Degrees.Count));
+        Assert.Equal(["1أ", "1ب", "2"], editor.Categories.Take(3).Select(c => c.Label));
+        Assert.Equal([1, 1, 1, 2], editor.Degrees.Take(4).Select(d => d.YearsInDegree));
+        Assert.Equal(595.401m, editor.Categories[0][editor.Degrees[0].Key]);
+        Assert.Equal(1384.101m, editor.Categories[17][editor.Degrees[17].Key]);
+
+        await editor.SaveCommand.ExecuteAsync(null);
+
+        Assert.Empty(_app.Dialogs.Errors);
+        var reopened = _app.Get<SalaryTableEditorViewModel>();
+        await reopened.LoadAsync(editor.Id);
+        Assert.Equal(324, reopened.Categories.Sum(c => reopened.Degrees.Count(d => c[d.Key] is not null)));
+        Assert.Equal(SalaryType.Monthly, reopened.SalaryType);
+    }
+
+    [Fact]
+    public async Task Importing_over_an_existing_grid_asks_first_and_a_bad_file_names_its_line()
+    {
+        var editor = await EditorOnAsync("textile");
+        editor.AddCategoryCommand.Execute(null);
+        var bad = Path.Combine(Path.GetTempPath(), $"grid-{Guid.NewGuid():N}.csv");
+        await File.WriteAllTextAsync(bad, "category,1,2\nyears,1,1\nI,1,x\n");
+        try
+        {
+            _app.Dialogs.FileToOpen = bad;
+            _app.Dialogs.ConfirmAnswer = false;
+            await editor.ImportCsvCommand.ExecuteAsync(null);
+            Assert.Single(editor.Categories);
+            Assert.Empty(_app.Dialogs.Errors);
+
+            _app.Dialogs.ConfirmAnswer = true;
+            await editor.ImportCsvCommand.ExecuteAsync(null);
+            Assert.Contains("3", Assert.Single(_app.Dialogs.Errors), StringComparison.Ordinal);
+            Assert.Single(editor.Categories); // nothing replaced when the file is refused
+        }
+        finally
+        {
+            File.Delete(bad);
+        }
+    }
+
     [Fact]
     public async Task Domain_errors_are_shown_not_thrown()
     {

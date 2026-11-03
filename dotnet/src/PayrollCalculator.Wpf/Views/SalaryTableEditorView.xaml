@@ -13,6 +13,7 @@
         <DockPanel DockPanel.Dock="Top">
             <StackPanel DockPanel.Dock="Left" Style="{StaticResource Toolbar}" Margin="0">
                 <Button Style="{StaticResource PrimaryButton}" c:Ui.Icon="{x:Static c:Icons.Save}" Content="{x:Static res:Labels.Save}" Command="{Binding SaveCommand}" />
+                <Button c:Ui.Icon="{x:Static c:Icons.Import}" Content="{x:Static res:Labels.ImportCsv}" Command="{Binding ImportCsvCommand}" />
                 <Button c:Ui.Icon="{x:Static c:Icons.Back}" Content="{x:Static res:Labels.Back}" Command="{Binding BackCommand}" />
             </StackPanel>
             <TextBlock Style="{StaticResource PageTitle}" Text="{Binding Title}" Margin="16,0,0,12" />

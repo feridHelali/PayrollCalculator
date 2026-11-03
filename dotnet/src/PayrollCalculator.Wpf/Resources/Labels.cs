@@ -24,6 +24,10 @@ public static class Labels
     public const string Monthly = "بالشهر";
     public const string Hourly = "بالساعة";
     public const string GridKind = "نوع الجدول";
+    public const string ImportCsv = "استيراد من ملف CSV";
+    public const string CsvFilter = "CSV (*.csv)|*.csv";
+    public const string ConfirmReplaceGrid = "سيتم تعويض الأصناف والدرجات الحالية بمحتوى الملف. هل تريد المواصلة؟";
+    public const string GridImported = "تم استيراد الجدول: يرجى مراجعته قبل الحفظ";
     public const string DefaultRegime = "نظام العمل الافتراضي";
     public const string HoursPerWeek = "ساعة في الأسبوع";
     public const string ConcernedEmployees = "الأعوان المعنيون";
@@ -72,7 +76,6 @@ public static class Labels
     public const string SelectAgreement = "يجب اختيار الاتفاقية";
     public const string ImportDone = "تم الاستيراد";
     public const string LegacyDbFilter = "SQLite (*.sqlite;*.db)|*.sqlite;*.db|*.*|*.*";
-    public const string CsvFilter = "CSV (*.csv)|*.csv";
 
     // Sign-in and users
     public const string Publisher = "AlfaComputers";
@@ -189,6 +192,7 @@ public static class Labels
             DomainError.Undeclared => $"{field}{detail} غير معرّف في هذا التاريخ",
             DomainError.InvalidStatusTransition => $"{field}{detail}: لا يمكن الانتقال إلى هذه الحالة",
             DomainError.ImmutableOnceApproved => $"{field}{detail}: لا يمكن تعديل حدث مصادق عليه، يجب سحبه وإدخال حدث جديد",
+            DomainError.InvalidImportFile => $"الملف غير صالح: يرجى مراجعة السطر{detail}",
             DomainError.ReadOnlySeed => $"{field}{detail}: هذه البيانات مرفقة بالبرنامج ولا يمكن تعديلها أو حذفها",
             DomainError.IncompleteSnapshot => $"{field}{detail}: بعض الأحداث المحفوظة في هذه النسخة لم تعد موجودة",
             _ => "عملية غير مسموح بها: " + error.Message,
@@ -239,6 +243,7 @@ public static class Labels
         DomainField.DaysWorked => "عدد أيام العمل",
         DomainField.Unit => "وحدة الأجر",
         DomainField.AgreementCode => "رمز الاتفاقية",
+        DomainField.ImportFile => "الملف",
         _ => string.Empty,
     };
 

@@ -25,6 +25,7 @@ public enum DomainError
     ImmutableOnceApproved,
     IncompleteSnapshot,
     ReadOnlySeed,
+    InvalidImportFile,
 }
 
 /// <summary>The value a rule applies to.</summary>
@@ -73,6 +74,7 @@ public enum DomainField
     DaysWorked,
     Unit,
     AgreementCode,
+    ImportFile,
 }
 
 /// <summary>Raised when an operation would break a business invariant.</summary>

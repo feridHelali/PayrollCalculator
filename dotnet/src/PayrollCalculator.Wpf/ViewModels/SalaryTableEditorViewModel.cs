@@ -172,6 +172,40 @@ public sealed partial class SalaryTableEditorViewModel(IServiceRunner runner, ID
         }
     }
 
+    /// <summary>Replaces the categories, degrees and amounts with those of a CSV file (see <see cref="GridCsv"/>).</summary>
+    [RelayCommand]
+    private async Task ImportCsvAsync()
+    {
+        if (Dialogs.OpenFile(Labels.CsvFilter) is not { } path
+            || ((Categories.Count > 0 || Degrees.Count > 0) && !Dialogs.Confirm(Labels.ConfirmReplaceGrid)))
+        {
+            return;
+        }
+
+        await TryAsync(async () =>
+        {
+            var grid = GridCsv.Parse(await File.ReadAllTextAsync(path).ConfigureAwait(true));
+            Degrees.Clear();
+            Categories.Clear();
+            var keys = grid.Degrees.Select((number, i) =>
+            {
+                var degree = new DegreeColumnViewModel(Guid.NewGuid().ToString(), number, grid.YearsInDegree[i]);
+                Degrees.Add(degree);
+                return degree.Key;
+            }).ToList();
+            foreach (var row in grid.Rows)
+            {
+                var category = new CategoryRowViewModel(Guid.NewGuid().ToString(), row.Category);
+                for (var i = 0; i < keys.Count; i++)
+                {
+                    category[keys[i]] = row.Amounts[i];
+                }
+
+                Categories.Add(category);
+            }
+        }, Labels.GridImported).ConfigureAwait(true);
+    }
+
     [RelayCommand]
     private void AddCategory()
     {
