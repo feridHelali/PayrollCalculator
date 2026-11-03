@@ -17,6 +17,10 @@ public enum DomainError
     IdentityAlreadyAssigned,
     TableNotInAgreement,
     TableAgreementLocked,
+    CareerMustStartWithHiring,
+    OutsideCareer,
+    NotApplicable,
+    Undeclared,
 }
 
 /// <summary>The value a rule applies to.</summary>
@@ -43,6 +47,21 @@ public enum DomainField
     Year,
     PasswordHash,
     SalaryTable,
+    Amount,
+    Percentage,
+    HoursPerMonth,
+    Regime,
+    GridLine,
+    CategoryCode,
+    Component,
+    SourceNumber,
+    SourceTitle,
+    JortIssue,
+    LegalSource,
+    Page,
+    MonthsInDegree,
+    GridCell,
+    CareerEvent,
 }
 
 /// <summary>Raised when an operation would break a business invariant.</summary>

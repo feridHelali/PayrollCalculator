@@ -15,7 +15,7 @@
 
 ## Phases and sub-sprints
 
-The status of every sub-sprint is **To do**. Each one is written test first, in the test project of its layer. The "First
+Phase B (05.2 – 05.10) is **done** (see "Phase B outcome" below); every other sub-sprint is **to do**. Each one is written test first, in the test project of its layer. The "First
 tests" column gives the scenarios that drive the code.
 
 ### Phase A: discovery (no production code)
@@ -33,11 +33,23 @@ tests" column gives the scenarios that drive the code.
 | 05.3 | **Legal sources and citations** | `LegalSource` (kind, number, JORT issue and date, file), `Citation` (source, page, article) | A citation needs a source and a page; the JORT reference is formatted in Arabic in `Labels` |
 | 05.4 | **Rule events** | `RuleEvent` hierarchy: `GridLineDeclared`, `SalaryGridEnacted`, `SalaryGridRevalued`, `AllowanceIntroduced` / `Revalued` / `Abolished`, `CareerRuleChanged`, `WorkingTimeChanged`, (`MinimumWageChanged`). Invariants at creation | A grid with a missing cell is rejected, or kept and flagged; a revaluation of an unknown category is rejected; an amount must be ≥ 0 |
 | 05.5 | **Rulebook fold** | `Rulebook.From(events).At(day)` → `PayRules`; ordering by `(EffectiveFrom, kind, sequence)`; supersession; retroactivity | An enactment in 2024 replaces the one from 2022; a retroactive order published in 2025 with effect from 2024 changes 2024; two events on the same day apply in a fixed order; a retracted event is ignored |
-| 05.6 | **Revaluation rules** | `RevaluationRule` (percentage for all, percentage per category band, fixed amount), rounding, **published amounts override**, the published-vs-computed check | +6.5 % then +7 % gives 87.165 from the unrounded value; a published 81.462 beats a computed 81.463, with a warning |
+| 05.6 | **Revaluation rules** | `RevaluationRule` (percentage for all, percentage per category band, fixed amount), rounding, **published amounts override**, the published-vs-computed check | +6.5 % then +7 % compounds on the amount in force (76.491 → 81.463 → 87.165); a published 81.462 beats a computed 81.463, with a warning |
 | 05.7 | **Allowances** | `AllowanceBasis` strategy: fixed monthly, per hour, per day, percentage of base; seniority brackets | A percentage-of-base allowance follows a raise of the base without any new event; an abolished allowance disappears from that date |
 | 05.8 | **Career** | `CareerEvent` hierarchy (`Hired`, `Reclassified`, `DegreeOverridden`, `RegimeChanged`, `UnpaidAbsence`, `Separated`); `Career.At(day, rules)` with cumulative progression | The degree never goes down when the durations change (C4); a reclassification resets or keeps the seniority as answered in 05.0; an absence suspends the seniority (❓) |
 | 05.9 | **Pay ledger** | `PayLedgerBuilder` → `PayLedger` of `LedgerEntry`; `IProrationPolicy`; hourly → monthly conversion through the regime; `LedgerIssue`; causes and citations on each entry | First and last months prorated; an hourly grid converted with 208 h; a missing cell gives an issue, not a zero; **the golden case passes** |
 | 05.10 | **Ledger views** | `ChangesOnly()`, `Collapse()` (runs of identical months), `Filter(component, period, issuesOnly)`, totals per component and per year | Three months with the same values collapse into one row "from–to"; the filters can be combined |
+
+#### Phase B outcome
+
+- **Done:** 05.2 to 05.10, test first. Domain tests: 153 (78 before), 250 in all; 0 warnings. New namespaces in `PayrollCalculator.Domain`: `Common` (`Money`, `Percentage`, `RoundingRule`, `PayUnit`, `WorkRegime`, codes), `LegalSources`, `Rules` (events, `Rulebook`, `PayRules`, revaluation rules, allowance bases), `Careers` and `Ledger`. The old `SalaryTable` and `SalaryTimelineCalculator` are untouched until the parity test (05.12).
+- **Changed from the plan (05.6).** Neither rounding rule reproduces every published amount: in the 2024 order, 81.462 is cut, 113.423 is rounded, and 87.165 is computed from the unrounded 2024 amount while 9.036 is computed from the rounded 2025 one. So a raise compounds on the amount **in force** (the published one when the text gives it), the published amount always wins, and any difference is a `RuleWarning`. There is no attempt to reproduce the ministry's arithmetic.
+- **Assumptions, to confirm in 05.0** (each is a strategy or an option, so changing it touches one class):
+  - The rules and the position in force on the **first day worked** of a month apply to the whole month; a change during a month applies from the next month (questions 3 and 5).
+  - Proration by **calendar days** (`CalendarDaysProration`); `ThirtyDayProration` is ready (question 3).
+  - A reclassification **restarts** the time in degree, and an unpaid absence **suspends** it and the years of service (`CareerOptions`, questions 5 and 8).
+  - A degree with no duration in the career rule, or the last degree of the grid, is a ceiling.
+  - Amounts of the ledger are rounded half up to the millime.
+- **Not done yet:** the golden case (05.1, needs the domain expert); `MinimumWageChanged` (question 6); allowances that differ by regime or by category (question 2: the two columns of the 2024 order).
 
 ### Phase C: persistence and migration (`PayrollCalculator.Infrastructure`)
 

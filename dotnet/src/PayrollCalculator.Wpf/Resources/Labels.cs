@@ -180,6 +180,10 @@ public static class Labels
             DomainError.IdentityAlreadyAssigned => "المعرّف محدد مسبقا",
             DomainError.TableNotInAgreement => "جدول الأجور لا ينتمي إلى الاتفاقية المختارة",
             DomainError.TableAgreementLocked => "لا يمكن نقل جدول الأجور إلى اتفاقية أخرى",
+            DomainError.CareerMustStartWithHiring => "يجب أن يبدأ المسار المهني بالانتداب",
+            DomainError.OutsideCareer => "حدث خارج فترة المسار المهني (بعد انتهاء العمل)",
+            DomainError.NotApplicable => $"{field}{detail}: لا يمكن تطبيق هذا التعديل",
+            DomainError.Undeclared => $"{field}{detail} غير معرّف في هذا التاريخ",
             _ => "عملية غير مسموح بها: " + error.Message,
         };
     }
@@ -206,6 +210,21 @@ public static class Labels
         DomainField.Year => "السنة",
         DomainField.PasswordHash => Password,
         DomainField.SalaryTable => SalaryTable,
+        DomainField.Amount => Amount,
+        DomainField.Percentage => "النسبة المائوية",
+        DomainField.HoursPerMonth => "عدد الساعات في الشهر",
+        DomainField.Regime => "نظام العمل",
+        DomainField.GridLine => "سلسلة جداول الأجور",
+        DomainField.CategoryCode => "رمز الصنف",
+        DomainField.Component => "عنصر الأجر",
+        DomainField.SourceNumber => "عدد النص",
+        DomainField.SourceTitle => "عنوان النص",
+        DomainField.JortIssue => "عدد الرائد الرسمي",
+        DomainField.LegalSource => "النص القانوني",
+        DomainField.Page => "الصفحة",
+        DomainField.MonthsInDegree => "عدد الأشهر في الدرجة",
+        DomainField.GridCell => "خانة الجدول",
+        DomainField.CareerEvent => "حدث المسار المهني",
         _ => string.Empty,
     };
 
