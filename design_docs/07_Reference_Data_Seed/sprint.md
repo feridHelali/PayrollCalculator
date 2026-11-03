@@ -160,10 +160,11 @@ acceptable. Checked on a clean **Windows Sandbox** (no .NET), offline, in 07.9.
   for those entered by a user), an `Origin` (Seed / User) and a `SortOrder`. Seeded agreements can't be renamed or
   deleted (`ReadOnlySeed`). Migration `AddAgreementCodeAndOrigin` gives existing rows a unique user code. Still to
   do: `Origin` on legal sources and rule events.
-- **The 20 agreements** of the product owner's list are in `data/seed/agreements.json` (id = display order, Arabic
-  label, slug = code). The file is embedded in Infrastructure and applied on every startup by `ReferenceDataSeeder`:
-  idempotent, matched by code, it never touches user data. The legacy import now only refuses a database that holds
-  user data.
+- **The 20 agreements** of the product owner's list (id = display order, Arabic label, slug = code) are seeded by EF
+  `HasData` in the migrations, from `Infrastructure/Persistence/AgreementSeed.cs`. All migrations were **squashed into
+  one `InitialCreate`** (schema + this seed); databases created earlier must be reset. A start-up seeder and an
+  embedded JSON were tried first and dropped as needlessly complex. The legacy import now only refuses a database that
+  holds user data.
 - **07.2 done.** One library, `data/jort/files/` (15 PDFs; the duplicate folder and the two zips were removed after
   checking they were identical), `inbox/`, and `manifest.json` (SHA-256, size, pages, status, kind, number, date,
   JORT issue, agreements, notes). The tool `dotnet/tools/PayrollCalculator.Seed` (`payroll-seed`, PdfPig) provides

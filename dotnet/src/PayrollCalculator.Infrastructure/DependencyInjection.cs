@@ -15,7 +15,6 @@ using PayrollCalculator.Infrastructure.Security;
 using PayrollCalculator.Infrastructure.LegacyImport;
 using PayrollCalculator.Infrastructure.Persistence;
 using PayrollCalculator.Infrastructure.Persistence.Events;
-using PayrollCalculator.Infrastructure.Seeding;
 
 namespace PayrollCalculator.Infrastructure;
 
@@ -50,20 +49,18 @@ public static class DependencyInjection
         services.AddScoped<ILedgerSnapshotRepository, LedgerSnapshotRepository>();
         services.AddSingleton<ILedgerFingerprint>(new Sha256LedgerFingerprint());
         services.AddScoped<LegacyEventMigration>();
-        services.AddScoped<ReferenceDataSeeder>();
         services.TryAddSingleton(TimeProvider.System);
         services.AddScoped<ILegacyDataImporter, LegacyElectronImporter>();
         services.AddSingleton<IPasswordHasher>(new Pbkdf2PasswordHasher());
         return services;
     }
 
-    /// <summary>Creates the database folder, applies pending migrations, then the reference data shipped with this build.</summary>
+    /// <summary>Creates the database folder and applies pending migrations (which also seed the agreements).</summary>
     public static async Task MigrateDatabaseAsync(this IServiceProvider services, CancellationToken ct = default)
     {
         var options = services.GetRequiredService<DatabaseOptions>();
         Directory.CreateDirectory(Path.GetDirectoryName(options.DatabasePath)!);
         await using var scope = services.CreateAsyncScope();
         await scope.ServiceProvider.GetRequiredService<PayrollDbContext>().Database.MigrateAsync(ct).ConfigureAwait(false);
-        await scope.ServiceProvider.GetRequiredService<ReferenceDataSeeder>().SeedAsync(ct).ConfigureAwait(false);
     }
 }

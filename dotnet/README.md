@@ -20,9 +20,10 @@ dotnet ef migrations add <Name> -p src/PayrollCalculator.Infrastructure -s src/P
 
 - The database is created and migrated on startup at `%LOCALAPPDATA%\PayrollCalculator\payroll.db`. Set the
   `PAYROLL_DB_PATH` environment variable to use another file.
-- **Reference data (sprint 07).** On every startup the app applies the data shipped with the build: today the 20
-  sectoral agreements of `data/seed/agreements.json` (embedded in Infrastructure), matched by their stable code. Seeded
-  agreements are read-only in the app. The JORT PDFs live in `data/jort/files`, described by `data/jort/manifest.json`;
+- **One migration, `InitialCreate`**, creates the schema and seeds the 20 sectoral agreements (Arabic label, stable
+  code, display order) from `Infrastructure/Persistence/AgreementSeed.cs` with EF `HasData`. Seeded agreements are
+  read-only in the app. The migrations were squashed in sprint 07, so a database created before that must be reset
+  (`.\run.ps1 -Reset`). The JORT PDFs live in `data/jort/files`, described by `data/jort/manifest.json`;
   they are not shipped with the app.
 
 ## Sign-in and users

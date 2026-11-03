@@ -14,8 +14,8 @@ layoff. The UI is in **Arabic, RTL**. The product spec is `design_docs/00_Incept
   architecture and the business-rule assumptions.
 - `design_docs/`: specs, the agreement PDFs, sprint notes. `02_Legacy_Electron_Archive/electron-app/` is the former
   Electron app, kept for reference only. Don't build or change it.
-- `data/seed/`: reference data shipped with the app (JSON, the source of truth; today `agreements.json`, embedded in
-  Infrastructure and applied at startup). `data/jort/`: the JORT PDF library (`files/`, `inbox/`, `manifest.json`), used
+- The 20 sectoral agreements are seeded by the single migration `InitialCreate` (EF `HasData`, list in
+  `Infrastructure/Persistence/AgreementSeed.cs`). `data/jort/`: the JORT PDF library (`files/`, `inbox/`, `manifest.json`), used
   to build the seed, not shipped. Plan: `design_docs/07_Reference_Data_Seed/sprint.md`.
 - `dotnet/tests/fixtures/legacy-sample.sqlite`: the old Electron sample data (test fixture only; the app no longer uses it).
 

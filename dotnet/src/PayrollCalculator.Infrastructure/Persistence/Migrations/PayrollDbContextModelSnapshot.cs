@@ -116,6 +116,168 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Agreements", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "vetements_tisses_et_prets_a_porter",
+                            Name = "الاتفاقية المشتركة القطاعية لصناعة الملابس المنسوجة والجاهزة",
+                            Origin = "Seed",
+                            SortOrder = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "textile",
+                            Name = "الاتفاقية المشتركة القطاعية للنسيج",
+                            Origin = "Seed",
+                            SortOrder = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Code = "batiment_et_travaux_publics",
+                            Name = "الاتفاقية المشتركة القطاعية للبناء والأشغال العامة",
+                            Origin = "Seed",
+                            SortOrder = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Code = "transformation_du_plastique",
+                            Name = "الاتفاقية المشتركة القطاعية لصناعة تحويل البلاستيك",
+                            Origin = "Seed",
+                            SortOrder = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Code = "banques_et_institutions_financieres",
+                            Name = "الاتفاقية المشتركة القطاعية للبنوك والمؤسسات المالية",
+                            Origin = "Seed",
+                            SortOrder = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Code = "agences_de_voyages",
+                            Name = "الاتفاقية المشتركة القطاعية لوكالات الأسفار",
+                            Origin = "Seed",
+                            SortOrder = 6
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Code = "employes_des_pharmacies",
+                            Name = "الاتفاقية المشتركة القطاعية لمستخدمي الصيدليات",
+                            Origin = "Seed",
+                            SortOrder = 7
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Code = "enseignement_prive",
+                            Name = "الاتفاقية المشتركة القطاعية للتعليم الخاص",
+                            Origin = "Seed",
+                            SortOrder = 8
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Code = "hotels_touristiques",
+                            Name = "الاتفاقية المشتركة القطاعية للنزل السياحية والمؤسسات المشابهة",
+                            Origin = "Seed",
+                            SortOrder = 9
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Code = "assurances",
+                            Name = "الاتفاقية المشتركة القطاعية للتأمين",
+                            Origin = "Seed",
+                            SortOrder = 10
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Code = "fonderie_metallurgie_mecanique",
+                            Name = "الاتفاقية المشتركة القطاعية للمسابك والتعدين والبناءات الميكانيكية",
+                            Origin = "Seed",
+                            SortOrder = 11
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Code = "electricite_et_electronique",
+                            Name = "الاتفاقية المشتركة القطاعية لصناعة الكهرباء والألكترونيك",
+                            Origin = "Seed",
+                            SortOrder = 12
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Code = "construction_metallique",
+                            Name = "الاتفاقية المشتركة القطاعية للبناء المعدني",
+                            Origin = "Seed",
+                            SortOrder = 13
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Code = "constructeurs_et_concessionnaires_automobiles",
+                            Name = "الاتفاقية المشتركة القطاعية لصانعي ووكلاء السيارات",
+                            Origin = "Seed",
+                            SortOrder = 14
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Code = "equipements_agricoles_et_genie_civil",
+                            Name = "الاتفاقية المشتركة القطاعية لوكلاء التجهيزات الفلاحية والهندسة المدنية",
+                            Origin = "Seed",
+                            SortOrder = 15
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Code = "cliniques_privees",
+                            Name = "الاتفاقية المشتركة القطاعية للمصحات الخاصة",
+                            Origin = "Seed",
+                            SortOrder = 16
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Code = "gestion_des_dechets",
+                            Name = "الاتفاقية المشتركة القطاعية للتصرف في النفايات الصلبة والسائلة",
+                            Origin = "Seed",
+                            SortOrder = 17
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Code = "transformation_du_verre_et_miroiterie",
+                            Name = "الاتفاقية المشتركة القطاعية لتحويل البلور والمرآة",
+                            Origin = "Seed",
+                            SortOrder = 18
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Code = "commerce_et_distribution",
+                            Name = "الاتفاقية المشتركة القطاعية للتجارة وتوزيع المواد والمنتوجات",
+                            Origin = "Seed",
+                            SortOrder = 19
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Code = "explosifs_et_pyrotechnie",
+                            Name = "الاتفاقية المشتركة القطاعية للمفرقعات",
+                            Origin = "Seed",
+                            SortOrder = 20
+                        });
                 });
 
             modelBuilder.Entity("PayrollCalculator.Domain.Ledger.LedgerSnapshot", b =>

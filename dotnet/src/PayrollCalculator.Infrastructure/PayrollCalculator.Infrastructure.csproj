@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\PayrollCalculator.Application\PayrollCalculator.Application.csproj" />
@@ -12,11 +12,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.14" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.14" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- Reference data shipped with the product (sprint 07); the source of truth is data/seed in the repository. -->
-    <EmbeddedResource Include="../../../data/seed/agreements.json" LogicalName="seed.agreements.json" />
   </ItemGroup>
 
   <PropertyGroup>

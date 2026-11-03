@@ -19,6 +19,15 @@ internal sealed class AgreementConfiguration : IEntityTypeConfiguration<Sectoria
         b.Property(a => a.Origin).HasConversion<string>().HasMaxLength(10);
         b.Ignore(a => a.IsTransient);
         b.Ignore(a => a.IsSeeded);
+        b.HasData(AgreementSeed.All.Select(a => new
+        {
+            a.Id,
+            a.Code,
+            a.Name,
+            Description = (string?)null,
+            Origin = DataOrigin.Seed,
+            SortOrder = (int?)a.Id,
+        }));
     }
 }
 

@@ -1,3 +1,4 @@
+using PayrollCalculator.Application.Agreements;
 using System.IO;
 using PayrollCalculator.Domain.Calculation;
 using PayrollCalculator.Domain.SalaryTables;
@@ -42,21 +43,25 @@ public sealed class ViewModelTests : IDisposable
         return editor;
     }
 
+    /// <summary>The agreements entered by the user; the 20 seeded ones come first in the list.</summary>
+    private static List<AgreementDto> UserAgreements(AgreementsViewModel vm) => vm.Agreements.Where(a => !a.IsSeeded).ToList();
+
     [Fact]
     public async Task Agreements_create_edit_and_delete()
     {
         var vm = await AgreementsWithOneAsync("A");
-        Assert.Equal("A", Assert.Single(vm.Agreements).Name);
+        Assert.Equal("A", Assert.Single(UserAgreements(vm)).Name);
 
-        vm.SelectedAgreement = vm.Agreements[0];
+        vm.SelectedAgreement = UserAgreements(vm)[0];
         Assert.Equal("A", vm.EditName);
         vm.EditName = "B";
         await vm.SaveCommand.ExecuteAsync(null);
-        Assert.Equal("B", Assert.Single(vm.Agreements).Name);
+        Assert.Equal("B", Assert.Single(UserAgreements(vm)).Name);
 
-        vm.SelectedAgreement = vm.Agreements[0];
+        vm.SelectedAgreement = UserAgreements(vm)[0];
         await vm.DeleteCommand.ExecuteAsync(null);
-        Assert.Empty(vm.Agreements);
+        Assert.Empty(UserAgreements(vm));
+        Assert.Equal(20, vm.Agreements.Count);
     }
 
     [Fact]
@@ -64,11 +69,24 @@ public sealed class ViewModelTests : IDisposable
     {
         var vm = await AgreementsWithOneAsync();
         _app.Dialogs.ConfirmAnswer = false;
+        vm.SelectedAgreement = UserAgreements(vm)[0];
+
+        await vm.DeleteCommand.ExecuteAsync(null);
+
+        Assert.Single(UserAgreements(vm));
+    }
+
+    [Fact]
+    public async Task A_seeded_agreement_cannot_be_deleted_and_the_error_is_shown()
+    {
+        var vm = _app.Get<AgreementsViewModel>();
+        await vm.LoadAsync();
         vm.SelectedAgreement = vm.Agreements[0];
 
         await vm.DeleteCommand.ExecuteAsync(null);
 
-        Assert.Single(vm.Agreements);
+        Assert.Single(_app.Dialogs.Errors);
+        Assert.Equal(20, vm.Agreements.Count);
     }
 
     [Fact]
@@ -82,7 +100,7 @@ public sealed class ViewModelTests : IDisposable
         await vm.SaveCommand.ExecuteAsync(null);
 
         Assert.Single(_app.Dialogs.Errors);
-        Assert.Empty(vm.Agreements);
+        Assert.Empty(UserAgreements(vm));
     }
 
     [Fact]
