@@ -23,6 +23,9 @@ public static class Labels
     public const string SalaryTypeLabel = "نوع الجدول";
     public const string Monthly = "بالشهر";
     public const string Hourly = "بالساعة";
+    public const string GridKind = "نوع الجدول";
+    public const string DefaultRegime = "نظام العمل الافتراضي";
+    public const string HoursPerWeek = "ساعة في الأسبوع";
     public const string ConcernedEmployees = "الأعوان المعنيون";
     public const string StartDate = "تاريخ بداية التطبيق";
     public const string EndDate = "تاريخ نهاية التطبيق";

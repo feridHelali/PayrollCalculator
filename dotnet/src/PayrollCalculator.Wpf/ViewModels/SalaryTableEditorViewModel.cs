@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PayrollCalculator.Application.Agreements;
 using PayrollCalculator.Application.SalaryTables;
+using PayrollCalculator.Domain.Common;
 using PayrollCalculator.Domain.SalaryTables;
 using PayrollCalculator.Wpf.Resources;
 using PayrollCalculator.Wpf.Services;
@@ -81,6 +82,22 @@ public sealed partial class SalaryTableEditorViewModel(IServiceRunner runner, ID
 
     public ObservableCollection<AgreementDto> Agreements { get; } = [];
 
+    /// <summary>The kinds of grids the selected agreement defines; picking one fills the salary type and the employees.</summary>
+    public ObservableCollection<GridKindDto> GridKinds { get; } = [];
+
+    public bool HasGridKinds => GridKinds.Count > 0;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DefaultRegimeText))]
+    public partial GridKindDto? SelectedGridKind { get; set; }
+
+    /// <summary>The default working time of the selected grid kind, for example "48 ساعة في الأسبوع".</summary>
+    public string DefaultRegimeText => SelectedGridKind is { } kind
+        ? string.Create(CultureInfo.InvariantCulture, $"{kind.DefaultWeeklyHours} {Labels.HoursPerWeek}")
+        : string.Empty;
+
+    private bool _filling;
+
     public ObservableCollection<CategoryRowViewModel> Categories { get; } = [];
 
     public ObservableCollection<DegreeColumnViewModel> Degrees { get; } = [];
@@ -127,6 +144,33 @@ public sealed partial class SalaryTableEditorViewModel(IServiceRunner runner, ID
         var dto = await Runner.RunAsync<SalaryTableService, SalaryTableDto>(s => s.GetAsync(tableId)).ConfigureAwait(true);
         Fill(dto);
     });
+
+    partial void OnSelectedAgreementIdChanged(int? value)
+    {
+        GridKinds.Clear();
+        foreach (var kind in Agreements.FirstOrDefault(a => a.Id == value)?.GridKinds ?? [])
+        {
+            GridKinds.Add(kind);
+        }
+
+        SelectedGridKind = GridKinds.FirstOrDefault(k => k.Name == ConcernedEmployees);
+        OnPropertyChanged(nameof(HasGridKinds));
+    }
+
+    partial void OnSelectedGridKindChanged(GridKindDto? oldValue, GridKindDto? newValue)
+    {
+        if (_filling || newValue is null)
+        {
+            return;
+        }
+
+        SalaryType = newValue.Unit == PayUnit.Hourly ? SalaryType.Hourly : SalaryType.Monthly;
+        // Keep what the user typed; replace only an empty field or the previous kind's name.
+        if (string.IsNullOrWhiteSpace(ConcernedEmployees) || ConcernedEmployees == oldValue?.Name)
+        {
+            ConcernedEmployees = newValue.Name;
+        }
+    }
 
     [RelayCommand]
     private void AddCategory()
@@ -200,11 +244,13 @@ public sealed partial class SalaryTableEditorViewModel(IServiceRunner runner, ID
 
     private void Fill(SalaryTableDto dto)
     {
+        _filling = true;
         Id = dto.Id;
-        SelectedAgreementId = dto.AgreementId;
         TableNumber = dto.TableNumber;
         SalaryType = dto.SalaryType;
         ConcernedEmployees = dto.ConcernedEmployees;
+        SelectedAgreementId = dto.AgreementId; // after the employees, so a matching grid kind is shown as selected
+        _filling = false;
         StartDate = ToDateTime(dto.StartDate);
         EndDate = ToDateTime(dto.EndDate);
 

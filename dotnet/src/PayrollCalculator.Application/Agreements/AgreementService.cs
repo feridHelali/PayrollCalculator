@@ -57,5 +57,6 @@ public sealed class AgreementService(IAgreementRepository agreements, IUnitOfWor
         NotFoundException.OrThrow(agreements.GetAsync(id, ct), "Agreement", id);
 
     private static AgreementDto ToDto(SectorialJointAgreement a) => new(a.Id, a.Name, a.Description, a.Code, a.IsSeeded,
-        a.GridKinds.Select(k => new GridKindDto(k.Code, k.Name, k.Unit, k.DefaultWeeklyHours)).ToList());
+        a.GridKinds.OrderBy(k => k.Unit).ThenBy(k => k.Code, StringComparer.Ordinal) // monthly first; the database keeps no order
+            .Select(k => new GridKindDto(k.Code, k.Name, k.Unit, k.DefaultWeeklyHours)).ToList());
 }

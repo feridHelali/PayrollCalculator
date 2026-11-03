@@ -89,6 +89,61 @@ public sealed class ViewModelTests : IDisposable
         Assert.Equal(20, vm.Agreements.Count);
     }
 
+    private async Task<SalaryTableEditorViewModel> EditorOnAsync(string agreementCode)
+    {
+        var editor = _app.Get<SalaryTableEditorViewModel>();
+        await editor.LoadAsync(null);
+        editor.SelectedAgreementId = editor.Agreements.Single(a => a.Code == agreementCode).Id;
+        return editor;
+    }
+
+    [Fact]
+    public async Task Choosing_an_agreement_lists_its_grid_kinds_and_a_kind_fills_the_type_and_employees()
+    {
+        var editor = await EditorOnAsync("textile");
+
+        Assert.True(editor.HasGridKinds);
+        Assert.Equal(["mensuel_cadres_maitrise", "horaire_ouvriers"], editor.GridKinds.Select(k => k.Code));
+
+        editor.SelectedGridKind = editor.GridKinds[1];
+        Assert.Equal((SalaryType.Hourly, "جدول الأجور الخاص بالعملة (ساعي)"), (editor.SalaryType, editor.ConcernedEmployees));
+        Assert.Equal("48 ساعة في الأسبوع", editor.DefaultRegimeText);
+
+        editor.SelectedGridKind = editor.GridKinds[0];
+        Assert.Equal((SalaryType.Monthly, "جدول الأجور الخاص بالإطارات وأعوان التسيير"), (editor.SalaryType, editor.ConcernedEmployees));
+
+        editor.SelectedAgreementId = editor.Agreements.Single(a => a.Code == "banques_et_institutions_financieres").Id;
+        Assert.Single(editor.GridKinds);
+        Assert.Null(editor.SelectedGridKind);
+    }
+
+    [Fact]
+    public async Task A_grid_kind_does_not_overwrite_employees_typed_by_the_user()
+    {
+        var editor = await EditorOnAsync("textile");
+        editor.ConcernedEmployees = "عملة الحياكة";
+
+        editor.SelectedGridKind = editor.GridKinds[1];
+
+        Assert.Equal((SalaryType.Hourly, "عملة الحياكة"), (editor.SalaryType, editor.ConcernedEmployees));
+    }
+
+    [Fact]
+    public async Task A_saved_table_reopens_with_its_grid_kind_selected()
+    {
+        var editor = await EditorOnAsync("textile");
+        editor.SelectedGridKind = editor.GridKinds[1];
+        editor.TableNumber = "1";
+        editor.StartDate = new DateTime(2022, 6, 1);
+        await editor.SaveCommand.ExecuteAsync(null);
+
+        var reopened = _app.Get<SalaryTableEditorViewModel>();
+        await reopened.LoadAsync(editor.Id);
+
+        Assert.Equal("horaire_ouvriers", reopened.SelectedGridKind?.Code);
+        Assert.Equal(SalaryType.Hourly, reopened.SalaryType);
+    }
+
     [Fact]
     public async Task Domain_errors_are_shown_not_thrown()
     {
