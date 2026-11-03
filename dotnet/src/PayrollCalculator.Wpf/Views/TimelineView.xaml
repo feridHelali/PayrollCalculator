@@ -1,0 +1,46 @@
+<UserControl x:Class="PayrollCalculator.Wpf.Views.TimelineView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:PayrollCalculator.Wpf.ViewModels"
+             xmlns:res="clr-namespace:PayrollCalculator.Wpf.Resources"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:TimelineViewModel}">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <StackPanel DockPanel.Dock="Left" Style="{StaticResource Toolbar}" Margin="0">
+                <Button Style="{StaticResource PrimaryButton}" Content="{x:Static res:Labels.ExportCsv}" Command="{Binding ExportCsvCommand}" />
+                <Button Content="{x:Static res:Labels.Back}" Command="{Binding BackCommand}" />
+            </StackPanel>
+            <TextBlock Style="{StaticResource PageTitle}" Margin="16,0,0,12">
+                <Run Text="{Binding Title, Mode=OneWay}" />
+                <Run Text=" — " />
+                <Run Text="{Binding Affair.Claimant, Mode=OneWay}" />
+                <Run Text=" (" /><Run Text="{Binding Affair.AffairNumber, Mode=OneWay}" /><Run Text=")" />
+            </TextBlock>
+        </DockPanel>
+
+        <!-- Summary -->
+        <Border DockPanel.Dock="Top" Background="{StaticResource Brush.AccentLight}" Padding="14,10" Margin="0,0,0,10" CornerRadius="4">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{x:Static res:Labels.TotalMonthly}" Margin="0,0,8,0" />
+                <TextBlock Text="{Binding TotalMonthlyAmount, StringFormat=N3}" FontWeight="Bold" FlowDirection="LeftToRight" Margin="0,0,32,0" />
+                <TextBlock Text="{x:Static res:Labels.UnresolvedMonths}" Margin="0,0,8,0" />
+                <TextBlock Text="{Binding UnresolvedMonths}" FontWeight="Bold" Foreground="{StaticResource Brush.Warning}" />
+            </StackPanel>
+        </Border>
+
+        <DataGrid ItemsSource="{Binding Lines}" IsReadOnly="True" EnableRowVirtualization="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{x:Static res:Labels.Period}" Binding="{Binding Period}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.Seniority}" Binding="{Binding MonthsOfSeniority}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.Degree}" Binding="{Binding Degree}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.TableNumber}" Binding="{Binding TableNumber}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.SalaryTypeLabel}" Binding="{Binding SalaryType, Converter={StaticResource SalaryTypeText}}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.Amount}" Binding="{Binding Amount, StringFormat=N3}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.Status}" Binding="{Binding Issue, Converter={StaticResource IssueText}}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

@@ -1,0 +1,43 @@
+﻿<Window x:Class="PayrollCalculator.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:PayrollCalculator.Wpf.ViewModels"
+        xmlns:res="clr-namespace:PayrollCalculator.Wpf.Resources"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
+        Title="{x:Static res:Labels.AppTitle}"
+        Width="1280" Height="860" MinWidth="900" MinHeight="600"
+        WindowStartupLocation="CenterScreen"
+        FlowDirection="RightToLeft" Language="ar-TN"
+        FontFamily="Segoe UI" FontSize="14">
+    <DockPanel>
+        <!-- Status bar -->
+        <Border DockPanel.Dock="Bottom" Background="{StaticResource Brush.AccentLight}" Padding="12,4">
+            <DockPanel>
+                <ProgressBar DockPanel.Dock="Left" Width="120" Height="8" IsIndeterminate="True" Margin="0,0,12,0"
+                             Visibility="{Binding Status.IsBusy, Converter={StaticResource BoolToVisibility}}" />
+                <TextBlock Text="{Binding Status.Message}" VerticalAlignment="Center" />
+            </DockPanel>
+        </Border>
+
+        <!-- Side navigation -->
+        <Border DockPanel.Dock="Left" Width="230" Background="{StaticResource Brush.Nav}">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="{x:Static res:Labels.AppTitle}" Foreground="White"
+                           FontSize="20" FontWeight="Bold" Margin="16,20,16,24" />
+                <Button DockPanel.Dock="Bottom" Style="{StaticResource NavButton}" FontSize="13" Opacity="0.8"
+                        Content="{x:Static res:Labels.ImportLegacy}" Command="{Binding ImportLegacyCommand}" Margin="0,0,0,12" />
+                <StackPanel>
+                    <Button Style="{StaticResource NavButton}" Content="{x:Static res:Labels.Affairs}" Command="{Binding ShowAffairsCommand}" />
+                    <Button Style="{StaticResource NavButton}" Content="{x:Static res:Labels.SalaryTables}" Command="{Binding ShowSalaryTablesCommand}" />
+                    <Button Style="{StaticResource NavButton}" Content="{x:Static res:Labels.Agreements}" Command="{Binding ShowAgreementsCommand}" />
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- Current page (resolved through the DataTemplates in App.xaml) -->
+        <ContentControl Content="{Binding CurrentPage}" Margin="20" />
+    </DockPanel>
+</Window>

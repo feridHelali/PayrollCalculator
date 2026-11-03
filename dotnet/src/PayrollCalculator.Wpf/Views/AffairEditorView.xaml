@@ -1,0 +1,65 @@
+<UserControl x:Class="PayrollCalculator.Wpf.Views.AffairEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:PayrollCalculator.Wpf.ViewModels"
+             xmlns:res="clr-namespace:PayrollCalculator.Wpf.Resources"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:AffairEditorViewModel}">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <StackPanel DockPanel.Dock="Left" Style="{StaticResource Toolbar}" Margin="0">
+                <Button Style="{StaticResource PrimaryButton}" Content="{x:Static res:Labels.Save}" Command="{Binding SaveCommand}" />
+                <Button Content="{x:Static res:Labels.Timeline}" Command="{Binding TimelineCommand}" />
+                <Button Content="{x:Static res:Labels.Back}" Command="{Binding BackCommand}" />
+            </StackPanel>
+            <TextBlock Style="{StaticResource PageTitle}" Text="{Binding Title}" Margin="16,0,0,12" />
+        </DockPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid MaxWidth="900" HorizontalAlignment="Left">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="24" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <Label Content="{x:Static res:Labels.AffairNumber}" />
+                    <TextBox Text="{Binding AffairNumber, UpdateSourceTrigger=PropertyChanged}" />
+                    <Label Content="{x:Static res:Labels.Claimant}" />
+                    <TextBox Text="{Binding Claimant, UpdateSourceTrigger=PropertyChanged}" />
+                    <Label Content="{x:Static res:Labels.Title}" />
+                    <TextBox Text="{Binding AffairTitle}" />
+                    <Label Content="{x:Static res:Labels.StartOfWork}" />
+                    <DatePicker SelectedDate="{Binding StartDate}" />
+                    <Label Content="{x:Static res:Labels.EndOfWork}" />
+                    <DatePicker SelectedDate="{Binding EndDate}" />
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <Label Content="{x:Static res:Labels.Agreement}" />
+                    <ComboBox ItemsSource="{Binding Agreements}" DisplayMemberPath="Name" SelectedValuePath="Id"
+                              SelectedValue="{Binding SelectedAgreementId}" />
+                    <Label Content="{x:Static res:Labels.SalaryTable}" />
+                    <ComboBox ItemsSource="{Binding Tables}" SelectedValuePath="Id" SelectedValue="{Binding SelectedTableId}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <Run Text="{Binding TableNumber, Mode=OneWay}" FontWeight="SemiBold" />
+                                    <Run Text=" — " />
+                                    <Run Text="{Binding ConcernedEmployees, Mode=OneWay}" />
+                                    <Run Text=" (" /><Run Text="{Binding StartDate, Mode=OneWay, Converter={StaticResource DateText}}" /><Run Text=")" />
+                                </TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Label Content="{x:Static res:Labels.InitialCategory}" />
+                    <ComboBox IsEditable="True" ItemsSource="{Binding CategoryOptions}"
+                              Text="{Binding InitialCategory, UpdateSourceTrigger=PropertyChanged}" />
+                    <Label Content="{x:Static res:Labels.InitialDegree}" />
+                    <ComboBox IsEditable="True" ItemsSource="{Binding DegreeOptions}"
+                              Text="{Binding InitialDegree, UpdateSourceTrigger=LostFocus}" />
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

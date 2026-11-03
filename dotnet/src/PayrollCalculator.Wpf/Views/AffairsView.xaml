@@ -1,0 +1,31 @@
+<UserControl x:Class="PayrollCalculator.Wpf.Views.AffairsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:PayrollCalculator.Wpf.ViewModels"
+             xmlns:res="clr-namespace:PayrollCalculator.Wpf.Resources"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:AffairsViewModel}">
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top" Style="{StaticResource PageTitle}" Text="{Binding Title}" />
+        <StackPanel DockPanel.Dock="Top" Style="{StaticResource Toolbar}">
+            <Button Style="{StaticResource PrimaryButton}" Content="{x:Static res:Labels.New}" Command="{Binding NewCommand}" />
+            <Button Content="{x:Static res:Labels.Edit}" Command="{Binding EditCommand}" />
+            <Button Content="{x:Static res:Labels.Timeline}" Command="{Binding TimelineCommand}" />
+            <Button Content="{x:Static res:Labels.Delete}" Command="{Binding DeleteCommand}" />
+        </StackPanel>
+        <DataGrid ItemsSource="{Binding Affairs}" SelectedItem="{Binding SelectedAffair}" IsReadOnly="True"
+                  MouseDoubleClick="OnRowDoubleClick">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{x:Static res:Labels.AffairNumber}" Binding="{Binding AffairNumber}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.Claimant}" Binding="{Binding Claimant}" Width="2*" />
+                <DataGridTextColumn Header="{x:Static res:Labels.Title}" Binding="{Binding Title}" Width="2*" />
+                <DataGridTextColumn Header="{x:Static res:Labels.StartOfWork}" Binding="{Binding StartDate, Converter={StaticResource DateText}}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.EndOfWork}" Binding="{Binding EndDate, Converter={StaticResource DateText}}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.Agreement}" Binding="{Binding AgreementName}" Width="2*" />
+                <DataGridTextColumn Header="{x:Static res:Labels.TableNumber}" Binding="{Binding TableNumber}" Width="Auto" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

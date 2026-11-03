@@ -1,0 +1,96 @@
+<UserControl x:Class="PayrollCalculator.Wpf.Views.SalaryTableEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:PayrollCalculator.Wpf.ViewModels"
+             xmlns:v="clr-namespace:PayrollCalculator.Wpf.Views"
+             xmlns:res="clr-namespace:PayrollCalculator.Wpf.Resources"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:SalaryTableEditorViewModel}">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <StackPanel DockPanel.Dock="Left" Style="{StaticResource Toolbar}" Margin="0">
+                <Button Style="{StaticResource PrimaryButton}" Content="{x:Static res:Labels.Save}" Command="{Binding SaveCommand}" />
+                <Button Content="{x:Static res:Labels.Back}" Command="{Binding BackCommand}" />
+            </StackPanel>
+            <TextBlock Style="{StaticResource PageTitle}" Text="{Binding Title}" Margin="16,0,0,12" />
+        </DockPanel>
+
+        <!-- Header -->
+        <Grid DockPanel.Dock="Top" Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label Content="{x:Static res:Labels.Agreement}" />
+            <ComboBox Grid.Row="1" ItemsSource="{Binding Agreements}" DisplayMemberPath="Name" SelectedValuePath="Id"
+                      SelectedValue="{Binding SelectedAgreementId}" />
+            <Label Grid.Column="2" Content="{x:Static res:Labels.TableNumber}" />
+            <TextBox Grid.Column="2" Grid.Row="1" Text="{Binding TableNumber, UpdateSourceTrigger=PropertyChanged}" />
+            <Label Grid.Column="4" Content="{x:Static res:Labels.SalaryTypeLabel}" />
+            <ComboBox Grid.Column="4" Grid.Row="1" ItemsSource="{Binding SalaryTypes}" SelectedItem="{Binding SalaryType}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource SalaryTypeText}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Label Grid.Row="2" Content="{x:Static res:Labels.ConcernedEmployees}" />
+            <TextBox Grid.Row="3" Text="{Binding ConcernedEmployees}" />
+            <Label Grid.Row="2" Grid.Column="2" Content="{x:Static res:Labels.StartDate}" />
+            <DatePicker Grid.Row="3" Grid.Column="2" SelectedDate="{Binding StartDate}" />
+            <Label Grid.Row="2" Grid.Column="4" Content="{x:Static res:Labels.EndDate}" />
+            <DatePicker Grid.Row="3" Grid.Column="4" SelectedDate="{Binding EndDate}" />
+        </Grid>
+
+        <!-- Degrees (columns of the grid) -->
+        <GroupBox DockPanel.Dock="Left" Header="{x:Static res:Labels.Degrees}" Width="300" Margin="0,0,16,0" Padding="6">
+            <DockPanel>
+                <Button DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="0,0,0,6"
+                        Content="{x:Static res:Labels.AddDegree}" Command="{Binding AddDegreeCommand}" />
+                <DataGrid ItemsSource="{Binding Degrees}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="{x:Static res:Labels.Degree}" Binding="{Binding Number, UpdateSourceTrigger=LostFocus}" Width="Auto" />
+                        <DataGridTextColumn Header="{x:Static res:Labels.YearsInDegree}" Binding="{Binding YearsInDegree}" Width="*" />
+                        <DataGridTemplateColumn Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="✕" MinWidth="0" Padding="6,0" Margin="0"
+                                            Command="{Binding DataContext.RemoveDegreeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </GroupBox>
+
+        <!-- Salary grid: one row per category, one column per degree (generated) -->
+        <GroupBox Header="{x:Static res:Labels.SalaryGrid}" Padding="6">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Style="{StaticResource Toolbar}" Margin="0,0,0,6">
+                    <Button Content="{x:Static res:Labels.AddCategory}" Command="{Binding AddCategoryCommand}" />
+                    <Button Content="{x:Static res:Labels.Delete}" Command="{Binding RemoveCategoryCommand}" />
+                </StackPanel>
+                <DataGrid x:Name="Matrix" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}"
+                          FrozenColumnCount="1"
+                          v:MatrixColumns.Degrees="{Binding Degrees}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="{x:Static res:Labels.Category}" Binding="{Binding Label}" MinWidth="160" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </GroupBox>
+    </DockPanel>
+</UserControl>

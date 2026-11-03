@@ -1,0 +1,33 @@
+<UserControl x:Class="PayrollCalculator.Wpf.Views.SalaryTablesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:PayrollCalculator.Wpf.ViewModels"
+             xmlns:res="clr-namespace:PayrollCalculator.Wpf.Resources"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:SalaryTablesViewModel}">
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top" Style="{StaticResource PageTitle}" Text="{Binding Title}" />
+        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+            <ComboBox DockPanel.Dock="Left" Width="360" Margin="0,0,16,0"
+                      ItemsSource="{Binding AgreementFilter}" SelectedItem="{Binding SelectedFilter}" DisplayMemberPath="Name" />
+            <StackPanel Style="{StaticResource Toolbar}" Margin="0">
+                <Button Style="{StaticResource PrimaryButton}" Content="{x:Static res:Labels.New}" Command="{Binding NewCommand}" />
+                <Button Content="{x:Static res:Labels.Edit}" Command="{Binding EditCommand}" />
+                <Button Content="{x:Static res:Labels.Delete}" Command="{Binding DeleteCommand}" />
+            </StackPanel>
+        </DockPanel>
+        <DataGrid ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}" IsReadOnly="True"
+                  MouseDoubleClick="OnRowDoubleClick">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{x:Static res:Labels.Agreement}" Binding="{Binding AgreementName}" Width="2*" />
+                <DataGridTextColumn Header="{x:Static res:Labels.TableNumber}" Binding="{Binding TableNumber}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.SalaryTypeLabel}" Binding="{Binding SalaryType, Converter={StaticResource SalaryTypeText}}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.ConcernedEmployees}" Binding="{Binding ConcernedEmployees}" Width="2*" />
+                <DataGridTextColumn Header="{x:Static res:Labels.StartDate}" Binding="{Binding StartDate, Converter={StaticResource DateText}}" Width="Auto" />
+                <DataGridTextColumn Header="{x:Static res:Labels.EndDate}" Binding="{Binding EndDate, Converter={StaticResource DateText}}" Width="Auto" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>
