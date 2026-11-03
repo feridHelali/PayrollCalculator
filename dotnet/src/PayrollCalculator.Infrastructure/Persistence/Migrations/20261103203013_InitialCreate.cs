@@ -69,6 +69,29 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AgreementGridKinds",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Code = table.Column<string>(type: "TEXT", maxLength: 80, nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    Unit = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false),
+                    DefaultWeeklyHours = table.Column<int>(type: "INTEGER", nullable: false),
+                    AgreementId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AgreementGridKinds", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AgreementGridKinds_Agreements_AgreementId",
+                        column: x => x.AgreementId,
+                        principalTable: "Agreements",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SalaryTables",
                 columns: table => new
                 {
@@ -306,6 +329,50 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                     { 20, "explosifs_et_pyrotechnie", null, "الاتفاقية المشتركة القطاعية للمفرقعات", "Seed", 20 }
                 });
 
+            migrationBuilder.InsertData(
+                table: "AgreementGridKinds",
+                columns: new[] { "Id", "AgreementId", "Code", "DefaultWeeklyHours", "Name", "Unit" },
+                values: new object[,]
+                {
+                    { 1, 1, "mensuel_cadres_maitrise", 48, "جدول الأجور الخاص بالإطارات وأعوان التسيير (شهري)", "Monthly" },
+                    { 2, 1, "horaire_executants", 48, "جدول الأجور الخاص بأعوان التنفيذ (ساعي)", "Hourly" },
+                    { 3, 2, "mensuel_cadres_maitrise", 48, "جدول الأجور الخاص بالإطارات وأعوان التسيير", "Monthly" },
+                    { 4, 2, "horaire_ouvriers", 48, "جدول الأجور الخاص بالعملة (ساعي)", "Hourly" },
+                    { 5, 3, "mensuel_administratif_technique", 48, "جدول أجور الأعوان الإداريين والفنيين والإطارات", "Monthly" },
+                    { 6, 3, "horaire_ouvriers_qualifies", 48, "جدول أجور عملة التنفيذ (ساعي)", "Hourly" },
+                    { 7, 4, "mensuel_cadres_maitrise", 48, "جدول الأجور الخاص بالإطارات وأعوان التسيير", "Monthly" },
+                    { 8, 4, "horaire_executants", 48, "جدول أجور أعوان التنفيذ والعملة", "Hourly" },
+                    { 9, 5, "mensuel_agents_titulaires", 40, "جدول الأجور الموحد لأعوان البنوك والمؤسسات المالية (شهري)", "Monthly" },
+                    { 10, 6, "mensuel_toutes_categories", 48, "جدول الأجور الأساسية الموحد لجميع الأصناف", "Monthly" },
+                    { 11, 7, "mensuel_diplomes_et_cadres", 40, "جدول أجور الصيادلة المساعدين والإطارات", "Monthly" },
+                    { 12, 7, "mensuel_preparateurs_et_employes", 40, "جدول أجور المحضرين وأعوان الصيدليات", "Monthly" },
+                    { 13, 8, "mensuel_enseignants", 40, "جدول أجور سلك التدريس والتعليم", "Monthly" },
+                    { 14, 8, "mensuel_administratif", 40, "جدول أجور السلك الإداري وأعوان الإحاطة", "Monthly" },
+                    { 15, 9, "mensuel_cadres_maitrise", 48, "جدول أجور إطارات وأعوان تسيير المؤسسات السياحية", "Monthly" },
+                    { 16, 9, "mensuel_horaire_execution", 48, "جدول أجور أعوان التنفيذ (حسب نظام العمل)", "Monthly" },
+                    { 17, 10, "mensuel_toutes_categories", 40, "جدول الأجور الأساسية الموحد لأعوان شركات التأمين", "Monthly" },
+                    { 18, 11, "mensuel_cadres_maitrise", 48, "جدول أجور الإطارات وأعوان التسيير (المعادن)", "Monthly" },
+                    { 19, 11, "horaire_ouvriers", 48, "جدول أجور عملة التنفيذ بسلك التعدين (ساعي)", "Hourly" },
+                    { 20, 12, "mensuel_cadres_maitrise", 48, "جدول الأجور الخاص بالإطارات وأعوان التسيير", "Monthly" },
+                    { 21, 12, "horaire_executants", 48, "جدول أجور أعوان التنفيذ والعملة (ساعي)", "Hourly" },
+                    { 22, 13, "mensuel_cadres_maitrise", 48, "جدول الأجور الخاص بالإطارات وأعوان التسيير", "Monthly" },
+                    { 23, 13, "horaire_ouvriers", 48, "جدول أجور عملة التنفيذ (ساعي)", "Hourly" },
+                    { 24, 14, "mensuel_cadres_maitrise", 48, "جدول الأجور الخاص بإطارات وأعوان تسيير قطاع السيارات", "Monthly" },
+                    { 25, 14, "horaire_ouvriers", 48, "جدول أجور أعوان التنفيذ والعملة (ساعي)", "Hourly" },
+                    { 26, 15, "mensuel_cadres_maitrise", 48, "جدول الأجور الخاص بالإطارات وأعوان التسيير", "Monthly" },
+                    { 27, 15, "horaire_executants", 48, "جدول أجور عملة وأعوان التنفيذ (ساعي)", "Hourly" },
+                    { 28, 16, "mensuel_cadres_paramedical", 40, "جدول أجور الإطارات الطبية الموازية والإداريين", "Monthly" },
+                    { 29, 16, "mensuel_execution_ouvriers", 40, "جدول أجور أعوان التنفيذ والعملة بالمصحات", "Monthly" },
+                    { 30, 17, "mensuel_cadres_maitrise", 48, "جدول أجور سلك الإطارات وأعوان الإشراف", "Monthly" },
+                    { 31, 17, "horaire_ouvriers_execution", 48, "جدول أجور عملة التنفيذ الميدانيين (ساعي)", "Hourly" },
+                    { 32, 18, "mensuel_cadres_maitrise", 48, "جدول أجور إطارات وأعوان تسيير قطاع البلور", "Monthly" },
+                    { 33, 18, "horaire_ouvriers", 48, "جدول أجور عملة الفروع المهنية للتنفيذ (ساعي)", "Hourly" },
+                    { 34, 19, "mensuel_cadres_maitrise", 48, "جدول الأجور الخاص بالإطارات وأعوان التسيير والتجارة", "Monthly" },
+                    { 35, 19, "mensuel_execution", 48, "جدول الأجور الخاص بأعوان التنفيذ والخدمات", "Monthly" },
+                    { 36, 20, "mensuel_cadres_maitrise", 48, "جدول أجور الإطارات الفنية والإدارية", "Monthly" },
+                    { 37, 20, "horaire_ouvriers_depots", 48, "جدول أجور عملة ومناولى المواد المتفجرة (ساعي)", "Hourly" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Affairs_AgreementId",
                 table: "Affairs",
@@ -315,6 +382,12 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                 name: "IX_Affairs_SalaryTableId",
                 table: "Affairs",
                 column: "SalaryTableId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AgreementGridKinds_AgreementId_Code",
+                table: "AgreementGridKinds",
+                columns: new[] { "AgreementId", "Code" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Agreements_Code",
@@ -384,6 +457,9 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AgreementGridKinds");
+
             migrationBuilder.DropTable(
                 name: "CareerEvents");
 

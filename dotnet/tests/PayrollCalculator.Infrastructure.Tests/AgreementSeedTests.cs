@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PayrollCalculator.Domain.Agreements;
+using PayrollCalculator.Domain.Common;
 using PayrollCalculator.Infrastructure.Persistence;
 
 namespace PayrollCalculator.Infrastructure.Tests;
@@ -40,5 +41,20 @@ public sealed class AgreementSeedTests : IDisposable
         Assert.True(id > 20);
         Assert.Equal(DataOrigin.User, (await new AgreementRepository(check).GetAsync(id))!.Origin);
         Assert.NotNull(await new AgreementRepository(check).FindByCodeAsync("textile"));
+    }
+
+    [Fact]
+    public async Task Each_agreement_comes_with_its_salary_grid_kinds()
+    {
+        await using var ctx = _db.NewContext();
+        var agreements = await ctx.Agreements.ToListAsync();
+
+        Assert.Equal(37, agreements.Sum(a => a.GridKinds.Count));
+        Assert.All(agreements, a => Assert.InRange(a.GridKinds.Count, 1, 2));
+        var textile = agreements.Single(a => a.Code == "textile");
+        var hourly = textile.GridKinds.Single(k => k.Code == "horaire_ouvriers");
+        Assert.Equal((PayUnit.Hourly, 48, "جدول الأجور الخاص بالعملة (ساعي)"), (hourly.Unit, hourly.DefaultWeeklyHours, hourly.Name));
+        Assert.Equal((PayUnit.Monthly, 40), (agreements.Single(a => a.Code == "banques_et_institutions_financieres").GridKinds[0].Unit,
+            agreements.Single(a => a.Code == "banques_et_institutions_financieres").GridKinds[0].DefaultWeeklyHours));
     }
 }

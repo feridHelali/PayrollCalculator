@@ -28,6 +28,28 @@ internal sealed class AgreementConfiguration : IEntityTypeConfiguration<Sectoria
             Origin = DataOrigin.Seed,
             SortOrder = (int?)a.Id,
         }));
+
+        b.OwnsMany(a => a.GridKinds, k =>
+        {
+            k.ToTable("AgreementGridKinds");
+            k.WithOwner().HasForeignKey("AgreementId");
+            k.Property<int>("Id");
+            k.HasKey("Id");
+            k.Property(x => x.Code).IsRequired().HasMaxLength(80);
+            k.Property(x => x.Name).IsRequired().HasMaxLength(500);
+            k.Property(x => x.Unit).HasConversion<string>().HasMaxLength(10);
+            k.HasIndex("AgreementId", nameof(SalaryGridKind.Code)).IsUnique();
+            k.HasData(AgreementSeed.GridKinds.Select(g => new
+            {
+                g.Id,
+                g.AgreementId,
+                g.Code,
+                g.Name,
+                g.Unit,
+                g.DefaultWeeklyHours,
+            }));
+        });
+        b.Navigation(a => a.GridKinds).UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }
 

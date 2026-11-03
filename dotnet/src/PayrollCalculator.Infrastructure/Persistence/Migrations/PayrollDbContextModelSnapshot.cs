@@ -581,6 +581,384 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
                 });
 
+            modelBuilder.Entity("PayrollCalculator.Domain.Agreements.SectorialJointAgreement", b =>
+                {
+                    b.OwnsMany("PayrollCalculator.Domain.Agreements.SalaryGridKind", "GridKinds", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<int>("AgreementId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<string>("Code")
+                                .IsRequired()
+                                .HasMaxLength(80)
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("DefaultWeeklyHours")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasMaxLength(500)
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Unit")
+                                .IsRequired()
+                                .HasMaxLength(10)
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("AgreementId", "Code")
+                                .IsUnique();
+
+                            b1.ToTable("AgreementGridKinds", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("AgreementId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    Id = 1,
+                                    AgreementId = 1,
+                                    Code = "mensuel_cadres_maitrise",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول الأجور الخاص بالإطارات وأعوان التسيير (شهري)",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 2,
+                                    AgreementId = 1,
+                                    Code = "horaire_executants",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول الأجور الخاص بأعوان التنفيذ (ساعي)",
+                                    Unit = "Hourly"
+                                },
+                                new
+                                {
+                                    Id = 3,
+                                    AgreementId = 2,
+                                    Code = "mensuel_cadres_maitrise",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول الأجور الخاص بالإطارات وأعوان التسيير",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 4,
+                                    AgreementId = 2,
+                                    Code = "horaire_ouvriers",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول الأجور الخاص بالعملة (ساعي)",
+                                    Unit = "Hourly"
+                                },
+                                new
+                                {
+                                    Id = 5,
+                                    AgreementId = 3,
+                                    Code = "mensuel_administratif_technique",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول أجور الأعوان الإداريين والفنيين والإطارات",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 6,
+                                    AgreementId = 3,
+                                    Code = "horaire_ouvriers_qualifies",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول أجور عملة التنفيذ (ساعي)",
+                                    Unit = "Hourly"
+                                },
+                                new
+                                {
+                                    Id = 7,
+                                    AgreementId = 4,
+                                    Code = "mensuel_cadres_maitrise",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول الأجور الخاص بالإطارات وأعوان التسيير",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 8,
+                                    AgreementId = 4,
+                                    Code = "horaire_executants",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول أجور أعوان التنفيذ والعملة",
+                                    Unit = "Hourly"
+                                },
+                                new
+                                {
+                                    Id = 9,
+                                    AgreementId = 5,
+                                    Code = "mensuel_agents_titulaires",
+                                    DefaultWeeklyHours = 40,
+                                    Name = "جدول الأجور الموحد لأعوان البنوك والمؤسسات المالية (شهري)",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 10,
+                                    AgreementId = 6,
+                                    Code = "mensuel_toutes_categories",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول الأجور الأساسية الموحد لجميع الأصناف",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 11,
+                                    AgreementId = 7,
+                                    Code = "mensuel_diplomes_et_cadres",
+                                    DefaultWeeklyHours = 40,
+                                    Name = "جدول أجور الصيادلة المساعدين والإطارات",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 12,
+                                    AgreementId = 7,
+                                    Code = "mensuel_preparateurs_et_employes",
+                                    DefaultWeeklyHours = 40,
+                                    Name = "جدول أجور المحضرين وأعوان الصيدليات",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 13,
+                                    AgreementId = 8,
+                                    Code = "mensuel_enseignants",
+                                    DefaultWeeklyHours = 40,
+                                    Name = "جدول أجور سلك التدريس والتعليم",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 14,
+                                    AgreementId = 8,
+                                    Code = "mensuel_administratif",
+                                    DefaultWeeklyHours = 40,
+                                    Name = "جدول أجور السلك الإداري وأعوان الإحاطة",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 15,
+                                    AgreementId = 9,
+                                    Code = "mensuel_cadres_maitrise",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول أجور إطارات وأعوان تسيير المؤسسات السياحية",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 16,
+                                    AgreementId = 9,
+                                    Code = "mensuel_horaire_execution",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول أجور أعوان التنفيذ (حسب نظام العمل)",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 17,
+                                    AgreementId = 10,
+                                    Code = "mensuel_toutes_categories",
+                                    DefaultWeeklyHours = 40,
+                                    Name = "جدول الأجور الأساسية الموحد لأعوان شركات التأمين",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 18,
+                                    AgreementId = 11,
+                                    Code = "mensuel_cadres_maitrise",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول أجور الإطارات وأعوان التسيير (المعادن)",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 19,
+                                    AgreementId = 11,
+                                    Code = "horaire_ouvriers",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول أجور عملة التنفيذ بسلك التعدين (ساعي)",
+                                    Unit = "Hourly"
+                                },
+                                new
+                                {
+                                    Id = 20,
+                                    AgreementId = 12,
+                                    Code = "mensuel_cadres_maitrise",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول الأجور الخاص بالإطارات وأعوان التسيير",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 21,
+                                    AgreementId = 12,
+                                    Code = "horaire_executants",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول أجور أعوان التنفيذ والعملة (ساعي)",
+                                    Unit = "Hourly"
+                                },
+                                new
+                                {
+                                    Id = 22,
+                                    AgreementId = 13,
+                                    Code = "mensuel_cadres_maitrise",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول الأجور الخاص بالإطارات وأعوان التسيير",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 23,
+                                    AgreementId = 13,
+                                    Code = "horaire_ouvriers",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول أجور عملة التنفيذ (ساعي)",
+                                    Unit = "Hourly"
+                                },
+                                new
+                                {
+                                    Id = 24,
+                                    AgreementId = 14,
+                                    Code = "mensuel_cadres_maitrise",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول الأجور الخاص بإطارات وأعوان تسيير قطاع السيارات",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 25,
+                                    AgreementId = 14,
+                                    Code = "horaire_ouvriers",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول أجور أعوان التنفيذ والعملة (ساعي)",
+                                    Unit = "Hourly"
+                                },
+                                new
+                                {
+                                    Id = 26,
+                                    AgreementId = 15,
+                                    Code = "mensuel_cadres_maitrise",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول الأجور الخاص بالإطارات وأعوان التسيير",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 27,
+                                    AgreementId = 15,
+                                    Code = "horaire_executants",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول أجور عملة وأعوان التنفيذ (ساعي)",
+                                    Unit = "Hourly"
+                                },
+                                new
+                                {
+                                    Id = 28,
+                                    AgreementId = 16,
+                                    Code = "mensuel_cadres_paramedical",
+                                    DefaultWeeklyHours = 40,
+                                    Name = "جدول أجور الإطارات الطبية الموازية والإداريين",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 29,
+                                    AgreementId = 16,
+                                    Code = "mensuel_execution_ouvriers",
+                                    DefaultWeeklyHours = 40,
+                                    Name = "جدول أجور أعوان التنفيذ والعملة بالمصحات",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 30,
+                                    AgreementId = 17,
+                                    Code = "mensuel_cadres_maitrise",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول أجور سلك الإطارات وأعوان الإشراف",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 31,
+                                    AgreementId = 17,
+                                    Code = "horaire_ouvriers_execution",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول أجور عملة التنفيذ الميدانيين (ساعي)",
+                                    Unit = "Hourly"
+                                },
+                                new
+                                {
+                                    Id = 32,
+                                    AgreementId = 18,
+                                    Code = "mensuel_cadres_maitrise",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول أجور إطارات وأعوان تسيير قطاع البلور",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 33,
+                                    AgreementId = 18,
+                                    Code = "horaire_ouvriers",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول أجور عملة الفروع المهنية للتنفيذ (ساعي)",
+                                    Unit = "Hourly"
+                                },
+                                new
+                                {
+                                    Id = 34,
+                                    AgreementId = 19,
+                                    Code = "mensuel_cadres_maitrise",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول الأجور الخاص بالإطارات وأعوان التسيير والتجارة",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 35,
+                                    AgreementId = 19,
+                                    Code = "mensuel_execution",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول الأجور الخاص بأعوان التنفيذ والخدمات",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 36,
+                                    AgreementId = 20,
+                                    Code = "mensuel_cadres_maitrise",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول أجور الإطارات الفنية والإدارية",
+                                    Unit = "Monthly"
+                                },
+                                new
+                                {
+                                    Id = 37,
+                                    AgreementId = 20,
+                                    Code = "horaire_ouvriers_depots",
+                                    DefaultWeeklyHours = 48,
+                                    Name = "جدول أجور عملة ومناولى المواد المتفجرة (ساعي)",
+                                    Unit = "Hourly"
+                                });
+                        });
+
+                    b.Navigation("GridKinds");
+                });
+
             modelBuilder.Entity("PayrollCalculator.Domain.Ledger.LedgerSnapshot", b =>
                 {
                     b.HasOne("PayrollCalculator.Domain.Affairs.Affair", null)

@@ -4,9 +4,14 @@ using PayrollCalculator.Domain.Common;
 
 namespace PayrollCalculator.Application.Agreements;
 
+/// <summary>A kind of salary grid of an agreement, offered when creating a grid.</summary>
+public sealed record GridKindDto(string Code, string Name, PayUnit Unit, int DefaultWeeklyHours);
+
 /// <param name="Code">Stable code (read only); null when creating.</param>
 /// <param name="IsSeeded">Shipped with the product, so read only (D4).</param>
-public sealed record AgreementDto(int Id, string Name, string? Description, string? Code = null, bool IsSeeded = false);
+/// <param name="GridKinds">The salary grid kinds the agreement defines (read only).</param>
+public sealed record AgreementDto(int Id, string Name, string? Description, string? Code = null, bool IsSeeded = false,
+    IReadOnlyList<GridKindDto>? GridKinds = null);
 
 /// <summary>Use cases for sectoral joint agreements.</summary>
 public sealed class AgreementService(IAgreementRepository agreements, IUnitOfWork unitOfWork)
@@ -51,5 +56,6 @@ public sealed class AgreementService(IAgreementRepository agreements, IUnitOfWor
     private Task<SectorialJointAgreement> Load(int id, CancellationToken ct) =>
         NotFoundException.OrThrow(agreements.GetAsync(id, ct), "Agreement", id);
 
-    private static AgreementDto ToDto(SectorialJointAgreement a) => new(a.Id, a.Name, a.Description, a.Code, a.IsSeeded);
+    private static AgreementDto ToDto(SectorialJointAgreement a) => new(a.Id, a.Name, a.Description, a.Code, a.IsSeeded,
+        a.GridKinds.Select(k => new GridKindDto(k.Code, k.Name, k.Unit, k.DefaultWeeklyHours)).ToList());
 }

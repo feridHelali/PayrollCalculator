@@ -13,9 +13,38 @@ public enum DataOrigin
     Seed = 1,
 }
 
+/// <summary>
+/// A kind of salary grid an agreement defines (for example the monthly grid of cadres and supervisors, or the hourly
+/// grid of workers). It tells a new grid its unit and its default working time.
+/// </summary>
+public sealed class SalaryGridKind
+{
+    internal SalaryGridKind(string code, string name, PayUnit unit, int defaultWeeklyHours)
+    {
+        Code = code;
+        Name = name;
+        Unit = unit;
+        DefaultWeeklyHours = defaultWeeklyHours;
+    }
+
+    /// <summary>Stable within the agreement, for example <c>mensuel_cadres_maitrise</c> or <c>horaire_ouvriers</c>.</summary>
+    public string Code { get; private set; }
+
+    /// <summary>Arabic name of the grid.</summary>
+    public string Name { get; private set; }
+
+    /// <summary>Monthly salaries or hourly rates.</summary>
+    public PayUnit Unit { get; private set; }
+
+    /// <summary>Default work regime, in hours per week (48 or 40).</summary>
+    public int DefaultWeeklyHours { get; private set; }
+}
+
 /// <summary>A sectoral joint agreement (الاتفاقية المشتركة القطاعية).</summary>
 public sealed partial class SectorialJointAgreement : Entity
 {
+    private readonly List<SalaryGridKind> _gridKinds = [];
+
     private SectorialJointAgreement(string code, string name, string? description, DataOrigin origin, int? sortOrder)
     {
         Code = code;
@@ -41,6 +70,9 @@ public sealed partial class SectorialJointAgreement : Entity
     public int? SortOrder { get; private set; }
 
     public bool IsSeeded => Origin == DataOrigin.Seed;
+
+    /// <summary>The kinds of salary grids the agreement defines (seeded with the agreement).</summary>
+    public IReadOnlyList<SalaryGridKind> GridKinds => _gridKinds;
 
     /// <summary>An agreement entered by a user; it gets a generated code.</summary>
     public static SectorialJointAgreement Create(string name, string? description) =>
