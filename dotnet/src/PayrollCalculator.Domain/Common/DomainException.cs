@@ -69,6 +69,8 @@ public enum DomainField
     Reviewer,
     LedgerSnapshot,
     Affair,
+    DaysWorked,
+    Unit,
 }
 
 /// <summary>Raised when an operation would break a business invariant.</summary>

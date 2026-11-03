@@ -244,6 +244,7 @@ public static class EventJson
     {
         FixedMonthly b => new JsonObject { ["type"] = "fixedMonthly", ["amount"] = b.Value.Dinars },
         PerHour b => new JsonObject { ["type"] = "perHour", ["rate"] = b.Rate.Dinars },
+        PerDayWorked b => new JsonObject { ["type"] = "perDayWorked", ["rate"] = b.Rate.Dinars, ["daysPerFullMonth"] = b.DaysPerFullMonth },
         PercentOfBase b => new JsonObject { ["type"] = "percentOfBase", ["percent"] = b.Percentage.Value },
         SeniorityBrackets b => new JsonObject
         {
@@ -257,6 +258,7 @@ public static class EventJson
     {
         "fixedMonthly" => new FixedMonthly(ReadMoney(basis["amount"])),
         "perHour" => new PerHour(ReadMoney(basis["rate"])),
+        "perDayWorked" => new PerDayWorked(ReadMoney(basis["rate"]), basis["daysPerFullMonth"]!.GetValue<decimal>()),
         "percentOfBase" => new PercentOfBase(new Percentage(basis["percent"]!.GetValue<decimal>())),
         "seniorityBrackets" => new SeniorityBrackets(basis["brackets"]!.AsArray()
             .Select(x => new SeniorityBracket(x!["fromYears"]!.GetValue<int>(), new Percentage(x["percent"]!.GetValue<decimal>())))),

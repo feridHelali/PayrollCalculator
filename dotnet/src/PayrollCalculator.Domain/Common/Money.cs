@@ -17,6 +17,9 @@ public enum PayUnit
 {
     Monthly = 0,
     Hourly = 1,
+
+    /// <summary>Per day worked (for example a meal allowance). Allowances only: a grid is monthly or hourly.</summary>
+    Daily = 2,
 }
 
 /// <summary>

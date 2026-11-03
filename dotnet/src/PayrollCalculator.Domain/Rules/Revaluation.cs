@@ -55,6 +55,12 @@ public enum RuleWarningKind
 
     /// <summary>A grid lacks a cell (category/degree) that the rest of the grid implies.</summary>
     GridIncomplete,
+
+    /// <summary>
+    /// An amount is lower than the one of the degree before it, in the same category: most likely a misreading.
+    /// <see cref="RuleWarning.Computed"/> holds the lower degree's amount and <see cref="RuleWarning.Published"/> this one's.
+    /// </summary>
+    NonMonotonicGrid,
 }
 
 /// <summary>A point to review, raised while folding the events.</summary>

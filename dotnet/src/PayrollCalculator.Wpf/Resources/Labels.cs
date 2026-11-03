@@ -232,6 +232,8 @@ public static class Labels
         DomainField.Reviewer => "المراجع",
         DomainField.LedgerSnapshot => "نسخة السجل",
         DomainField.Affair => Affair,
+        DomainField.DaysWorked => "عدد أيام العمل",
+        DomainField.Unit => "وحدة الأجر",
         _ => string.Empty,
     };
 

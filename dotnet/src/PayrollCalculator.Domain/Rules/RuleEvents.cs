@@ -60,7 +60,7 @@ public sealed record GridLineDeclared : RuleEvent
         ArgumentNullException.ThrowIfNull(categories);
         Line = line;
         Name = Guard.Required(name, DomainField.GridLine);
-        Unit = unit;
+        Unit = unit is PayUnit.Monthly or PayUnit.Hourly ? unit : throw new DomainException(DomainError.OutOfRange, DomainField.Unit, unit.ToString());
         Categories = categories.ToImmutableArray();
         if (Categories.Count == 0)
         {
@@ -127,6 +127,7 @@ public sealed record SalaryGridEnacted : RuleEvent
             }
         }
 
+        GridCells.WarnIfDecreasing(grid, null, Id, warnings);
         return rules.WithLine(line with { Grid = grid });
     }
 }
@@ -187,7 +188,9 @@ public sealed record SalaryGridRevalued : RuleEvent
             return computed is { } amount ? new GridValue(amount, Id) : pair.Value;
         });
 
-        return rules.WithLine(line with { Grid = new SalaryGrid(cells) });
+        var raised = new SalaryGrid(cells);
+        GridCells.WarnIfDecreasing(raised, grid, Id, warnings);
+        return rules.WithLine(line with { Grid = raised });
     }
 }
 
@@ -320,6 +323,27 @@ public sealed record AllowanceAbolished : RuleEvent
 
 internal static class GridCells
 {
+    /// <summary>
+    /// Warns for each cell lower than the one of the previous degree in its category (G2: a likely misreading).
+    /// With <paramref name="before"/>, only the decreases this event introduces are reported.
+    /// </summary>
+    public static void WarnIfDecreasing(SalaryGrid grid, SalaryGrid? before, Guid eventId, ICollection<RuleWarning> warnings)
+    {
+        foreach (var category in grid.Cells.Keys.Select(k => k.Category).Distinct())
+        {
+            var degrees = grid.Cells.Keys.Where(k => k.Category == category).Select(k => k.Degree).Order().ToList();
+            for (var i = 1; i < degrees.Count; i++)
+            {
+                var (lower, higher) = (grid.AmountFor(category, degrees[i - 1])!.Value, grid.AmountFor(category, degrees[i])!.Value);
+                var wasDecreasing = before?.AmountFor(category, degrees[i - 1]) is { } l && before.AmountFor(category, degrees[i]) is { } h && h < l;
+                if (higher < lower && !wasDecreasing)
+                {
+                    warnings.Add(new RuleWarning(RuleWarningKind.NonMonotonicGrid, eventId, new GridKey(category, degrees[i]).ToString(), lower, higher));
+                }
+            }
+        }
+    }
+
     public static ImmutableArray<GridCell> Validate(IEnumerable<GridCell> cells, bool allowEmpty = false)
     {
         ArgumentNullException.ThrowIfNull(cells);

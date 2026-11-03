@@ -51,6 +51,35 @@ public sealed record PerHour : AllowanceBasis
         : ComponentValue.Missing(PayUnit.Hourly, Rate, LedgerIssue.RegimeUnknown);
 }
 
+/// <summary>
+/// A rate per day worked (for example the meal allowance, منحة القفة). The text or the regime gives the working days of a
+/// full month (26 for a six-day week, 22 for a five-day week); a partial month gets them in proportion.
+/// </summary>
+public sealed record PerDayWorked : AllowanceBasis
+{
+    public PerDayWorked(Money rate, decimal daysPerFullMonth)
+    {
+        Rate = rate >= Money.Zero ? rate : throw new DomainException(DomainError.CannotBeNegative, DomainField.Amount);
+        DaysPerFullMonth = daysPerFullMonth is > 0 and <= 31
+            ? daysPerFullMonth
+            : throw new DomainException(DomainError.OutOfRange, DomainField.DaysWorked);
+    }
+
+    public Money Rate { get; }
+
+    public decimal DaysPerFullMonth { get; }
+
+    public override Money? Amount => Rate;
+
+    public override AllowanceBasis Increase(Percentage percentage, RoundingRule rounding) => new PerDayWorked(Rate.Increase(percentage, rounding), DaysPerFullMonth);
+
+    public override ComponentValue ValueFor(ValuationContext context)
+    {
+        var days = DaysPerFullMonth * context.Proration;
+        return new(PayUnit.Daily, Rate, null, days, Rate.Times(days, context.Rounding), LedgerIssue.None);
+    }
+}
+
 /// <summary>A percentage of the month's base salary; it follows the base, so a raise of the base raises it.</summary>
 public sealed record PercentOfBase(Percentage Percentage) : AllowanceBasis
 {

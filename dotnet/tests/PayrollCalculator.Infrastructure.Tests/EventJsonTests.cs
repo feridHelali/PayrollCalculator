@@ -31,6 +31,7 @@ public class EventJsonTests
         new WorkingTimeChanged(Day, Source, new RegimeCode("H48"), 208m),
         new AllowanceIntroduced(Day, Source, new ComponentCode("TRANSPORT"), "منحة النقل", new FixedMonthly(M(76.491m))),
         new AllowanceIntroduced(Day, Source, new ComponentCode("HOURLY"), "منحة", new PerHour(M(0.125m))),
+        new AllowanceIntroduced(Day, Source, new ComponentCode("MEAL"), "منحة القفة", new PerDayWorked(M(2.5m), 26)),
         new AllowanceIntroduced(Day, Source, new ComponentCode("OUTPUT"), "منحة الإنتاج", new PercentOfBase(new Percentage(10))),
         new AllowanceIntroduced(Day, Source, new ComponentCode("SENIORITY"), "منحة الأقدمية",
             new SeniorityBrackets([new SeniorityBracket(5, new Percentage(5)), new SeniorityBracket(10, new Percentage(10))])),
