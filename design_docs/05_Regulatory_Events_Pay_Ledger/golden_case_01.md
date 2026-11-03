@@ -1,4 +1,4 @@
-# Golden case 01: Ste Yosra, IT lead, 1998–2008 (simulated)
+# Golden case 01: Ste Yosra, IT lead, 1998–2008 (simulated, passing)
 
 **Purpose (05.1).** One career, worked out by hand, that the app must reproduce exactly from month to month. It is the
 only proof that the engine is right in law, and not just consistent with the old code. This case is a **simulation**
@@ -29,7 +29,37 @@ Each point below is a gap in either the data or the product. Most of them would 
 | Y7 | Work regime (48 h or 40 h), monthly or hourly pay | Hourly grids need the hours | From the contract or the payslips |
 | Y8 | Unpaid absences, promotions, earlier service (time already in degree) | Changes the degree and the seniority | Yes/no and dates |
 
-## The case once the gaps are filled
+## Answers and simulation choices
+
+| # | Answer (product owner) or **choice** (simulation) |
+|---|---|
+| Y2 | Home electrical goods **retailer**. The real case would fall under the trade (commerce) agreement for that activity, not under the electronics and electricity agreement in the library, which seems to cover manufacturing. Neither text for 1998–2008 is in the library, so the grid is **synthetic**: line `SIM-ELEC-RETAIL` |
+| Y1 | Only the net is known. Simulated deductions: CNSS **7 %** and IRPP **21 %**, both flat, so net = gross × 0.93 × 0.79. The real IRPP is a progressive scale, so a flat 21 % overstates the gross. In a real case, this is replaced by the payslips or by the real scales as rule events |
+| Y6 | Transport **8.000**, presence **2.080**, assiduity (مواظبة) **12.000** TND a month, fixed. "12 Sseduité" was read as *assiduité*. No seniority prime was mentioned, so none is simulated |
+| Y3 | **Choice:** category C (cadres), degree 1 at hiring; 24 months per degree, degree 6 is the ceiling |
+| Grid | **Choice:** C = 480, 495, 510, 525, 540, 555 (1998-01-01), raised for all by 4.5 % (1999-05), 5 % (2002-05), 5 % (2005-05) and 4.5 % (2008-05), half up, compounding |
+| Y5 | **Choice:** net 400 (1998-09), 450 (2001-01), 500 (2003-07), 550 (2005-07), 600 (2007-07) |
+| Y7, Y8 | **Choice:** 48 h, monthly pay, no absence, no promotion, no earlier service |
+| Period | **Choice:** 1998-09-01 → 2008-08-31, so every month is a full month |
+
+## Result
+
+- **Oracle:** `dotnet/tests/fixtures/golden_01/oracle.py`, a separate Python implementation written without the
+  engine, generates `expected.csv` (120 months).
+- **Test:** `GoldenCase01Tests` builds the same rules as events and checks every month, to the millime: degree, base,
+  each prime and total owed. It passes. The concise view gives 9 periods for the base: 4 raises and 4 degree steps.
+- **Owed**, as base plus primes from the synthetic grid: **69,793.168 TND** over 120 months.
+- **Paid, as gross equivalent** (net ÷ 0.7347): **79,352.130 TND**.
+- **Difference: −9,558.962 TND.** With these synthetic rules the employee was paid **more** than the minimum in every
+  month. That is a legitimate outcome, and it is exactly the case where Gemini's arrears code would show nothing:
+  sprint 08 must keep the negative months and say "nothing owed", not hide them.
+- **What it tells the product:**
+  1. Arrears need **gross** paid amounts. Converting net to gross needs the real CNSS rates and IRPP scales, which
+     are rule events in their own right (a possible sprint 09).
+  2. The real case is blocked by the **missing 1998–2008 trade agreement texts**, not by the engine.
+
+## The case with real data (later)
+
 
 The career events are known except for the line, category and degree:
 
@@ -51,7 +81,7 @@ What the expert fills in (`tests/fixtures/golden_01/expected.xlsx`), one row per
 - The ledger built from the seed and these career events gives the "owed" columns for every month, to the millime.
 - Sprint 08 then checks "owed − paid", keeping the negative months, against the same file.
 
-## Questions for the product owner (as the employee)
+## Questions for the product owner (answered above for the simulation; to ask again for a real case)
 
 1. What was Ste Yosra's activity? (Y2)
 2. Do you have the payslips, or at least the **gross** salary? If only the net, roughly from which month did it go up? (Y1, Y5)
