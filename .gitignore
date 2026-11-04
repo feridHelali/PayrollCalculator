@@ -14,3 +14,9 @@ licences/
 
 # Release output (dotnet/release.ps1)
 dotnet/artifacts/
+
+# Local databases and activations created by running the app from the repository root
+/--*
+/*.db
+/*.db-*
+/license.json
