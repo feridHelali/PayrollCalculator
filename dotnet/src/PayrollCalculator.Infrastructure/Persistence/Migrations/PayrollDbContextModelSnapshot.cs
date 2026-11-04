@@ -618,38 +618,6 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("SalaryTableId")
                         .OnDelete(DeleteBehavior.SetNull);
-
-                    b.OwnsMany("PayrollCalculator.Domain.Affairs.PaidSalaryStep", "PaidSalary", b1 =>
-                        {
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<int>("AffairId")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<DateOnly>("From")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<decimal>("GrossAmount")
-                                .HasPrecision(18, 4)
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("Note")
-                                .HasMaxLength(500)
-                                .HasColumnType("TEXT");
-
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("AffairId");
-
-                            b1.ToTable("AffairPaidSalary", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("AffairId");
-                        });
-
-                    b.Navigation("PaidSalary");
                 });
 
             modelBuilder.Entity("PayrollCalculator.Domain.Agreements.SectorialJointAgreement", b =>

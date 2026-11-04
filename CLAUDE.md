@@ -4,8 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Desktop app that rebuilds base salaries over long periods for Tunisia, according to sectoral joint agreements
-(Conventions Collectives Sectorielles / الاتفاقيات القطاعية المشتركة). The results are used in legal proceedings after a
+Desktop app that rebuilds, month by month, the **gross salary only** (salaire brut: grid base salary + applicable primes)
+over long periods for Tunisia, according to sectoral joint agreements (Conventions Collectives Sectorielles /
+الاتفاقيات القطاعية المشتركة). Out of scope: net pay, CNSS, IRPP, legal interest, severance, paid-vs-owed arrears. The results are used in legal proceedings after a
 layoff. The UI is in **Arabic, RTL**. The product spec is `design_docs/00_Inception/spec_2025.md`.
 
 ## Layout

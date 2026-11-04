@@ -1,8 +1,10 @@
 # PayrollCalculator (.NET 10 / WPF)
 
 This is the C# re-implementation of the Electron application, which is archived in `design_docs/02_Legacy_Electron_Archive/`.
-It rebuilds, month by month, the base salary a laid-off employee was owed over their employment. The calculation
-follows the salary grids of Tunisian sectoral joint agreements, and the result is used in legal proceedings.
+It rebuilds, month by month, the gross salary (salaire brut: base salary from the grid plus the applicable primes) a
+laid-off employee was owed over their employment. The calculation follows the salary grids of Tunisian sectoral joint
+agreements, and the result is used in legal proceedings. The gross is the only target: no net pay, CNSS, IRPP, legal
+interest or severance, and no comparison with what was actually paid.
 
 ## Commands (run from `dotnet/`)
 
@@ -22,11 +24,9 @@ dotnet ef migrations add <Name> -p src/PayrollCalculator.Infrastructure -s src/P
   `PAYROLL_DB_PATH` environment variable to use another file.
 - **Monthly ledger (الكشف الشهري للأجر والمنح, from the affairs list).** `AffairLedgerBuilder` (Domain) turns the affair's
   salary tables and the primes ticked for the employee into rule events and values them with `PayLedgerBuilder`: base
-  from the grid (hourly × 208 h), monthly primes prorated, per-day primes × 26 working days, percentages of the base.
-  The regime is the affair's salary table's (`WeeklyHours`: 48 h = 208 h and 26 days a month, 40 h = 173.333 h and
-  22 days; assumptions to confirm). **Arrears:** the gross pay actually received is entered on the same screen as dated
-  steps; each month shows paid (prorated like the base) and owed − paid, negative months kept. CSV export with one
-  column per prime plus paid and difference.
+  from the grid, monthly primes prorated, per-day primes × working days, percentages of the base. The work regime is
+  the grid's weekly hours (48 h: 208 h and 26 days a month; 40 h: 173.333 h and 22 days). CSV export with one column
+  per prime.
 - **One migration, `InitialCreate`**, creates the schema and seeds the 20 sectoral agreements (Arabic label, stable
   code, display order) from `Infrastructure/Persistence/AgreementSeed.cs` with EF `HasData`. Seeded agreements are
   read-only in the app. The migrations were squashed in sprint 07, so a database created before that must be reset

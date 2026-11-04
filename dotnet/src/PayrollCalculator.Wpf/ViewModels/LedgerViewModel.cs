@@ -29,19 +29,6 @@ public sealed partial class LedgerPrimeViewModel(int id, string name, AllowanceU
     public partial bool IsSelected { get; set; }
 }
 
-/// <summary>A step of the gross pay actually received, as edited in the grid.</summary>
-public sealed partial class PaidStepViewModel : ObservableObject
-{
-    [ObservableProperty]
-    public partial DateTime? From { get; set; }
-
-    [ObservableProperty]
-    public partial decimal? GrossAmount { get; set; }
-
-    [ObservableProperty]
-    public partial string? Note { get; set; }
-}
-
 /// <summary>A generated column of the ledger grid, bound to the row indexer <c>[Code]</c>.</summary>
 public sealed record LedgerColumnViewModel(string Code, string Header);
 
@@ -62,11 +49,6 @@ public sealed class LedgerRowViewModel(LedgerRowDto row)
     public decimal Total { get; } = row.Total;
 
     public LedgerIssue Issue { get; } = row.Issue;
-
-    public decimal? Paid { get; } = row.Paid;
-
-    /// <summary>Owed minus paid; negative when the employee was paid more.</summary>
-    public decimal? Difference { get; } = row.Difference;
 
     public decimal? this[string code] => row.Amounts.TryGetValue(code, out var amount) ? amount : null;
 }
@@ -94,18 +76,6 @@ public sealed partial class LedgerViewModel(IServiceRunner runner, IDialogServic
     /// <summary>Totals of the columns, in the order of <see cref="Columns"/>, as "name: amount".</summary>
     public ObservableCollection<string> Totals { get; } = [];
 
-    /// <summary>The gross pay actually received, by steps.</summary>
-    public ObservableCollection<PaidStepViewModel> PaidSteps { get; } = [];
-
-    [ObservableProperty]
-    public partial decimal TotalPaid { get; private set; }
-
-    [ObservableProperty]
-    public partial decimal TotalDifference { get; private set; }
-
-    [ObservableProperty]
-    public partial int MonthsWithoutPaid { get; private set; }
-
     [ObservableProperty]
     public partial decimal GrandTotal { get; private set; }
 
@@ -127,13 +97,6 @@ public sealed partial class LedgerViewModel(IServiceRunner runner, IDialogServic
         }
 
         OnPropertyChanged(nameof(HasPrimes));
-        var paid = await Runner.RunAsync<AffairService, IReadOnlyList<PaidSalaryStepDto>>(s => s.GetPaidSalaryAsync(affairId)).ConfigureAwait(true);
-        PaidSteps.Clear();
-        foreach (var step in paid)
-        {
-            PaidSteps.Add(new PaidStepViewModel { From = ToDateTime(step.From), GrossAmount = step.GrossAmount, Note = step.Note });
-        }
-
         await CalculateCoreAsync().ConfigureAwait(true);
     });
 
@@ -170,44 +133,6 @@ public sealed partial class LedgerViewModel(IServiceRunner runner, IDialogServic
 
         GrandTotal = _ledger.GrandTotal;
         UnresolvedMonths = _ledger.UnresolvedMonths;
-        TotalPaid = _ledger.TotalPaid;
-        TotalDifference = _ledger.TotalDifference;
-        MonthsWithoutPaid = _ledger.MonthsWithoutPaid;
-    }
-
-    [RelayCommand]
-    private void AddPaidStep() => PaidSteps.Add(new PaidStepViewModel());
-
-    [RelayCommand]
-    private void RemovePaidStep(PaidStepViewModel? step)
-    {
-        if (step is not null && Dialogs.Confirm(Labels.ConfirmDelete))
-        {
-            PaidSteps.Remove(step);
-        }
-    }
-
-    /// <summary>Saves the paid steps, then recalculates the ledger with them.</summary>
-    [RelayCommand]
-    private async Task SavePaidAsync()
-    {
-        if (Affair is null)
-        {
-            return;
-        }
-
-        if (PaidSteps.Any(s => s.From is null || s.GrossAmount is null))
-        {
-            Dialogs.ShowError(Labels.RateIncomplete);
-            return;
-        }
-
-        var steps = PaidSteps.Select(s => new PaidSalaryStepDto(ToDate(s.From)!.Value, s.GrossAmount!.Value, s.Note)).ToList();
-        await TryAsync(async () =>
-        {
-            await Runner.RunAsync<AffairService>(s => s.SavePaidSalaryAsync(Affair.Id, steps)).ConfigureAwait(true);
-            await CalculateCoreAsync().ConfigureAwait(true);
-        }, Labels.Saved).ConfigureAwait(true);
     }
 
     [RelayCommand]
