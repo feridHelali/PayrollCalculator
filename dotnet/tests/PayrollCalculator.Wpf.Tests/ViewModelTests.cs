@@ -335,6 +335,30 @@ public sealed class ViewModelTests : IDisposable
     }
 
     [Fact]
+    public async Task The_copy_asks_for_a_serial_once_and_the_about_page_shows_it_masked()
+    {
+        var activation = _app.Get<ActivationViewModel>();
+        Assert.False(await activation.IsActivatedAsync());
+
+        activation.Serial = "01234-56789";
+        Assert.False(await activation.ActivateAsync());
+        Assert.Equal(Labels.SerialInvalidFormat, activation.ErrorMessage);
+        activation.Serial = "ZZZZZ-ZZZZZ-ZZZZZ-ZZZZZ";
+        Assert.False(await activation.ActivateAsync());
+        Assert.Equal(Labels.SerialUnknown, activation.ErrorMessage);
+
+        activation.Serial = "01234-56789-abcde-fghjk";
+        Assert.True(await activation.ActivateAsync());
+        Assert.False(activation.HasError);
+        Assert.True(await _app.Get<ActivationViewModel>().IsActivatedAsync());
+
+        var about = _app.Get<AboutViewModel>();
+        await about.LoadAsync();
+        Assert.StartsWith("*****-*****-*****-FGHJK", about.LicenseText, StringComparison.Ordinal);
+        Assert.Contains("FGHJK", about.SupportText, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public async Task Seeded_grids_and_primes_are_listed_and_open_for_reading_only()
     {
         var tables = _app.Get<SalaryTablesViewModel>();

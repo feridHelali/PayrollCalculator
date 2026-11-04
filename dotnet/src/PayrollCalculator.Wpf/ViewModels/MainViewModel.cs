@@ -93,7 +93,7 @@ public sealed partial class MainViewModel : PageViewModel
     private Task ShowUsersAsync() => _navigator.GoAsync<UsersViewModel>(p => p.LoadAsync());
 
     [RelayCommand]
-    private Task ShowAboutAsync() => _navigator.GoAsync<AboutViewModel>();
+    private Task ShowAboutAsync() => _navigator.GoAsync<AboutViewModel>(a => a.LoadAsync());
 
     [RelayCommand]
     private Task ShowChangePasswordAsync() => _navigator.GoAsync<ChangePasswordViewModel>();

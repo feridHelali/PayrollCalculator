@@ -85,7 +85,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition />
+                            <RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition />
                         </Grid.RowDefinitions>
                         <TextBlock Style="{StaticResource Key}" Text="{x:Static res:Labels.Version}" />
                         <TextBlock Grid.Column="1" Style="{StaticResource Value}" Text="{Binding Product.DisplayVersion}" FlowDirection="LeftToRight" HorizontalAlignment="Right" />
@@ -95,6 +95,9 @@
                         <TextBlock Grid.Row="2" Grid.Column="1" Style="{StaticResource Value}" Text="{Binding OperatingSystem}" FlowDirection="LeftToRight" HorizontalAlignment="Right" />
                         <TextBlock Grid.Row="3" Style="{StaticResource Key}" Text="{x:Static res:Labels.Database}" />
                         <TextBlock Grid.Row="3" Grid.Column="1" Style="{StaticResource Value}" Text="{Binding DatabasePath}" FlowDirection="LeftToRight" HorizontalAlignment="Right" />
+                        <TextBlock Grid.Row="4" Grid.Column="1" Style="{StaticResource Muted}" Text="{Binding DataNote}" TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="5" Style="{StaticResource Key}" Text="{x:Static res:Labels.License}" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" Style="{StaticResource Value}" Text="{Binding LicenseText}" FlowDirection="LeftToRight" HorizontalAlignment="Right" />
                     </Grid>
                     <StackPanel Style="{StaticResource Toolbar}" Margin="0,14,0,0">
                         <Button c:Ui.Icon="{x:Static c:Icons.Copy}" Content="{x:Static res:Labels.CopyInfo}" Click="OnCopyInfo" />

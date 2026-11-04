@@ -27,6 +27,7 @@ public static class DependencyInjection
         services.AddScoped<AuthenticationService>();
         services.AddScoped<UserService>();
         services.AddScoped<UserSeeder>();
+        services.AddScoped<Licensing.LicenseService>();
         return services;
     }
 }

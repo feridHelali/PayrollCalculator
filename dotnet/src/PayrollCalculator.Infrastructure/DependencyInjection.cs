@@ -22,8 +22,50 @@ namespace PayrollCalculator.Infrastructure;
 /// <summary>Where the application database lives.</summary>
 public sealed class DatabaseOptions
 {
+    public const string FileName = "payroll.db";
+
     public string DatabasePath { get; set; } = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PayrollCalculator", "payroll.db");
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PayrollCalculator", "data", FileName);
+
+    /// <summary>True when the folder beside the app could not be written and the per-user folder is used instead.</summary>
+    public bool IsFallback { get; set; }
+
+    /// <summary>The data folder: the database, its backups and the licence.</summary>
+    public string DataDirectory => Path.GetDirectoryName(DatabasePath)!;
+
+    /// <summary>
+    /// The database of an installed or portable copy: <paramref name="overridePath"/> (<c>PAYROLL_DB_PATH</c>) when given,
+    /// else <c>{app}\data\payroll.db</c>, else, when that folder can't be written (a copy under Program Files),
+    /// <c>%LOCALAPPDATA%\PayrollCalculator\data\payroll.db</c>.
+    /// </summary>
+    public static DatabaseOptions Resolve(string? overridePath, string appDirectory, string localAppData, Func<string, bool>? canWrite = null)
+    {
+        if (!string.IsNullOrWhiteSpace(overridePath))
+        {
+            return new DatabaseOptions { DatabasePath = Path.GetFullPath(overridePath) };
+        }
+
+        var beside = Path.Combine(appDirectory, "data");
+        return (canWrite ?? CanWrite)(beside)
+            ? new DatabaseOptions { DatabasePath = Path.Combine(beside, FileName) }
+            : new DatabaseOptions { DatabasePath = Path.Combine(localAppData, "PayrollCalculator", "data", FileName), IsFallback = true };
+    }
+
+    private static bool CanWrite(string directory)
+    {
+        try
+        {
+            Directory.CreateDirectory(directory);
+            var probe = Path.Combine(directory, ".write-test-" + Guid.NewGuid().ToString("N"));
+            File.WriteAllText(probe, string.Empty);
+            File.Delete(probe);
+            return true;
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            return false;
+        }
+    }
 }
 
 public static class DependencyInjection
@@ -32,6 +74,8 @@ public static class DependencyInjection
     {
         ArgumentNullException.ThrowIfNull(options);
         services.AddSingleton(options);
+        services.AddSingleton<Application.Licensing.ISerialRegistry, Licensing.EmbeddedSerialRegistry>();
+        services.AddSingleton<Application.Licensing.ILicenseStore, Licensing.FileLicenseStore>();
         return services.AddPersistence(o => o.UseSqlite($"Data Source={options.DatabasePath}"));
     }
 
@@ -58,11 +102,39 @@ public static class DependencyInjection
     }
 
     /// <summary>Creates the database folder and applies pending migrations (which also seed the agreements).</summary>
-    public static async Task MigrateDatabaseAsync(this IServiceProvider services, CancellationToken ct = default)
+    /// <summary>
+    /// Creates or upgrades the database. Before upgrading an existing database (a migration pending on a database that
+    /// already has some), it copies it to <c>data\backups\payroll-{yyyyMMdd-HHmmss}.db</c>.
+    /// </summary>
+    /// <returns>The backup made, or null.</returns>
+    public static async Task<string?> MigrateDatabaseAsync(this IServiceProvider services, CancellationToken ct = default)
     {
         var options = services.GetRequiredService<DatabaseOptions>();
-        Directory.CreateDirectory(Path.GetDirectoryName(options.DatabasePath)!);
+        Directory.CreateDirectory(options.DataDirectory);
         await using var scope = services.CreateAsyncScope();
-        await scope.ServiceProvider.GetRequiredService<PayrollDbContext>().Database.MigrateAsync(ct).ConfigureAwait(false);
+        var db = scope.ServiceProvider.GetRequiredService<PayrollDbContext>().Database;
+        string? backup = null;
+        if (File.Exists(options.DatabasePath)
+            && (await db.GetAppliedMigrationsAsync(ct).ConfigureAwait(false)).Any()
+            && (await db.GetPendingMigrationsAsync(ct).ConfigureAwait(false)).Any())
+        {
+            backup = Backup(options);
+        }
+
+        await db.MigrateAsync(ct).ConfigureAwait(false);
+        return backup;
+    }
+
+    private static string Backup(DatabaseOptions options)
+    {
+        var folder = Path.Combine(options.DataDirectory, "backups");
+        Directory.CreateDirectory(folder);
+        var target = Path.Combine(folder, $"payroll-{DateTime.Now.ToString("yyyyMMdd-HHmmss", System.Globalization.CultureInfo.InvariantCulture)}.db");
+        using var source = new Microsoft.Data.Sqlite.SqliteConnection($"Data Source={options.DatabasePath};Pooling=False");
+        using var copy = new Microsoft.Data.Sqlite.SqliteConnection($"Data Source={target};Pooling=False");
+        source.Open();
+        copy.Open();
+        source.BackupDatabase(copy); // consistent copy, WAL included
+        return target;
     }
 }

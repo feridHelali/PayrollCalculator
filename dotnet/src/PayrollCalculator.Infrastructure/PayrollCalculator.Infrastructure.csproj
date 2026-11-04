@@ -18,6 +18,8 @@
   <ItemGroup>
     <EmbeddedResource Include="..\..\..\data\seed\agreements\**\seed.json;..\..\..\data\seed\agreements\**\*.csv"
                       LogicalName="seed/%(RecursiveDir)%(Filename)%(Extension)" />
+    <!-- The hashes of the licence serials (tools/generate-serials.ps1). -->
+    <EmbeddedResource Include="Licensing\serials.sha256" LogicalName="PayrollCalculator.Licensing.serials.sha256" />
   </ItemGroup>
 
   <PropertyGroup>

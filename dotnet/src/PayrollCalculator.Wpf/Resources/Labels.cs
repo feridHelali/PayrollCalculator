@@ -4,6 +4,7 @@ using PayrollCalculator.Domain.Ledger;
 using PayrollCalculator.Domain.SalaryTables;
 using PayrollCalculator.Domain.Users;
 using PayrollCalculator.Application.Common;
+using PayrollCalculator.Application.Licensing;
 using PayrollCalculator.Application.Users;
 using PayrollCalculator.Domain.Common;
 using PayrollCalculator.Wpf.Services;
@@ -112,6 +113,15 @@ public static class Labels
     public const string Welcome = "مرحبا بك";
     public const string SignInPrompt = "سجّل الدخول للمتابعة";
     public const string SignIn = "دخول";
+    public const string Activation = "تفعيل البرنامج";
+    public const string ActivationPrompt = "أدخل رقم الترخيص الذي سُلّم إليك مع البرنامج. يُطلب مرة واحدة على هذا الجهاز.";
+    public const string SerialNumber = "رقم الترخيص";
+    public const string Activate = "تفعيل";
+    public const string SerialInvalidFormat = "رقم الترخيص يتكون من 20 حرفا ورقما (XXXXX-XXXXX-XXXXX-XXXXX): يرجى التثبت منه";
+    public const string SerialUnknown = "رقم الترخيص غير صالح لهذه النسخة";
+    public const string License = "الترخيص";
+    public const string NotActivated = "غير مفعل";
+    public const string DataFallback = "تعذرت الكتابة في مجلد البرنامج: البيانات محفوظة في مجلد المستخدم";
     public const string SignOut = "تسجيل الخروج";
     public const string Quit = "إغلاق";
     public const string UserName = "اسم المستخدم";
@@ -278,6 +288,13 @@ public static class Labels
         DomainField.WeeklyHours => WeeklyHours,
         DomainField.ImportFile => "الملف",
         _ => string.Empty,
+    };
+
+    public static string ActivationOutcomeText(ActivationOutcome outcome) => outcome switch
+    {
+        ActivationOutcome.Activated => string.Empty,
+        ActivationOutcome.InvalidFormat => SerialInvalidFormat,
+        _ => SerialUnknown,
     };
 
     public static string SignInOutcomeText(SignInOutcome outcome) => outcome switch

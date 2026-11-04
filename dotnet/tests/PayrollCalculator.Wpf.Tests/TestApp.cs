@@ -2,6 +2,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PayrollCalculator.Application;
+using PayrollCalculator.Application.Licensing;
 using PayrollCalculator.Domain.Users;
 using PayrollCalculator.Infrastructure.Security;
 using PayrollCalculator.Infrastructure;
@@ -25,6 +26,8 @@ internal sealed class TestApp : IDisposable
         services.AddSingleton(new DatabaseOptions { DatabasePath = "test.db" });
         services.AddPersistence(o => o.UseSqlite(_connection));
         services.AddPresentation();
+        services.AddSingleton<ISerialRegistry>(new TestSerials());
+        services.AddSingleton<ILicenseStore, MemoryLicenseStore>();
         services.AddSingleton<IDialogService>(Dialogs);
         services.AddSingleton<IPasswordHasher>(new Pbkdf2PasswordHasher(iterations: 1_000)); // fast, same format
         _provider = services.BuildServiceProvider();
@@ -41,6 +44,27 @@ internal sealed class TestApp : IDisposable
     {
         _provider.Dispose();
         _connection.Dispose();
+    }
+}
+
+/// <summary>Accepts only <see cref="Serial"/>.</summary>
+internal sealed class TestSerials : ISerialRegistry
+{
+    public const string Serial = "0123456789ABCDEFGHJK";
+
+    public bool IsKnown(string hash) => hash == SerialKey.Hash(Serial);
+}
+
+internal sealed class MemoryLicenseStore : ILicenseStore
+{
+    private LicenseRecord? _record;
+
+    public Task<LicenseRecord?> ReadAsync(CancellationToken ct = default) => Task.FromResult(_record);
+
+    public Task WriteAsync(LicenseRecord record, CancellationToken ct = default)
+    {
+        _record = record;
+        return Task.CompletedTask;
     }
 }
 

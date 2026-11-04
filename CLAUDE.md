@@ -29,6 +29,12 @@ layoff. The UI is in **Arabic, RTL**. The product spec is `design_docs/00_Incept
 - `.\run.ps1 [-Reset] [-DbPath <file>] [-ImportLegacy] [-Release]`: build and run the WPF app (`-Reset` deletes the database first).
 - `dotnet run --project tools/PayrollCalculator.Seed -- catalogue | library-verify | text <key> [page]`: the PDF library.
 - `dotnet ef migrations add <Name> -p src/PayrollCalculator.Infrastructure -s src/PayrollCalculator.Infrastructure -o Persistence/Migrations`
+- `.\release.ps1 [-SkipTests]`: self-contained publish, Inno Setup installer (`installer/PayrollCalculator.iss`), portable
+  zip and checksums in `artifacts/release/<version>/` (needs Inno Setup 6 on the build machine only). Installed or
+  portable, the app keeps its data in `data\` beside the exe (`DatabaseOptions.Resolve`). Plan: `design_docs/08_Installer_MVP_Release/sprint.md`.
+- `.\tools\generate-serials.ps1 [-Count 100] [-Note "..."]`: licence serials. The serials go to the git-ignored
+  `licences/` folder at the repository root (private, never commit them); only their SHA-256 are appended to
+  `Infrastructure/Licensing/serials.sha256`, embedded in the app. Rebuild for new serials to be accepted.
 
 ## Conventions
 

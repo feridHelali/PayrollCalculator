@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,11 +32,8 @@ public partial class App : System.Windows.Application
         var splash = new SplashWindow();
         splash.Show();
 
-        var options = new DatabaseOptions();
-        if (Environment.GetEnvironmentVariable("PAYROLL_DB_PATH") is { Length: > 0 } customPath)
-        {
-            options.DatabasePath = Path.GetFullPath(customPath);
-        }
+        var options = DatabaseOptions.Resolve(Environment.GetEnvironmentVariable("PAYROLL_DB_PATH"), AppContext.BaseDirectory,
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
 
         var builder = Host.CreateApplicationBuilder(e.Args);
         builder.Services
@@ -77,7 +74,7 @@ public partial class App : System.Windows.Application
             return;
         }
 
-        if (!SignIn())
+        if (!await ActivateAsync().ConfigureAwait(true) || !SignIn())
         {
             Shutdown();
             return;
@@ -92,6 +89,14 @@ public partial class App : System.Windows.Application
         }
 
         Services.GetRequiredService<CurrentUser>().Changed += OnSessionChanged;
+    }
+
+    /// <summary>Asks for a serial while this copy isn't activated (sprint 08). True once it is.</summary>
+    private async Task<bool> ActivateAsync()
+    {
+        ShutdownMode = ShutdownMode.OnExplicitShutdown;
+        var viewModel = Services.GetRequiredService<ActivationViewModel>();
+        return await viewModel.IsActivatedAsync().ConfigureAwait(true) || new ActivationWindow(viewModel).ShowDialog() == true;
     }
 
     /// <summary>Shows the modal sign-in window. True once a session is open.</summary>

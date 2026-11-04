@@ -3,8 +3,9 @@
     Builds and runs the PayrollCalculator WPF app.
 
 .DESCRIPTION
-    Wraps `dotnet run` for src/PayrollCalculator.Wpf. By default the app uses
-    %LOCALAPPDATA%\PayrollCalculator\payroll.db, which it creates and migrates on startup.
+    Wraps `dotnet run` for src/PayrollCalculator.Wpf. For development the database is
+    %LOCALAPPDATA%\PayrollCalculator\payroll.db (passed as PAYROLL_DB_PATH), created and migrated on startup. An
+    installed or portable copy uses data\payroll.db beside the exe instead.
 
 .PARAMETER DbPath
     Use another database file (sets PAYROLL_DB_PATH for this run only).
@@ -62,10 +63,8 @@ if ($ImportLegacy) {
 
 $previousDbPath = $env:PAYROLL_DB_PATH
 try {
-    if ($DbPath) {
-        $env:PAYROLL_DB_PATH = $database
-        Write-Host "Database: $env:PAYROLL_DB_PATH"
-    }
+    $env:PAYROLL_DB_PATH = $database
+    Write-Host "Database: $env:PAYROLL_DB_PATH"
 
     $dotnetArgs = @('run', '--project', $project, '-c', $configuration)
     if ($appArgs.Count -gt 0) { $dotnetArgs += @('--') + $appArgs }
