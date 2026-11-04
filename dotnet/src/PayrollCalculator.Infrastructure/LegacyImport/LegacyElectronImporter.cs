@@ -25,9 +25,9 @@ public sealed partial class LegacyElectronImporter(PayrollDbContext db) : ILegac
             throw new FileNotFoundException("Legacy database not found.", legacyDatabasePath);
         }
 
-        // Seeded agreements are not user data: only agreements, tables or affairs entered by a user block the import.
+        // Seeded agreements, grids and primes are not user data: only agreements, tables or affairs entered by a user block the import.
         if (await db.Agreements.AnyAsync(a => a.Origin == DataOrigin.User, cancellationToken).ConfigureAwait(false)
-            || await db.SalaryTables.AnyAsync(cancellationToken).ConfigureAwait(false)
+            || await db.SalaryTables.AnyAsync(t => t.Origin == DataOrigin.User, cancellationToken).ConfigureAwait(false)
             || await db.Affairs.AnyAsync(cancellationToken).ConfigureAwait(false))
         {
             throw new InvalidOperationException("The target database already contains data; import only into an empty database.");

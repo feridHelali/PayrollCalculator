@@ -11,9 +11,11 @@
              d:DataContext="{d:DesignInstance Type=vm:SalaryTableEditorViewModel}">
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">
+            <TextBlock DockPanel.Dock="Right" VerticalAlignment="Center" Opacity="0.75" Text="{x:Static res:Labels.SeededReadOnly}"
+                       Visibility="{Binding IsSeeded, Converter={StaticResource BoolToVisibility}}" />
             <StackPanel DockPanel.Dock="Left" Style="{StaticResource Toolbar}" Margin="0">
-                <Button Style="{StaticResource PrimaryButton}" c:Ui.Icon="{x:Static c:Icons.Save}" Content="{x:Static res:Labels.Save}" Command="{Binding SaveCommand}" />
-                <Button c:Ui.Icon="{x:Static c:Icons.Import}" Content="{x:Static res:Labels.ImportCsv}" Command="{Binding ImportCsvCommand}" />
+                <Button Style="{StaticResource PrimaryButton}" c:Ui.Icon="{x:Static c:Icons.Save}" Content="{x:Static res:Labels.Save}" Command="{Binding SaveCommand}" Visibility="{Binding IsSeeded, Converter={StaticResource InverseBoolToVisibility}}" />
+                <Button c:Ui.Icon="{x:Static c:Icons.Import}" Content="{x:Static res:Labels.ImportCsv}" Command="{Binding ImportCsvCommand}" Visibility="{Binding IsSeeded, Converter={StaticResource InverseBoolToVisibility}}" />
                 <Button c:Ui.Icon="{x:Static c:Icons.Back}" Content="{x:Static res:Labels.Back}" Command="{Binding BackCommand}" />
             </StackPanel>
             <TextBlock Style="{StaticResource PageTitle}" Text="{Binding Title}" Margin="16,0,0,12" />

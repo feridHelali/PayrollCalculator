@@ -135,7 +135,7 @@ public sealed class PersistenceTests : IDisposable
         }
 
         await using var check = _db.NewContext();
-        Assert.Empty(await new SalaryTableRepository(check).ListAsync());
+        Assert.DoesNotContain(await new SalaryTableRepository(check).ListAsync(), t => t.AgreementId == agreementId); // the seeded grids stay
         Assert.Empty(await new AffairRepository(check).ListAsync());
     }
 

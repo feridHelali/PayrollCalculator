@@ -1,6 +1,6 @@
-# Drafts: travel agencies agreement (الاتفاقية المشتركة القطاعية لوكالات الأسفار)
+# Seed: travel agencies agreement (الاتفاقية المشتركة القطاعية لوكالات الأسفار)
 
-**Status: draft, read from the page images; to be checked by a person against the PDF before it is used.**
+**Status: seeded in the app (read-only) from `seed.json` and the CSVs of this folder. Read from the page images: still to be checked by a person against the PDF.**
 
 ## The agreement and its riders (from the recitals of rider 11)
 
@@ -58,10 +58,10 @@ stands for the «-» of the text.
 
 The transport amounts include the transport prime of decree 503 of 16 March 1982.
 
-**Entering them in the app** (المنح والمنافع):
-- **Transport:** two primes, one per group, with «المنتفعون» = «أعوان التنفيذ والتسيير» or «الإطارات».
-- **Presence:** two primes, a «عن كل يوم عمل» one and a monthly one.
-- **Drivers:** one prime per season, with the season written in «شروط الإسناد».
+**In the app:** seeded from `seed.json`, one prime per group (transport) or per season (drivers), the presence prime
+as two primes (per day worked, and monthly). The 1997 amounts (articles 45, 46 and 48, below) are the first rate of
+the same primes. The meal prime (art. 47), the production prime (art. 44) and the retirement prime (art. 43) are not
+seeded: they are not a fixed monthly amount.
 
 ## Rules of rider 11 worth knowing
 

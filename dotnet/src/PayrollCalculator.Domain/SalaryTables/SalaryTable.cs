@@ -1,3 +1,4 @@
+using PayrollCalculator.Domain.Agreements;
 using PayrollCalculator.Domain.Common;
 
 namespace PayrollCalculator.Domain.SalaryTables;
@@ -44,6 +45,20 @@ public sealed class SalaryTable : Entity
     public int WeeklyHours { get; private set; } = DefaultWeeklyHours;
 
     public const int DefaultWeeklyHours = 48;
+
+    /// <summary>Seed: shipped with the product (data/seed/agreements), read only in the app (D4).</summary>
+    public DataOrigin Origin { get; private set; }
+
+    public bool IsSeeded => Origin == DataOrigin.Seed;
+
+    /// <summary>Throws when the table is shipped with the product and so cannot be changed or deleted here.</summary>
+    public void EnsureEditable()
+    {
+        if (IsSeeded)
+        {
+            throw new DomainException(DomainError.ReadOnlySeed, DomainField.TableNumber, TableNumber);
+        }
+    }
 
     public IReadOnlyList<SalaryCategory> Categories => _categories.OrderBy(c => c.Position).ToList();
 

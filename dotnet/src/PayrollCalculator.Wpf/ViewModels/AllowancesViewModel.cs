@@ -120,6 +120,10 @@ public sealed partial class AllowanceEditorViewModel(IServiceRunner runner, IDia
     [ObservableProperty]
     public partial string? Conditions { get; set; }
 
+    /// <summary>Shipped with the product: shown for reading only (D4).</summary>
+    [ObservableProperty]
+    public partial bool IsSeeded { get; private set; }
+
     public Task LoadAsync(int? id, int? agreementId = null) => TryAsync(async () =>
     {
         var agreements = await Runner.RunAsync<AgreementService, IReadOnlyList<AgreementDto>>(s => s.ListAsync()).ConfigureAwait(true);
@@ -137,6 +141,7 @@ public sealed partial class AllowanceEditorViewModel(IServiceRunner runner, IDia
 
         var dto = await Runner.RunAsync<AllowanceService, AllowanceDto>(s => s.GetAsync(allowanceId)).ConfigureAwait(true);
         Id = dto.Id;
+        IsSeeded = dto.IsSeeded;
         SelectedAgreementId = dto.AgreementId;
         Name = dto.Name;
         Unit = dto.Unit;

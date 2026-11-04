@@ -1,4 +1,5 @@
 using System.Globalization;
+using PayrollCalculator.Domain.Agreements;
 using PayrollCalculator.Domain.Common;
 
 namespace PayrollCalculator.Domain.Allowances;
@@ -75,6 +76,20 @@ public sealed class Allowance : Entity
 
     /// <summary>Conditions written in the text (for example: lost after more than one unjustified absence in the month).</summary>
     public string? Conditions { get; private set; }
+
+    /// <summary>Seed: shipped with the product (data/seed/agreements), read only in the app (D4).</summary>
+    public DataOrigin Origin { get; private set; }
+
+    public bool IsSeeded => Origin == DataOrigin.Seed;
+
+    /// <summary>Throws when the prime is shipped with the product and so cannot be changed or deleted here.</summary>
+    public void EnsureEditable()
+    {
+        if (IsSeeded)
+        {
+            throw new DomainException(DomainError.ReadOnlySeed, DomainField.AllowanceName, Name);
+        }
+    }
 
     /// <summary>The amounts, by effective date.</summary>
     public IReadOnlyList<AllowanceRate> Rates => _rates.OrderBy(r => r.EffectiveFrom).ToList();

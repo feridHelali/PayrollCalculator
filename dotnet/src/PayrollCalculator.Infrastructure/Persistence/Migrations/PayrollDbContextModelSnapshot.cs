@@ -302,6 +302,11 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Unit")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -312,6 +317,111 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                     b.HasIndex("AgreementId");
 
                     b.ToTable("Allowances", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AgreementId = 1,
+                            Conditions = "تشمل منحة نصف اليوم (الفصل 5 من أمر 8 جانفي 1948)",
+                            Name = "منحة الحضور",
+                            Origin = "Seed",
+                            Unit = "PerMonth"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AgreementId = 1,
+                            AppliesTo = "أعوان التنفيذ والتسيير",
+                            Name = "منحة النقل (أعوان التنفيذ والتسيير)",
+                            Origin = "Seed",
+                            Unit = "PerMonth"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AgreementId = 1,
+                            AppliesTo = "الإطارات",
+                            Name = "منحة النقل (الإطارات)",
+                            Origin = "Seed",
+                            Unit = "PerMonth"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AgreementId = 1,
+                            Conditions = "تسقط عن كل عامل يتغيب أكثر من مرة في الشهر دون عذر شرعي",
+                            Name = "منحة التشجيع على المواظبة",
+                            Origin = "Seed",
+                            Unit = "PerMonth"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AgreementId = 6,
+                            AppliesTo = "أعوان التنفيذ والتسيير",
+                            Conditions = "تشمل منحة النقل المحدثة بالأمر عدد 503 المؤرخ في 16 مارس 1982",
+                            Name = "منحة النقل (أعوان التنفيذ والتسيير)",
+                            Origin = "Seed",
+                            Unit = "PerMonth"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AgreementId = 6,
+                            AppliesTo = "الإطارات",
+                            Conditions = "تشمل منحة النقل المحدثة بالأمر عدد 503 المؤرخ في 16 مارس 1982",
+                            Name = "منحة النقل (الإطارات)",
+                            Origin = "Seed",
+                            Unit = "PerMonth"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AgreementId = 6,
+                            Conditions = "عن كل يوم عمل فعلي، تصرف شهريا",
+                            Name = "منحة الحضور (عن كل يوم عمل)",
+                            Origin = "Seed",
+                            Unit = "PerDayWorked"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AgreementId = 6,
+                            Name = "منحة الحضور (شهرية)",
+                            Origin = "Seed",
+                            Unit = "PerMonth"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AgreementId = 6,
+                            AppliesTo = "السواق",
+                            Conditions = "تصرف من شهر أكتوبر إلى شهر ماي",
+                            Name = "منحة الساعات الإضافية الجزافية للسواق (أكتوبر - ماي)",
+                            Origin = "Seed",
+                            Unit = "PerMonth"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AgreementId = 6,
+                            AppliesTo = "السواق",
+                            Conditions = "تصرف من شهر جوان إلى شهر سبتمبر",
+                            Name = "منحة الساعات الإضافية الجزافية للسواق (جوان - سبتمبر)",
+                            Origin = "Seed",
+                            Unit = "PerMonth"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            AgreementId = 6,
+                            AppliesTo = "فنيو المخازن والسواق",
+                            Conditions = "يمكن حجبها عن شهر ارتكاب خطأ فادح من الدرجة الثانية",
+                            Name = "منحة العناية والصيانة",
+                            Origin = "Seed",
+                            Unit = "PerMonth"
+                        });
                 });
 
             modelBuilder.Entity("PayrollCalculator.Domain.Ledger.LedgerSnapshot", b =>
@@ -496,6 +606,11 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("SalaryType")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -511,24 +626,133 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(48);
 
-                    b.ComplexProperty(typeof(Dictionary<string, object>), "ApplicationPeriod", "PayrollCalculator.Domain.SalaryTables.SalaryTable.ApplicationPeriod#DateRange", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<DateOnly?>("End")
-                                .HasColumnType("TEXT")
-                                .HasColumnName("ApplicationEnd");
-
-                            b1.Property<DateOnly>("Start")
-                                .HasColumnType("TEXT")
-                                .HasColumnName("ApplicationStart");
-                        });
-
                     b.HasKey("Id");
 
                     b.HasIndex("AgreementId", "TableNumber");
 
                     b.ToTable("SalaryTables", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AgreementId = 1,
+                            ConcernedEmployees = "الأعوان الخالصون بالساعة",
+                            Origin = "Seed",
+                            SalaryType = "Hourly",
+                            TableNumber = "1",
+                            WeeklyHours = 48
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AgreementId = 1,
+                            ConcernedEmployees = "الأعوان الخالصون بالساعة",
+                            Origin = "Seed",
+                            SalaryType = "Hourly",
+                            TableNumber = "1",
+                            WeeklyHours = 48
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AgreementId = 1,
+                            ConcernedEmployees = "الأعوان الخالصون بالساعة",
+                            Origin = "Seed",
+                            SalaryType = "Hourly",
+                            TableNumber = "1",
+                            WeeklyHours = 48
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AgreementId = 1,
+                            ConcernedEmployees = "الأعوان الخالصون بالشهر",
+                            Origin = "Seed",
+                            SalaryType = "Monthly",
+                            TableNumber = "2",
+                            WeeklyHours = 48
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AgreementId = 1,
+                            ConcernedEmployees = "الأعوان الخالصون بالشهر",
+                            Origin = "Seed",
+                            SalaryType = "Monthly",
+                            TableNumber = "2",
+                            WeeklyHours = 48
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AgreementId = 1,
+                            ConcernedEmployees = "الأعوان الخالصون بالشهر",
+                            Origin = "Seed",
+                            SalaryType = "Monthly",
+                            TableNumber = "2",
+                            WeeklyHours = 48
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AgreementId = 6,
+                            ConcernedEmployees = "جميع الأصناف",
+                            Origin = "Seed",
+                            SalaryType = "Monthly",
+                            TableNumber = "1",
+                            WeeklyHours = 48
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AgreementId = 6,
+                            ConcernedEmployees = "جميع الأصناف",
+                            Origin = "Seed",
+                            SalaryType = "Monthly",
+                            TableNumber = "1",
+                            WeeklyHours = 48
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AgreementId = 6,
+                            ConcernedEmployees = "جميع الأصناف",
+                            Origin = "Seed",
+                            SalaryType = "Monthly",
+                            TableNumber = "1",
+                            WeeklyHours = 48
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AgreementId = 6,
+                            ConcernedEmployees = "جميع الأصناف",
+                            Origin = "Seed",
+                            SalaryType = "Monthly",
+                            TableNumber = "1",
+                            WeeklyHours = 48
+                        },
+                        new
+                        {
+                            Id = 11,
+                            AgreementId = 6,
+                            ConcernedEmployees = "جميع الأصناف",
+                            Origin = "Seed",
+                            SalaryType = "Monthly",
+                            TableNumber = "1",
+                            WeeklyHours = 48
+                        },
+                        new
+                        {
+                            Id = 12,
+                            AgreementId = 6,
+                            ConcernedEmployees = "جميع الأصناف",
+                            Origin = "Seed",
+                            SalaryType = "Monthly",
+                            TableNumber = "1",
+                            WeeklyHours = 48
+                        });
                 });
 
             modelBuilder.Entity("PayrollCalculator.Domain.Users.User", b =>
@@ -1034,6 +1258,264 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("AllowanceId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    Id = 1,
+                                    AllowanceId = 1,
+                                    EffectiveFrom = new DateOnly(2024, 1, 1),
+                                    Source = "الملحق التعديلي عدد 18، الرائد الرسمي عدد 49 لسنة 2024، ص 3516، الفصل 49",
+                                    Value = 7.930m
+                                },
+                                new
+                                {
+                                    Id = 2,
+                                    AllowanceId = 1,
+                                    EffectiveFrom = new DateOnly(2025, 1, 1),
+                                    Source = "الملحق التعديلي عدد 18، الرائد الرسمي عدد 49 لسنة 2024، ص 3516، الفصل 49",
+                                    Value = 8.445m
+                                },
+                                new
+                                {
+                                    Id = 3,
+                                    AllowanceId = 1,
+                                    EffectiveFrom = new DateOnly(2026, 1, 1),
+                                    Source = "الملحق التعديلي عدد 18، الرائد الرسمي عدد 49 لسنة 2024، ص 3516، الفصل 49",
+                                    Value = 9.036m
+                                },
+                                new
+                                {
+                                    Id = 4,
+                                    AllowanceId = 2,
+                                    EffectiveFrom = new DateOnly(2024, 1, 1),
+                                    Source = "الملحق التعديلي عدد 18، الرائد الرسمي عدد 49 لسنة 2024، ص 3516، الفصل 49",
+                                    Value = 68.693m
+                                },
+                                new
+                                {
+                                    Id = 5,
+                                    AllowanceId = 2,
+                                    EffectiveFrom = new DateOnly(2025, 1, 1),
+                                    Source = "الملحق التعديلي عدد 18، الرائد الرسمي عدد 49 لسنة 2024، ص 3516، الفصل 49",
+                                    Value = 73.158m
+                                },
+                                new
+                                {
+                                    Id = 6,
+                                    AllowanceId = 2,
+                                    EffectiveFrom = new DateOnly(2026, 1, 1),
+                                    Source = "الملحق التعديلي عدد 18، الرائد الرسمي عدد 49 لسنة 2024، ص 3516، الفصل 49",
+                                    Value = 78.279m
+                                },
+                                new
+                                {
+                                    Id = 7,
+                                    AllowanceId = 3,
+                                    EffectiveFrom = new DateOnly(2024, 1, 1),
+                                    Source = "الملحق التعديلي عدد 18، الرائد الرسمي عدد 49 لسنة 2024، ص 3516، الفصل 49",
+                                    Value = 76.491m
+                                },
+                                new
+                                {
+                                    Id = 8,
+                                    AllowanceId = 3,
+                                    EffectiveFrom = new DateOnly(2025, 1, 1),
+                                    Source = "الملحق التعديلي عدد 18، الرائد الرسمي عدد 49 لسنة 2024، ص 3516، الفصل 49",
+                                    Value = 81.462m
+                                },
+                                new
+                                {
+                                    Id = 9,
+                                    AllowanceId = 3,
+                                    EffectiveFrom = new DateOnly(2026, 1, 1),
+                                    Source = "الملحق التعديلي عدد 18، الرائد الرسمي عدد 49 لسنة 2024، ص 3516، الفصل 49",
+                                    Value = 87.165m
+                                },
+                                new
+                                {
+                                    Id = 10,
+                                    AllowanceId = 4,
+                                    EffectiveFrom = new DateOnly(2024, 1, 1),
+                                    Source = "الملحق التعديلي عدد 18، الرائد الرسمي عدد 49 لسنة 2024، ص 3516، الفصل 49",
+                                    Value = 14.050m
+                                },
+                                new
+                                {
+                                    Id = 11,
+                                    AllowanceId = 4,
+                                    EffectiveFrom = new DateOnly(2025, 1, 1),
+                                    Source = "الملحق التعديلي عدد 18، الرائد الرسمي عدد 49 لسنة 2024، ص 3516، الفصل 49",
+                                    Value = 14.964m
+                                },
+                                new
+                                {
+                                    Id = 12,
+                                    AllowanceId = 4,
+                                    EffectiveFrom = new DateOnly(2026, 1, 1),
+                                    Source = "الملحق التعديلي عدد 18، الرائد الرسمي عدد 49 لسنة 2024، ص 3516، الفصل 49",
+                                    Value = 16.011m
+                                },
+                                new
+                                {
+                                    Id = 13,
+                                    AllowanceId = 5,
+                                    EffectiveFrom = new DateOnly(1996, 5, 1),
+                                    Source = "الاتفاقية المشتركة القطاعية 1997، الرائد الرسمي عدد 41 لسنة 1997، الفصل 45",
+                                    Value = 14.000m
+                                },
+                                new
+                                {
+                                    Id = 14,
+                                    AllowanceId = 5,
+                                    EffectiveFrom = new DateOnly(2017, 5, 1),
+                                    Source = "الملحق التعديلي عدد 9، الرائد الرسمي عدد 62 لسنة 2017",
+                                    Value = 61.583m
+                                },
+                                new
+                                {
+                                    Id = 15,
+                                    AllowanceId = 5,
+                                    EffectiveFrom = new DateOnly(2022, 5, 1),
+                                    Source = "الملحق التعديلي عدد 11، الرائد الرسمي عدد 120 لسنة 2022، ص 3265",
+                                    Value = 75.089m
+                                },
+                                new
+                                {
+                                    Id = 16,
+                                    AllowanceId = 5,
+                                    EffectiveFrom = new DateOnly(2023, 5, 1),
+                                    Source = "الملحق التعديلي عدد 11، الرائد الرسمي عدد 120 لسنة 2022، ص 3265",
+                                    Value = 79.970m
+                                },
+                                new
+                                {
+                                    Id = 17,
+                                    AllowanceId = 6,
+                                    EffectiveFrom = new DateOnly(1996, 5, 1),
+                                    Source = "الاتفاقية المشتركة القطاعية 1997، الرائد الرسمي عدد 41 لسنة 1997، الفصل 45",
+                                    Value = 19.000m
+                                },
+                                new
+                                {
+                                    Id = 18,
+                                    AllowanceId = 6,
+                                    EffectiveFrom = new DateOnly(2017, 5, 1),
+                                    Source = "الملحق التعديلي عدد 9، الرائد الرسمي عدد 62 لسنة 2017",
+                                    Value = 66.583m
+                                },
+                                new
+                                {
+                                    Id = 19,
+                                    AllowanceId = 6,
+                                    EffectiveFrom = new DateOnly(2022, 5, 1),
+                                    Source = "الملحق التعديلي عدد 11، الرائد الرسمي عدد 120 لسنة 2022، ص 3265",
+                                    Value = 81.186m
+                                },
+                                new
+                                {
+                                    Id = 20,
+                                    AllowanceId = 6,
+                                    EffectiveFrom = new DateOnly(2023, 5, 1),
+                                    Source = "الملحق التعديلي عدد 11، الرائد الرسمي عدد 120 لسنة 2022، ص 3265",
+                                    Value = 86.463m
+                                },
+                                new
+                                {
+                                    Id = 21,
+                                    AllowanceId = 7,
+                                    EffectiveFrom = new DateOnly(1996, 5, 1),
+                                    Source = "الاتفاقية المشتركة القطاعية 1997، الرائد الرسمي عدد 41 لسنة 1997، الفصل 46",
+                                    Value = 0.103m
+                                },
+                                new
+                                {
+                                    Id = 22,
+                                    AllowanceId = 7,
+                                    EffectiveFrom = new DateOnly(2017, 5, 1),
+                                    Source = "الملحق التعديلي عدد 9، الرائد الرسمي عدد 62 لسنة 2017",
+                                    Value = 0.424m
+                                },
+                                new
+                                {
+                                    Id = 23,
+                                    AllowanceId = 7,
+                                    EffectiveFrom = new DateOnly(2022, 5, 1),
+                                    Source = "الملحق التعديلي عدد 11، الرائد الرسمي عدد 120 لسنة 2022، ص 3265",
+                                    Value = 0.452m
+                                },
+                                new
+                                {
+                                    Id = 24,
+                                    AllowanceId = 7,
+                                    EffectiveFrom = new DateOnly(2023, 5, 1),
+                                    Source = "الملحق التعديلي عدد 11، الرائد الرسمي عدد 120 لسنة 2022، ص 3265",
+                                    Value = 0.481m
+                                },
+                                new
+                                {
+                                    Id = 25,
+                                    AllowanceId = 8,
+                                    EffectiveFrom = new DateOnly(2017, 5, 1),
+                                    Source = "الملحق التعديلي عدد 9، الرائد الرسمي عدد 62 لسنة 2017",
+                                    Value = 3.180m
+                                },
+                                new
+                                {
+                                    Id = 26,
+                                    AllowanceId = 8,
+                                    EffectiveFrom = new DateOnly(2022, 5, 1),
+                                    Source = "الملحق التعديلي عدد 11، الرائد الرسمي عدد 120 لسنة 2022، ص 3265",
+                                    Value = 3.387m
+                                },
+                                new
+                                {
+                                    Id = 27,
+                                    AllowanceId = 8,
+                                    EffectiveFrom = new DateOnly(2023, 5, 1),
+                                    Source = "الملحق التعديلي عدد 11، الرائد الرسمي عدد 120 لسنة 2022، ص 3265",
+                                    Value = 3.607m
+                                },
+                                new
+                                {
+                                    Id = 28,
+                                    AllowanceId = 9,
+                                    EffectiveFrom = new DateOnly(2022, 5, 1),
+                                    Source = "الملحق التعديلي عدد 11، الرائد الرسمي عدد 120 لسنة 2022، ص 3265",
+                                    Value = 42.600m
+                                },
+                                new
+                                {
+                                    Id = 29,
+                                    AllowanceId = 9,
+                                    EffectiveFrom = new DateOnly(2023, 5, 1),
+                                    Source = "الملحق التعديلي عدد 11، الرائد الرسمي عدد 120 لسنة 2022، ص 3265",
+                                    Value = 45.369m
+                                },
+                                new
+                                {
+                                    Id = 30,
+                                    AllowanceId = 10,
+                                    EffectiveFrom = new DateOnly(2022, 5, 1),
+                                    Source = "الملحق التعديلي عدد 11، الرائد الرسمي عدد 120 لسنة 2022، ص 3265",
+                                    Value = 106.500m
+                                },
+                                new
+                                {
+                                    Id = 31,
+                                    AllowanceId = 10,
+                                    EffectiveFrom = new DateOnly(2023, 5, 1),
+                                    Source = "الملحق التعديلي عدد 11، الرائد الرسمي عدد 120 لسنة 2022، ص 3265",
+                                    Value = 113.423m
+                                },
+                                new
+                                {
+                                    Id = 32,
+                                    AllowanceId = 11,
+                                    EffectiveFrom = new DateOnly(1996, 5, 1),
+                                    Source = "الاتفاقية المشتركة القطاعية 1997، الرائد الرسمي عدد 41 لسنة 1997، الفصل 48",
+                                    Value = 15.000m
+                                });
                         });
 
                     b.Navigation("Rates");
@@ -1097,6 +1579,89 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("PayrollCalculator.Domain.Common.DateRange", "ApplicationPeriod", b1 =>
+                        {
+                            b1.Property<int>("SalaryTableId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<DateOnly?>("End")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("ApplicationEnd");
+
+                            b1.Property<DateOnly>("Start")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("ApplicationStart");
+
+                            b1.HasKey("SalaryTableId");
+
+                            b1.ToTable("SalaryTables");
+
+                            b1.WithOwner()
+                                .HasForeignKey("SalaryTableId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    SalaryTableId = 1,
+                                    Start = new DateOnly(2024, 1, 1)
+                                },
+                                new
+                                {
+                                    SalaryTableId = 2,
+                                    Start = new DateOnly(2025, 1, 1)
+                                },
+                                new
+                                {
+                                    SalaryTableId = 3,
+                                    Start = new DateOnly(2026, 1, 1)
+                                },
+                                new
+                                {
+                                    SalaryTableId = 4,
+                                    Start = new DateOnly(2024, 1, 1)
+                                },
+                                new
+                                {
+                                    SalaryTableId = 5,
+                                    Start = new DateOnly(2025, 1, 1)
+                                },
+                                new
+                                {
+                                    SalaryTableId = 6,
+                                    Start = new DateOnly(2026, 1, 1)
+                                },
+                                new
+                                {
+                                    SalaryTableId = 7,
+                                    Start = new DateOnly(1996, 5, 1)
+                                },
+                                new
+                                {
+                                    SalaryTableId = 8,
+                                    Start = new DateOnly(1997, 5, 1)
+                                },
+                                new
+                                {
+                                    SalaryTableId = 9,
+                                    Start = new DateOnly(1998, 5, 1)
+                                },
+                                new
+                                {
+                                    SalaryTableId = 10,
+                                    Start = new DateOnly(2017, 5, 1)
+                                },
+                                new
+                                {
+                                    SalaryTableId = 11,
+                                    Start = new DateOnly(2022, 5, 1)
+                                },
+                                new
+                                {
+                                    SalaryTableId = 12,
+                                    Start = new DateOnly(2023, 5, 1)
+                                });
+                        });
+
                     b.OwnsMany("PayrollCalculator.Domain.SalaryTables.DegreeStep", "Degrees", b1 =>
                         {
                             b1.Property<int>("Id")
@@ -1125,6 +1690,1496 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("SalaryTableId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    Id = 1,
+                                    Key = "deg-1",
+                                    Number = 1,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 2,
+                                    Key = "deg-2",
+                                    Number = 2,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 3,
+                                    Key = "deg-3",
+                                    Number = 3,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 4,
+                                    Key = "deg-4",
+                                    Number = 4,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 5,
+                                    Key = "deg-5",
+                                    Number = 5,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 6,
+                                    Key = "deg-6",
+                                    Number = 6,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 7,
+                                    Key = "deg-7",
+                                    Number = 7,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 8,
+                                    Key = "deg-8",
+                                    Number = 8,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 9,
+                                    Key = "deg-9",
+                                    Number = 9,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 10,
+                                    Key = "deg-10",
+                                    Number = 10,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 11,
+                                    Key = "deg-11",
+                                    Number = 11,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 12,
+                                    Key = "deg-12",
+                                    Number = 12,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 13,
+                                    Key = "deg-13",
+                                    Number = 13,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 14,
+                                    Key = "deg-14",
+                                    Number = 14,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 15,
+                                    Key = "deg-15",
+                                    Number = 15,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 16,
+                                    Key = "deg-16",
+                                    Number = 16,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 17,
+                                    Key = "deg-17",
+                                    Number = 17,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 18,
+                                    Key = "deg-18",
+                                    Number = 18,
+                                    SalaryTableId = 1,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 19,
+                                    Key = "deg-1",
+                                    Number = 1,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 20,
+                                    Key = "deg-2",
+                                    Number = 2,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 21,
+                                    Key = "deg-3",
+                                    Number = 3,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 22,
+                                    Key = "deg-4",
+                                    Number = 4,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 23,
+                                    Key = "deg-5",
+                                    Number = 5,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 24,
+                                    Key = "deg-6",
+                                    Number = 6,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 25,
+                                    Key = "deg-7",
+                                    Number = 7,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 26,
+                                    Key = "deg-8",
+                                    Number = 8,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 27,
+                                    Key = "deg-9",
+                                    Number = 9,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 28,
+                                    Key = "deg-10",
+                                    Number = 10,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 29,
+                                    Key = "deg-11",
+                                    Number = 11,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 30,
+                                    Key = "deg-12",
+                                    Number = 12,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 31,
+                                    Key = "deg-13",
+                                    Number = 13,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 32,
+                                    Key = "deg-14",
+                                    Number = 14,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 33,
+                                    Key = "deg-15",
+                                    Number = 15,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 34,
+                                    Key = "deg-16",
+                                    Number = 16,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 35,
+                                    Key = "deg-17",
+                                    Number = 17,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 36,
+                                    Key = "deg-18",
+                                    Number = 18,
+                                    SalaryTableId = 2,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 37,
+                                    Key = "deg-1",
+                                    Number = 1,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 38,
+                                    Key = "deg-2",
+                                    Number = 2,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 39,
+                                    Key = "deg-3",
+                                    Number = 3,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 40,
+                                    Key = "deg-4",
+                                    Number = 4,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 41,
+                                    Key = "deg-5",
+                                    Number = 5,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 42,
+                                    Key = "deg-6",
+                                    Number = 6,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 43,
+                                    Key = "deg-7",
+                                    Number = 7,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 44,
+                                    Key = "deg-8",
+                                    Number = 8,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 45,
+                                    Key = "deg-9",
+                                    Number = 9,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 46,
+                                    Key = "deg-10",
+                                    Number = 10,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 47,
+                                    Key = "deg-11",
+                                    Number = 11,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 48,
+                                    Key = "deg-12",
+                                    Number = 12,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 49,
+                                    Key = "deg-13",
+                                    Number = 13,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 50,
+                                    Key = "deg-14",
+                                    Number = 14,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 51,
+                                    Key = "deg-15",
+                                    Number = 15,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 52,
+                                    Key = "deg-16",
+                                    Number = 16,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 53,
+                                    Key = "deg-17",
+                                    Number = 17,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 54,
+                                    Key = "deg-18",
+                                    Number = 18,
+                                    SalaryTableId = 3,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 55,
+                                    Key = "deg-1",
+                                    Number = 1,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 56,
+                                    Key = "deg-2",
+                                    Number = 2,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 57,
+                                    Key = "deg-3",
+                                    Number = 3,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 58,
+                                    Key = "deg-4",
+                                    Number = 4,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 59,
+                                    Key = "deg-5",
+                                    Number = 5,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 60,
+                                    Key = "deg-6",
+                                    Number = 6,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 61,
+                                    Key = "deg-7",
+                                    Number = 7,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 62,
+                                    Key = "deg-8",
+                                    Number = 8,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 63,
+                                    Key = "deg-9",
+                                    Number = 9,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 64,
+                                    Key = "deg-10",
+                                    Number = 10,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 65,
+                                    Key = "deg-11",
+                                    Number = 11,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 66,
+                                    Key = "deg-12",
+                                    Number = 12,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 67,
+                                    Key = "deg-13",
+                                    Number = 13,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 68,
+                                    Key = "deg-14",
+                                    Number = 14,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 69,
+                                    Key = "deg-15",
+                                    Number = 15,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 70,
+                                    Key = "deg-16",
+                                    Number = 16,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 71,
+                                    Key = "deg-17",
+                                    Number = 17,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 72,
+                                    Key = "deg-18",
+                                    Number = 18,
+                                    SalaryTableId = 4,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 73,
+                                    Key = "deg-1",
+                                    Number = 1,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 74,
+                                    Key = "deg-2",
+                                    Number = 2,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 75,
+                                    Key = "deg-3",
+                                    Number = 3,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 76,
+                                    Key = "deg-4",
+                                    Number = 4,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 77,
+                                    Key = "deg-5",
+                                    Number = 5,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 78,
+                                    Key = "deg-6",
+                                    Number = 6,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 79,
+                                    Key = "deg-7",
+                                    Number = 7,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 80,
+                                    Key = "deg-8",
+                                    Number = 8,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 81,
+                                    Key = "deg-9",
+                                    Number = 9,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 82,
+                                    Key = "deg-10",
+                                    Number = 10,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 83,
+                                    Key = "deg-11",
+                                    Number = 11,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 84,
+                                    Key = "deg-12",
+                                    Number = 12,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 85,
+                                    Key = "deg-13",
+                                    Number = 13,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 86,
+                                    Key = "deg-14",
+                                    Number = 14,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 87,
+                                    Key = "deg-15",
+                                    Number = 15,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 88,
+                                    Key = "deg-16",
+                                    Number = 16,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 89,
+                                    Key = "deg-17",
+                                    Number = 17,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 90,
+                                    Key = "deg-18",
+                                    Number = 18,
+                                    SalaryTableId = 5,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 91,
+                                    Key = "deg-1",
+                                    Number = 1,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 92,
+                                    Key = "deg-2",
+                                    Number = 2,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 93,
+                                    Key = "deg-3",
+                                    Number = 3,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 94,
+                                    Key = "deg-4",
+                                    Number = 4,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 95,
+                                    Key = "deg-5",
+                                    Number = 5,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 96,
+                                    Key = "deg-6",
+                                    Number = 6,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 97,
+                                    Key = "deg-7",
+                                    Number = 7,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 98,
+                                    Key = "deg-8",
+                                    Number = 8,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 99,
+                                    Key = "deg-9",
+                                    Number = 9,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 100,
+                                    Key = "deg-10",
+                                    Number = 10,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 101,
+                                    Key = "deg-11",
+                                    Number = 11,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 102,
+                                    Key = "deg-12",
+                                    Number = 12,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 103,
+                                    Key = "deg-13",
+                                    Number = 13,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 104,
+                                    Key = "deg-14",
+                                    Number = 14,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 105,
+                                    Key = "deg-15",
+                                    Number = 15,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 106,
+                                    Key = "deg-16",
+                                    Number = 16,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 107,
+                                    Key = "deg-17",
+                                    Number = 17,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 108,
+                                    Key = "deg-18",
+                                    Number = 18,
+                                    SalaryTableId = 6,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 109,
+                                    Key = "deg-1",
+                                    Number = 1,
+                                    SalaryTableId = 7,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 110,
+                                    Key = "deg-2",
+                                    Number = 2,
+                                    SalaryTableId = 7,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 111,
+                                    Key = "deg-3",
+                                    Number = 3,
+                                    SalaryTableId = 7,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 112,
+                                    Key = "deg-4",
+                                    Number = 4,
+                                    SalaryTableId = 7,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 113,
+                                    Key = "deg-5",
+                                    Number = 5,
+                                    SalaryTableId = 7,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 114,
+                                    Key = "deg-6",
+                                    Number = 6,
+                                    SalaryTableId = 7,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 115,
+                                    Key = "deg-7",
+                                    Number = 7,
+                                    SalaryTableId = 7,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 116,
+                                    Key = "deg-8",
+                                    Number = 8,
+                                    SalaryTableId = 7,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 117,
+                                    Key = "deg-9",
+                                    Number = 9,
+                                    SalaryTableId = 7,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 118,
+                                    Key = "deg-10",
+                                    Number = 10,
+                                    SalaryTableId = 7,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 119,
+                                    Key = "deg-11",
+                                    Number = 11,
+                                    SalaryTableId = 7,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 120,
+                                    Key = "deg-12",
+                                    Number = 12,
+                                    SalaryTableId = 7,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 121,
+                                    Key = "deg-13",
+                                    Number = 13,
+                                    SalaryTableId = 7,
+                                    YearsInDegree = 0
+                                },
+                                new
+                                {
+                                    Id = 122,
+                                    Key = "deg-1",
+                                    Number = 1,
+                                    SalaryTableId = 8,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 123,
+                                    Key = "deg-2",
+                                    Number = 2,
+                                    SalaryTableId = 8,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 124,
+                                    Key = "deg-3",
+                                    Number = 3,
+                                    SalaryTableId = 8,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 125,
+                                    Key = "deg-4",
+                                    Number = 4,
+                                    SalaryTableId = 8,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 126,
+                                    Key = "deg-5",
+                                    Number = 5,
+                                    SalaryTableId = 8,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 127,
+                                    Key = "deg-6",
+                                    Number = 6,
+                                    SalaryTableId = 8,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 128,
+                                    Key = "deg-7",
+                                    Number = 7,
+                                    SalaryTableId = 8,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 129,
+                                    Key = "deg-8",
+                                    Number = 8,
+                                    SalaryTableId = 8,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 130,
+                                    Key = "deg-9",
+                                    Number = 9,
+                                    SalaryTableId = 8,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 131,
+                                    Key = "deg-10",
+                                    Number = 10,
+                                    SalaryTableId = 8,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 132,
+                                    Key = "deg-11",
+                                    Number = 11,
+                                    SalaryTableId = 8,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 133,
+                                    Key = "deg-12",
+                                    Number = 12,
+                                    SalaryTableId = 8,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 134,
+                                    Key = "deg-13",
+                                    Number = 13,
+                                    SalaryTableId = 8,
+                                    YearsInDegree = 0
+                                },
+                                new
+                                {
+                                    Id = 135,
+                                    Key = "deg-1",
+                                    Number = 1,
+                                    SalaryTableId = 9,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 136,
+                                    Key = "deg-2",
+                                    Number = 2,
+                                    SalaryTableId = 9,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 137,
+                                    Key = "deg-3",
+                                    Number = 3,
+                                    SalaryTableId = 9,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 138,
+                                    Key = "deg-4",
+                                    Number = 4,
+                                    SalaryTableId = 9,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 139,
+                                    Key = "deg-5",
+                                    Number = 5,
+                                    SalaryTableId = 9,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 140,
+                                    Key = "deg-6",
+                                    Number = 6,
+                                    SalaryTableId = 9,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 141,
+                                    Key = "deg-7",
+                                    Number = 7,
+                                    SalaryTableId = 9,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 142,
+                                    Key = "deg-8",
+                                    Number = 8,
+                                    SalaryTableId = 9,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 143,
+                                    Key = "deg-9",
+                                    Number = 9,
+                                    SalaryTableId = 9,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 144,
+                                    Key = "deg-10",
+                                    Number = 10,
+                                    SalaryTableId = 9,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 145,
+                                    Key = "deg-11",
+                                    Number = 11,
+                                    SalaryTableId = 9,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 146,
+                                    Key = "deg-12",
+                                    Number = 12,
+                                    SalaryTableId = 9,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 147,
+                                    Key = "deg-13",
+                                    Number = 13,
+                                    SalaryTableId = 9,
+                                    YearsInDegree = 0
+                                },
+                                new
+                                {
+                                    Id = 148,
+                                    Key = "deg-1",
+                                    Number = 1,
+                                    SalaryTableId = 10,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 149,
+                                    Key = "deg-2",
+                                    Number = 2,
+                                    SalaryTableId = 10,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 150,
+                                    Key = "deg-3",
+                                    Number = 3,
+                                    SalaryTableId = 10,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 151,
+                                    Key = "deg-4",
+                                    Number = 4,
+                                    SalaryTableId = 10,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 152,
+                                    Key = "deg-5",
+                                    Number = 5,
+                                    SalaryTableId = 10,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 153,
+                                    Key = "deg-6",
+                                    Number = 6,
+                                    SalaryTableId = 10,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 154,
+                                    Key = "deg-7",
+                                    Number = 7,
+                                    SalaryTableId = 10,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 155,
+                                    Key = "deg-8",
+                                    Number = 8,
+                                    SalaryTableId = 10,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 156,
+                                    Key = "deg-9",
+                                    Number = 9,
+                                    SalaryTableId = 10,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 157,
+                                    Key = "deg-10",
+                                    Number = 10,
+                                    SalaryTableId = 10,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 158,
+                                    Key = "deg-11",
+                                    Number = 11,
+                                    SalaryTableId = 10,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 159,
+                                    Key = "deg-12",
+                                    Number = 12,
+                                    SalaryTableId = 10,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 160,
+                                    Key = "deg-13",
+                                    Number = 13,
+                                    SalaryTableId = 10,
+                                    YearsInDegree = 0
+                                },
+                                new
+                                {
+                                    Id = 161,
+                                    Key = "deg-1",
+                                    Number = 1,
+                                    SalaryTableId = 11,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 162,
+                                    Key = "deg-2",
+                                    Number = 2,
+                                    SalaryTableId = 11,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 163,
+                                    Key = "deg-3",
+                                    Number = 3,
+                                    SalaryTableId = 11,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 164,
+                                    Key = "deg-4",
+                                    Number = 4,
+                                    SalaryTableId = 11,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 165,
+                                    Key = "deg-5",
+                                    Number = 5,
+                                    SalaryTableId = 11,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 166,
+                                    Key = "deg-6",
+                                    Number = 6,
+                                    SalaryTableId = 11,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 167,
+                                    Key = "deg-7",
+                                    Number = 7,
+                                    SalaryTableId = 11,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 168,
+                                    Key = "deg-8",
+                                    Number = 8,
+                                    SalaryTableId = 11,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 169,
+                                    Key = "deg-9",
+                                    Number = 9,
+                                    SalaryTableId = 11,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 170,
+                                    Key = "deg-10",
+                                    Number = 10,
+                                    SalaryTableId = 11,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 171,
+                                    Key = "deg-11",
+                                    Number = 11,
+                                    SalaryTableId = 11,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 172,
+                                    Key = "deg-12",
+                                    Number = 12,
+                                    SalaryTableId = 11,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 173,
+                                    Key = "deg-13",
+                                    Number = 13,
+                                    SalaryTableId = 11,
+                                    YearsInDegree = 0
+                                },
+                                new
+                                {
+                                    Id = 174,
+                                    Key = "deg-1",
+                                    Number = 1,
+                                    SalaryTableId = 12,
+                                    YearsInDegree = 1
+                                },
+                                new
+                                {
+                                    Id = 175,
+                                    Key = "deg-2",
+                                    Number = 2,
+                                    SalaryTableId = 12,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 176,
+                                    Key = "deg-3",
+                                    Number = 3,
+                                    SalaryTableId = 12,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 177,
+                                    Key = "deg-4",
+                                    Number = 4,
+                                    SalaryTableId = 12,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 178,
+                                    Key = "deg-5",
+                                    Number = 5,
+                                    SalaryTableId = 12,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 179,
+                                    Key = "deg-6",
+                                    Number = 6,
+                                    SalaryTableId = 12,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 180,
+                                    Key = "deg-7",
+                                    Number = 7,
+                                    SalaryTableId = 12,
+                                    YearsInDegree = 2
+                                },
+                                new
+                                {
+                                    Id = 181,
+                                    Key = "deg-8",
+                                    Number = 8,
+                                    SalaryTableId = 12,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 182,
+                                    Key = "deg-9",
+                                    Number = 9,
+                                    SalaryTableId = 12,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 183,
+                                    Key = "deg-10",
+                                    Number = 10,
+                                    SalaryTableId = 12,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 184,
+                                    Key = "deg-11",
+                                    Number = 11,
+                                    SalaryTableId = 12,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 185,
+                                    Key = "deg-12",
+                                    Number = 12,
+                                    SalaryTableId = 12,
+                                    YearsInDegree = 3
+                                },
+                                new
+                                {
+                                    Id = 186,
+                                    Key = "deg-13",
+                                    Number = 13,
+                                    SalaryTableId = 12,
+                                    YearsInDegree = 0
+                                });
                         });
 
                     b.OwnsMany("PayrollCalculator.Domain.SalaryTables.SalaryCategory", "Categories", b1 =>
@@ -1157,6 +3212,1064 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("SalaryTableId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    Id = 1,
+                                    Key = "cat-1",
+                                    Label = "I",
+                                    Position = 0,
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 2,
+                                    Key = "cat-2",
+                                    Label = "II",
+                                    Position = 1,
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 3,
+                                    Key = "cat-3",
+                                    Label = "III",
+                                    Position = 2,
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 4,
+                                    Key = "cat-4",
+                                    Label = "IV",
+                                    Position = 3,
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 5,
+                                    Key = "cat-5",
+                                    Label = "V",
+                                    Position = 4,
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 6,
+                                    Key = "cat-6",
+                                    Label = "VI",
+                                    Position = 5,
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 7,
+                                    Key = "cat-1",
+                                    Label = "I",
+                                    Position = 0,
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 8,
+                                    Key = "cat-2",
+                                    Label = "II",
+                                    Position = 1,
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 9,
+                                    Key = "cat-3",
+                                    Label = "III",
+                                    Position = 2,
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 10,
+                                    Key = "cat-4",
+                                    Label = "IV",
+                                    Position = 3,
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 11,
+                                    Key = "cat-5",
+                                    Label = "V",
+                                    Position = 4,
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 12,
+                                    Key = "cat-6",
+                                    Label = "VI",
+                                    Position = 5,
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 13,
+                                    Key = "cat-1",
+                                    Label = "I",
+                                    Position = 0,
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 14,
+                                    Key = "cat-2",
+                                    Label = "II",
+                                    Position = 1,
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 15,
+                                    Key = "cat-3",
+                                    Label = "III",
+                                    Position = 2,
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 16,
+                                    Key = "cat-4",
+                                    Label = "IV",
+                                    Position = 3,
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 17,
+                                    Key = "cat-5",
+                                    Label = "V",
+                                    Position = 4,
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 18,
+                                    Key = "cat-6",
+                                    Label = "VI",
+                                    Position = 5,
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 19,
+                                    Key = "cat-1",
+                                    Label = "1أ",
+                                    Position = 0,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 20,
+                                    Key = "cat-2",
+                                    Label = "1ب",
+                                    Position = 1,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 21,
+                                    Key = "cat-3",
+                                    Label = "2",
+                                    Position = 2,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 22,
+                                    Key = "cat-4",
+                                    Label = "3",
+                                    Position = 3,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 23,
+                                    Key = "cat-5",
+                                    Label = "4",
+                                    Position = 4,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 24,
+                                    Key = "cat-6",
+                                    Label = "5",
+                                    Position = 5,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 25,
+                                    Key = "cat-7",
+                                    Label = "6",
+                                    Position = 6,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 26,
+                                    Key = "cat-8",
+                                    Label = "7",
+                                    Position = 7,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 27,
+                                    Key = "cat-9",
+                                    Label = "8",
+                                    Position = 8,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 28,
+                                    Key = "cat-10",
+                                    Label = "9",
+                                    Position = 9,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 29,
+                                    Key = "cat-11",
+                                    Label = "10",
+                                    Position = 10,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 30,
+                                    Key = "cat-12",
+                                    Label = "11",
+                                    Position = 11,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 31,
+                                    Key = "cat-13",
+                                    Label = "12",
+                                    Position = 12,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 32,
+                                    Key = "cat-14",
+                                    Label = "13",
+                                    Position = 13,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 33,
+                                    Key = "cat-15",
+                                    Label = "14",
+                                    Position = 14,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 34,
+                                    Key = "cat-16",
+                                    Label = "15",
+                                    Position = 15,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 35,
+                                    Key = "cat-17",
+                                    Label = "16",
+                                    Position = 16,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 36,
+                                    Key = "cat-18",
+                                    Label = "17",
+                                    Position = 17,
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 37,
+                                    Key = "cat-1",
+                                    Label = "1أ",
+                                    Position = 0,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 38,
+                                    Key = "cat-2",
+                                    Label = "1ب",
+                                    Position = 1,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 39,
+                                    Key = "cat-3",
+                                    Label = "2",
+                                    Position = 2,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 40,
+                                    Key = "cat-4",
+                                    Label = "3",
+                                    Position = 3,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 41,
+                                    Key = "cat-5",
+                                    Label = "4",
+                                    Position = 4,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 42,
+                                    Key = "cat-6",
+                                    Label = "5",
+                                    Position = 5,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 43,
+                                    Key = "cat-7",
+                                    Label = "6",
+                                    Position = 6,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 44,
+                                    Key = "cat-8",
+                                    Label = "7",
+                                    Position = 7,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 45,
+                                    Key = "cat-9",
+                                    Label = "8",
+                                    Position = 8,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 46,
+                                    Key = "cat-10",
+                                    Label = "9",
+                                    Position = 9,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 47,
+                                    Key = "cat-11",
+                                    Label = "10",
+                                    Position = 10,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 48,
+                                    Key = "cat-12",
+                                    Label = "11",
+                                    Position = 11,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 49,
+                                    Key = "cat-13",
+                                    Label = "12",
+                                    Position = 12,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 50,
+                                    Key = "cat-14",
+                                    Label = "13",
+                                    Position = 13,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 51,
+                                    Key = "cat-15",
+                                    Label = "14",
+                                    Position = 14,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 52,
+                                    Key = "cat-16",
+                                    Label = "15",
+                                    Position = 15,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 53,
+                                    Key = "cat-17",
+                                    Label = "16",
+                                    Position = 16,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 54,
+                                    Key = "cat-18",
+                                    Label = "17",
+                                    Position = 17,
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 55,
+                                    Key = "cat-1",
+                                    Label = "1أ",
+                                    Position = 0,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 56,
+                                    Key = "cat-2",
+                                    Label = "1ب",
+                                    Position = 1,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 57,
+                                    Key = "cat-3",
+                                    Label = "2",
+                                    Position = 2,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 58,
+                                    Key = "cat-4",
+                                    Label = "3",
+                                    Position = 3,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 59,
+                                    Key = "cat-5",
+                                    Label = "4",
+                                    Position = 4,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 60,
+                                    Key = "cat-6",
+                                    Label = "5",
+                                    Position = 5,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 61,
+                                    Key = "cat-7",
+                                    Label = "6",
+                                    Position = 6,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 62,
+                                    Key = "cat-8",
+                                    Label = "7",
+                                    Position = 7,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 63,
+                                    Key = "cat-9",
+                                    Label = "8",
+                                    Position = 8,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 64,
+                                    Key = "cat-10",
+                                    Label = "9",
+                                    Position = 9,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 65,
+                                    Key = "cat-11",
+                                    Label = "10",
+                                    Position = 10,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 66,
+                                    Key = "cat-12",
+                                    Label = "11",
+                                    Position = 11,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 67,
+                                    Key = "cat-13",
+                                    Label = "12",
+                                    Position = 12,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 68,
+                                    Key = "cat-14",
+                                    Label = "13",
+                                    Position = 13,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 69,
+                                    Key = "cat-15",
+                                    Label = "14",
+                                    Position = 14,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 70,
+                                    Key = "cat-16",
+                                    Label = "15",
+                                    Position = 15,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 71,
+                                    Key = "cat-17",
+                                    Label = "16",
+                                    Position = 16,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 72,
+                                    Key = "cat-18",
+                                    Label = "17",
+                                    Position = 17,
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 73,
+                                    Key = "cat-1",
+                                    Label = "1",
+                                    Position = 0,
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 74,
+                                    Key = "cat-2",
+                                    Label = "2",
+                                    Position = 1,
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 75,
+                                    Key = "cat-3",
+                                    Label = "3",
+                                    Position = 2,
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 76,
+                                    Key = "cat-4",
+                                    Label = "4",
+                                    Position = 3,
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 77,
+                                    Key = "cat-5",
+                                    Label = "5",
+                                    Position = 4,
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 78,
+                                    Key = "cat-6",
+                                    Label = "6",
+                                    Position = 5,
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 79,
+                                    Key = "cat-7",
+                                    Label = "7",
+                                    Position = 6,
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 80,
+                                    Key = "cat-8",
+                                    Label = "8",
+                                    Position = 7,
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 81,
+                                    Key = "cat-9",
+                                    Label = "9",
+                                    Position = 8,
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 82,
+                                    Key = "cat-10",
+                                    Label = "10",
+                                    Position = 9,
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 83,
+                                    Key = "cat-1",
+                                    Label = "1",
+                                    Position = 0,
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 84,
+                                    Key = "cat-2",
+                                    Label = "2",
+                                    Position = 1,
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 85,
+                                    Key = "cat-3",
+                                    Label = "3",
+                                    Position = 2,
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 86,
+                                    Key = "cat-4",
+                                    Label = "4",
+                                    Position = 3,
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 87,
+                                    Key = "cat-5",
+                                    Label = "5",
+                                    Position = 4,
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 88,
+                                    Key = "cat-6",
+                                    Label = "6",
+                                    Position = 5,
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 89,
+                                    Key = "cat-7",
+                                    Label = "7",
+                                    Position = 6,
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 90,
+                                    Key = "cat-8",
+                                    Label = "8",
+                                    Position = 7,
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 91,
+                                    Key = "cat-9",
+                                    Label = "9",
+                                    Position = 8,
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 92,
+                                    Key = "cat-10",
+                                    Label = "10",
+                                    Position = 9,
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 93,
+                                    Key = "cat-1",
+                                    Label = "1",
+                                    Position = 0,
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 94,
+                                    Key = "cat-2",
+                                    Label = "2",
+                                    Position = 1,
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 95,
+                                    Key = "cat-3",
+                                    Label = "3",
+                                    Position = 2,
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 96,
+                                    Key = "cat-4",
+                                    Label = "4",
+                                    Position = 3,
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 97,
+                                    Key = "cat-5",
+                                    Label = "5",
+                                    Position = 4,
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 98,
+                                    Key = "cat-6",
+                                    Label = "6",
+                                    Position = 5,
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 99,
+                                    Key = "cat-7",
+                                    Label = "7",
+                                    Position = 6,
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 100,
+                                    Key = "cat-8",
+                                    Label = "8",
+                                    Position = 7,
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 101,
+                                    Key = "cat-9",
+                                    Label = "9",
+                                    Position = 8,
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 102,
+                                    Key = "cat-10",
+                                    Label = "10",
+                                    Position = 9,
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 103,
+                                    Key = "cat-1",
+                                    Label = "1",
+                                    Position = 0,
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 104,
+                                    Key = "cat-2",
+                                    Label = "2",
+                                    Position = 1,
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 105,
+                                    Key = "cat-3",
+                                    Label = "3",
+                                    Position = 2,
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 106,
+                                    Key = "cat-4",
+                                    Label = "4",
+                                    Position = 3,
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 107,
+                                    Key = "cat-5",
+                                    Label = "5",
+                                    Position = 4,
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 108,
+                                    Key = "cat-6",
+                                    Label = "6",
+                                    Position = 5,
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 109,
+                                    Key = "cat-7",
+                                    Label = "7",
+                                    Position = 6,
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 110,
+                                    Key = "cat-8",
+                                    Label = "8",
+                                    Position = 7,
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 111,
+                                    Key = "cat-9",
+                                    Label = "9",
+                                    Position = 8,
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 112,
+                                    Key = "cat-10",
+                                    Label = "10",
+                                    Position = 9,
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 113,
+                                    Key = "cat-1",
+                                    Label = "1",
+                                    Position = 0,
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 114,
+                                    Key = "cat-2",
+                                    Label = "2",
+                                    Position = 1,
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 115,
+                                    Key = "cat-3",
+                                    Label = "3",
+                                    Position = 2,
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 116,
+                                    Key = "cat-4",
+                                    Label = "4",
+                                    Position = 3,
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 117,
+                                    Key = "cat-5",
+                                    Label = "5",
+                                    Position = 4,
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 118,
+                                    Key = "cat-6",
+                                    Label = "6",
+                                    Position = 5,
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 119,
+                                    Key = "cat-7",
+                                    Label = "7",
+                                    Position = 6,
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 120,
+                                    Key = "cat-8",
+                                    Label = "8",
+                                    Position = 7,
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 121,
+                                    Key = "cat-9",
+                                    Label = "9",
+                                    Position = 8,
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 122,
+                                    Key = "cat-10",
+                                    Label = "10",
+                                    Position = 9,
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 123,
+                                    Key = "cat-1",
+                                    Label = "1",
+                                    Position = 0,
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 124,
+                                    Key = "cat-2",
+                                    Label = "2",
+                                    Position = 1,
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 125,
+                                    Key = "cat-3",
+                                    Label = "3",
+                                    Position = 2,
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 126,
+                                    Key = "cat-4",
+                                    Label = "4",
+                                    Position = 3,
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 127,
+                                    Key = "cat-5",
+                                    Label = "5",
+                                    Position = 4,
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 128,
+                                    Key = "cat-6",
+                                    Label = "6",
+                                    Position = 5,
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 129,
+                                    Key = "cat-7",
+                                    Label = "7",
+                                    Position = 6,
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 130,
+                                    Key = "cat-8",
+                                    Label = "8",
+                                    Position = 7,
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 131,
+                                    Key = "cat-9",
+                                    Label = "9",
+                                    Position = 8,
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 132,
+                                    Key = "cat-10",
+                                    Label = "10",
+                                    Position = 9,
+                                    SalaryTableId = 12
+                                });
                         });
 
                     b.OwnsMany("PayrollCalculator.Domain.SalaryTables.SalaryCell", "Cells", b1 =>
@@ -1190,7 +4303,16620 @@ namespace PayrollCalculator.Infrastructure.Persistence.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("SalaryTableId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    Id = 1,
+                                    Amount = 2.850m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 2,
+                                    Amount = 2.896m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 3,
+                                    Amount = 2.899m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 4,
+                                    Amount = 2.901m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 5,
+                                    Amount = 2.903m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 6,
+                                    Amount = 2.906m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 7,
+                                    Amount = 2.910m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 8,
+                                    Amount = 2.912m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 9,
+                                    Amount = 2.916m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 10,
+                                    Amount = 2.918m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 11,
+                                    Amount = 2.928m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 12,
+                                    Amount = 2.939m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 13,
+                                    Amount = 2.948m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 14,
+                                    Amount = 2.956m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 15,
+                                    Amount = 2.963m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 16,
+                                    Amount = 2.970m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 17,
+                                    Amount = 2.978m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 18,
+                                    Amount = 2.985m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 19,
+                                    Amount = 3.033m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 20,
+                                    Amount = 3.039m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 21,
+                                    Amount = 3.043m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 22,
+                                    Amount = 3.047m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 23,
+                                    Amount = 3.050m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 24,
+                                    Amount = 3.054m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 25,
+                                    Amount = 3.059m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 26,
+                                    Amount = 3.070m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 27,
+                                    Amount = 3.082m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 28,
+                                    Amount = 3.093m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 29,
+                                    Amount = 3.106m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 30,
+                                    Amount = 3.117m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 31,
+                                    Amount = 3.129m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 32,
+                                    Amount = 3.137m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 33,
+                                    Amount = 3.144m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 34,
+                                    Amount = 3.151m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 35,
+                                    Amount = 3.158m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 36,
+                                    Amount = 3.166m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 37,
+                                    Amount = 3.522m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 38,
+                                    Amount = 3.532m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 39,
+                                    Amount = 3.536m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 40,
+                                    Amount = 3.547m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 41,
+                                    Amount = 3.562m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 42,
+                                    Amount = 3.575m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 43,
+                                    Amount = 3.589m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 44,
+                                    Amount = 3.601m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 45,
+                                    Amount = 3.614m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 46,
+                                    Amount = 3.629m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 47,
+                                    Amount = 3.655m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 48,
+                                    Amount = 3.670m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 49,
+                                    Amount = 3.682m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 50,
+                                    Amount = 3.694m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 51,
+                                    Amount = 3.706m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 52,
+                                    Amount = 3.719m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 53,
+                                    Amount = 3.731m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 54,
+                                    Amount = 3.743m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 55,
+                                    Amount = 3.711m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 56,
+                                    Amount = 3.747m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 57,
+                                    Amount = 3.762m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 58,
+                                    Amount = 3.782m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 59,
+                                    Amount = 3.793m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 60,
+                                    Amount = 3.809m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 61,
+                                    Amount = 3.840m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 62,
+                                    Amount = 3.853m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 63,
+                                    Amount = 3.866m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 64,
+                                    Amount = 3.880m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 65,
+                                    Amount = 3.893m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 66,
+                                    Amount = 3.907m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 67,
+                                    Amount = 3.922m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 68,
+                                    Amount = 3.938m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 69,
+                                    Amount = 3.954m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 70,
+                                    Amount = 3.969m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 71,
+                                    Amount = 3.985m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 72,
+                                    Amount = 4.000m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 73,
+                                    Amount = 3.846m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 74,
+                                    Amount = 3.883m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 75,
+                                    Amount = 3.903m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 76,
+                                    Amount = 3.932m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 77,
+                                    Amount = 3.950m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 78,
+                                    Amount = 3.965m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 79,
+                                    Amount = 3.980m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 80,
+                                    Amount = 3.995m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 81,
+                                    Amount = 4.013m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 82,
+                                    Amount = 4.026m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 83,
+                                    Amount = 4.041m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 84,
+                                    Amount = 4.054m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 85,
+                                    Amount = 4.068m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 86,
+                                    Amount = 4.085m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 87,
+                                    Amount = 4.102m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 88,
+                                    Amount = 4.119m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 89,
+                                    Amount = 4.136m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 90,
+                                    Amount = 4.153m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 91,
+                                    Amount = 4.146m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 92,
+                                    Amount = 4.180m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 93,
+                                    Amount = 4.197m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 94,
+                                    Amount = 4.214m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 95,
+                                    Amount = 4.234m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 96,
+                                    Amount = 4.250m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 97,
+                                    Amount = 4.267m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 98,
+                                    Amount = 4.284m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 99,
+                                    Amount = 4.299m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 100,
+                                    Amount = 4.318m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 101,
+                                    Amount = 4.348m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 102,
+                                    Amount = 4.366m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 103,
+                                    Amount = 4.383m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 104,
+                                    Amount = 4.401m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 105,
+                                    Amount = 4.419m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 106,
+                                    Amount = 4.438m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 107,
+                                    Amount = 4.456m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 108,
+                                    Amount = 4.475m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 1
+                                },
+                                new
+                                {
+                                    Id = 109,
+                                    Amount = 3.035m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 110,
+                                    Amount = 3.084m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 111,
+                                    Amount = 3.087m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 112,
+                                    Amount = 3.090m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 113,
+                                    Amount = 3.092m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 114,
+                                    Amount = 3.095m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 115,
+                                    Amount = 3.099m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 116,
+                                    Amount = 3.101m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 117,
+                                    Amount = 3.105m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 118,
+                                    Amount = 3.108m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 119,
+                                    Amount = 3.118m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 120,
+                                    Amount = 3.130m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 121,
+                                    Amount = 3.140m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 122,
+                                    Amount = 3.148m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 123,
+                                    Amount = 3.156m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 124,
+                                    Amount = 3.163m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 125,
+                                    Amount = 3.171m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 126,
+                                    Amount = 3.179m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 127,
+                                    Amount = 3.231m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 128,
+                                    Amount = 3.237m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 129,
+                                    Amount = 3.241m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 130,
+                                    Amount = 3.245m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 131,
+                                    Amount = 3.249m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 132,
+                                    Amount = 3.253m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 133,
+                                    Amount = 3.258m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 134,
+                                    Amount = 3.269m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 135,
+                                    Amount = 3.282m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 136,
+                                    Amount = 3.294m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 137,
+                                    Amount = 3.308m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 138,
+                                    Amount = 3.320m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 139,
+                                    Amount = 3.333m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 140,
+                                    Amount = 3.340m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 141,
+                                    Amount = 3.348m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 142,
+                                    Amount = 3.356m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 143,
+                                    Amount = 3.364m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 144,
+                                    Amount = 3.371m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 145,
+                                    Amount = 3.751m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 146,
+                                    Amount = 3.761m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 147,
+                                    Amount = 3.766m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 148,
+                                    Amount = 3.778m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 149,
+                                    Amount = 3.793m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 150,
+                                    Amount = 3.808m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 151,
+                                    Amount = 3.822m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 152,
+                                    Amount = 3.835m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 153,
+                                    Amount = 3.849m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 154,
+                                    Amount = 3.865m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 155,
+                                    Amount = 3.893m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 156,
+                                    Amount = 3.909m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 157,
+                                    Amount = 3.921m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 158,
+                                    Amount = 3.934m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 159,
+                                    Amount = 3.947m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 160,
+                                    Amount = 3.960m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 161,
+                                    Amount = 3.973m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 162,
+                                    Amount = 3.986m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 163,
+                                    Amount = 3.952m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 164,
+                                    Amount = 3.991m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 165,
+                                    Amount = 4.006m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 166,
+                                    Amount = 4.028m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 167,
+                                    Amount = 4.040m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 168,
+                                    Amount = 4.057m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 169,
+                                    Amount = 4.089m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 170,
+                                    Amount = 4.103m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 171,
+                                    Amount = 4.118m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 172,
+                                    Amount = 4.132m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 173,
+                                    Amount = 4.146m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 174,
+                                    Amount = 4.161m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 175,
+                                    Amount = 4.177m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 176,
+                                    Amount = 4.194m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 177,
+                                    Amount = 4.211m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 178,
+                                    Amount = 4.227m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 179,
+                                    Amount = 4.244m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 180,
+                                    Amount = 4.260m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 181,
+                                    Amount = 4.096m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 182,
+                                    Amount = 4.136m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 183,
+                                    Amount = 4.156m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 184,
+                                    Amount = 4.187m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 185,
+                                    Amount = 4.207m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 186,
+                                    Amount = 4.222m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 187,
+                                    Amount = 4.239m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 188,
+                                    Amount = 4.255m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 189,
+                                    Amount = 4.274m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 190,
+                                    Amount = 4.288m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 191,
+                                    Amount = 4.304m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 192,
+                                    Amount = 4.318m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 193,
+                                    Amount = 4.332m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 194,
+                                    Amount = 4.350m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 195,
+                                    Amount = 4.368m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 196,
+                                    Amount = 4.386m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 197,
+                                    Amount = 4.404m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 198,
+                                    Amount = 4.423m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 199,
+                                    Amount = 4.416m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 200,
+                                    Amount = 4.452m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 201,
+                                    Amount = 4.470m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 202,
+                                    Amount = 4.488m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 203,
+                                    Amount = 4.509m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 204,
+                                    Amount = 4.526m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 205,
+                                    Amount = 4.544m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 206,
+                                    Amount = 4.562m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 207,
+                                    Amount = 4.579m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 208,
+                                    Amount = 4.598m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 209,
+                                    Amount = 4.630m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 210,
+                                    Amount = 4.650m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 211,
+                                    Amount = 4.668m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 212,
+                                    Amount = 4.687m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 213,
+                                    Amount = 4.707m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 214,
+                                    Amount = 4.726m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 215,
+                                    Amount = 4.746m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 216,
+                                    Amount = 4.766m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 2
+                                },
+                                new
+                                {
+                                    Id = 217,
+                                    Amount = 3.248m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 218,
+                                    Amount = 3.300m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 219,
+                                    Amount = 3.303m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 220,
+                                    Amount = 3.306m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 221,
+                                    Amount = 3.309m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 222,
+                                    Amount = 3.311m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 223,
+                                    Amount = 3.316m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 224,
+                                    Amount = 3.318m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 225,
+                                    Amount = 3.322m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 226,
+                                    Amount = 3.325m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 227,
+                                    Amount = 3.336m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 228,
+                                    Amount = 3.349m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 229,
+                                    Amount = 3.360m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 230,
+                                    Amount = 3.368m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 231,
+                                    Amount = 3.376m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 232,
+                                    Amount = 3.385m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 233,
+                                    Amount = 3.393m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 234,
+                                    Amount = 3.401m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 235,
+                                    Amount = 3.457m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 236,
+                                    Amount = 3.464m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 237,
+                                    Amount = 3.468m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 238,
+                                    Amount = 3.472m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 239,
+                                    Amount = 3.476m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 240,
+                                    Amount = 3.480m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 241,
+                                    Amount = 3.486m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 242,
+                                    Amount = 3.498m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 243,
+                                    Amount = 3.512m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 244,
+                                    Amount = 3.524m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 245,
+                                    Amount = 3.540m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 246,
+                                    Amount = 3.552m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 247,
+                                    Amount = 3.566m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 248,
+                                    Amount = 3.574m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 249,
+                                    Amount = 3.583m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 250,
+                                    Amount = 3.591m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 251,
+                                    Amount = 3.599m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 252,
+                                    Amount = 3.607m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 253,
+                                    Amount = 4.013m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 254,
+                                    Amount = 4.024m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 255,
+                                    Amount = 4.030m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 256,
+                                    Amount = 4.042m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 257,
+                                    Amount = 4.059m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 258,
+                                    Amount = 4.074m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 259,
+                                    Amount = 4.089m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 260,
+                                    Amount = 4.103m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 261,
+                                    Amount = 4.119m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 262,
+                                    Amount = 4.135m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 263,
+                                    Amount = 4.166m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 264,
+                                    Amount = 4.182m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 265,
+                                    Amount = 4.196m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 266,
+                                    Amount = 4.210m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 267,
+                                    Amount = 4.224m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 268,
+                                    Amount = 4.237m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 269,
+                                    Amount = 4.251m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 270,
+                                    Amount = 4.265m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 271,
+                                    Amount = 4.229m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 272,
+                                    Amount = 4.270m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 273,
+                                    Amount = 4.287m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 274,
+                                    Amount = 4.310m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 275,
+                                    Amount = 4.323m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 276,
+                                    Amount = 4.341m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 277,
+                                    Amount = 4.375m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 278,
+                                    Amount = 4.391m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 279,
+                                    Amount = 4.406m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 280,
+                                    Amount = 4.421m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 281,
+                                    Amount = 4.436m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 282,
+                                    Amount = 4.453m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 283,
+                                    Amount = 4.469m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 284,
+                                    Amount = 4.487m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 285,
+                                    Amount = 4.505m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 286,
+                                    Amount = 4.523m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 287,
+                                    Amount = 4.541m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 288,
+                                    Amount = 4.558m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 289,
+                                    Amount = 4.382m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 290,
+                                    Amount = 4.425m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 291,
+                                    Amount = 4.447m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 292,
+                                    Amount = 4.480m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 293,
+                                    Amount = 4.501m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 294,
+                                    Amount = 4.518m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 295,
+                                    Amount = 4.536m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 296,
+                                    Amount = 4.552m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 297,
+                                    Amount = 4.573m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 298,
+                                    Amount = 4.588m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 299,
+                                    Amount = 4.605m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 300,
+                                    Amount = 4.620m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 301,
+                                    Amount = 4.635m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 302,
+                                    Amount = 4.655m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 303,
+                                    Amount = 4.674m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 304,
+                                    Amount = 4.693m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 305,
+                                    Amount = 4.713m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 306,
+                                    Amount = 4.732m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 307,
+                                    Amount = 4.725m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 308,
+                                    Amount = 4.764m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 309,
+                                    Amount = 4.783m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 310,
+                                    Amount = 4.803m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 311,
+                                    Amount = 4.825m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 312,
+                                    Amount = 4.843m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 313,
+                                    Amount = 4.862m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 314,
+                                    Amount = 4.881m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 315,
+                                    Amount = 4.899m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 316,
+                                    Amount = 4.920m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 317,
+                                    Amount = 4.955m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 318,
+                                    Amount = 4.975m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 319,
+                                    Amount = 4.995m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 320,
+                                    Amount = 5.015m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 321,
+                                    Amount = 5.036m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 322,
+                                    Amount = 5.057m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 323,
+                                    Amount = 5.078m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 324,
+                                    Amount = 5.100m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 3
+                                },
+                                new
+                                {
+                                    Id = 325,
+                                    Amount = 595.401m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 326,
+                                    Amount = 604.963m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 327,
+                                    Amount = 605.495m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 328,
+                                    Amount = 606.028m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 329,
+                                    Amount = 606.561m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 330,
+                                    Amount = 606.689m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 331,
+                                    Amount = 607.731m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 332,
+                                    Amount = 608.347m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 333,
+                                    Amount = 608.965m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 334,
+                                    Amount = 609.583m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 335,
+                                    Amount = 611.500m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 336,
+                                    Amount = 613.561m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 337,
+                                    Amount = 615.638m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 338,
+                                    Amount = 617.196m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 339,
+                                    Amount = 618.753m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 340,
+                                    Amount = 620.310m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 341,
+                                    Amount = 621.867m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 342,
+                                    Amount = 623.424m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 343,
+                                    Amount = 626.956m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 344,
+                                    Amount = 628.122m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 345,
+                                    Amount = 628.705m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 346,
+                                    Amount = 629.290m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 347,
+                                    Amount = 629.905m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 348,
+                                    Amount = 630.581m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 349,
+                                    Amount = 631.257m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 350,
+                                    Amount = 631.933m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 351,
+                                    Amount = 632.887m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 352,
+                                    Amount = 635.362m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 353,
+                                    Amount = 637.586m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 354,
+                                    Amount = 639.905m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 355,
+                                    Amount = 642.177m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 356,
+                                    Amount = 643.348m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 357,
+                                    Amount = 644.520m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 358,
+                                    Amount = 645.691m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 359,
+                                    Amount = 646.862m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 360,
+                                    Amount = 648.033m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 361,
+                                    Amount = 636.216m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 362,
+                                    Amount = 637.696m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 363,
+                                    Amount = 638.520m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 364,
+                                    Amount = 639.344m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 365,
+                                    Amount = 640.033m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 366,
+                                    Amount = 642.591m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 367,
+                                    Amount = 645.187m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 368,
+                                    Amount = 647.775m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 369,
+                                    Amount = 650.377m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 370,
+                                    Amount = 652.951m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 371,
+                                    Amount = 655.538m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 372,
+                                    Amount = 658.126m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 373,
+                                    Amount = 661.093m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 374,
+                                    Amount = 663.007m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 375,
+                                    Amount = 664.921m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 376,
+                                    Amount = 666.835m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 377,
+                                    Amount = 668.749m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 378,
+                                    Amount = 670.663m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 379,
+                                    Amount = 735.233m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 380,
+                                    Amount = 737.464m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 381,
+                                    Amount = 740.028m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 382,
+                                    Amount = 743.004m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 383,
+                                    Amount = 745.976m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 384,
+                                    Amount = 748.947m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 385,
+                                    Amount = 751.918m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 386,
+                                    Amount = 754.890m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 387,
+                                    Amount = 757.861m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 388,
+                                    Amount = 763.693m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 389,
+                                    Amount = 766.253m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 390,
+                                    Amount = 768.815m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 391,
+                                    Amount = 771.376m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 392,
+                                    Amount = 774.156m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 393,
+                                    Amount = 776.937m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 394,
+                                    Amount = 779.717m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 395,
+                                    Amount = 782.498m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 396,
+                                    Amount = 785.278m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 397,
+                                    Amount = 773.818m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 398,
+                                    Amount = 781.277m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 399,
+                                    Amount = 784.603m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 400,
+                                    Amount = 787.931m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 401,
+                                    Amount = 791.260m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 402,
+                                    Amount = 794.588m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 403,
+                                    Amount = 800.775m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 404,
+                                    Amount = 803.385m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 405,
+                                    Amount = 805.991m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 406,
+                                    Amount = 808.598m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 407,
+                                    Amount = 811.203m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 408,
+                                    Amount = 813.809m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 409,
+                                    Amount = 816.689m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 410,
+                                    Amount = 819.986m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 411,
+                                    Amount = 823.284m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 412,
+                                    Amount = 826.581m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 413,
+                                    Amount = 829.878m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 414,
+                                    Amount = 833.176m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 415,
+                                    Amount = 802.867m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 416,
+                                    Amount = 809.821m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 417,
+                                    Amount = 813.298m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 418,
+                                    Amount = 819.399m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 419,
+                                    Amount = 822.396m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 420,
+                                    Amount = 825.393m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 421,
+                                    Amount = 828.390m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 422,
+                                    Amount = 831.387m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 423,
+                                    Amount = 834.737m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 424,
+                                    Amount = 837.733m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 425,
+                                    Amount = 840.731m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 426,
+                                    Amount = 843.727m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 427,
+                                    Amount = 846.725m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 428,
+                                    Amount = 850.099m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 429,
+                                    Amount = 853.473m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 430,
+                                    Amount = 856.847m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 431,
+                                    Amount = 860.221m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 432,
+                                    Amount = 863.594m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 433,
+                                    Amount = 898.403m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 434,
+                                    Amount = 906.495m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 435,
+                                    Amount = 910.483m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 436,
+                                    Amount = 914.392m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 437,
+                                    Amount = 918.301m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 438,
+                                    Amount = 922.210m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 439,
+                                    Amount = 926.119m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 440,
+                                    Amount = 930.375m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 441,
+                                    Amount = 934.755m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 442,
+                                    Amount = 942.167m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 443,
+                                    Amount = 946.898m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 444,
+                                    Amount = 950.414m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 445,
+                                    Amount = 954.323m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 446,
+                                    Amount = 958.624m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 447,
+                                    Amount = 962.926m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 448,
+                                    Amount = 967.227m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 449,
+                                    Amount = 971.528m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 450,
+                                    Amount = 975.829m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 451,
+                                    Amount = 914.385m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 452,
+                                    Amount = 923.312m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 453,
+                                    Amount = 927.600m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 454,
+                                    Amount = 931.888m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 455,
+                                    Amount = 939.208m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 456,
+                                    Amount = 943.773m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 457,
+                                    Amount = 948.576m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 458,
+                                    Amount = 953.379m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 459,
+                                    Amount = 958.074m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 460,
+                                    Amount = 962.362m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 461,
+                                    Amount = 966.649m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 462,
+                                    Amount = 970.937m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 463,
+                                    Amount = 975.225m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 464,
+                                    Amount = 979.905m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 465,
+                                    Amount = 984.584m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 466,
+                                    Amount = 989.264m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 467,
+                                    Amount = 993.944m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 468,
+                                    Amount = 998.624m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 469,
+                                    Amount = 936.799m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 470,
+                                    Amount = 946.180m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 471,
+                                    Amount = 953.906m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 472,
+                                    Amount = 959.008m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 473,
+                                    Amount = 964.260m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 474,
+                                    Amount = 969.514m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 475,
+                                    Amount = 974.384m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 476,
+                                    Amount = 979.076m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 477,
+                                    Amount = 983.767m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 478,
+                                    Amount = 988.458m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 479,
+                                    Amount = 996.182m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 480,
+                                    Amount = 1000.874m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 481,
+                                    Amount = 1005.615m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 482,
+                                    Amount = 1010.908m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 483,
+                                    Amount = 1016.202m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 484,
+                                    Amount = 1021.496m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 485,
+                                    Amount = 1026.790m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 486,
+                                    Amount = 1032.084m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 487,
+                                    Amount = 953.480m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 488,
+                                    Amount = 966.429m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 489,
+                                    Amount = 971.971m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 490,
+                                    Amount = 977.524m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 491,
+                                    Amount = 983.018m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 492,
+                                    Amount = 987.976m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 493,
+                                    Amount = 992.935m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 494,
+                                    Amount = 998.018m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 495,
+                                    Amount = 1002.850m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 496,
+                                    Amount = 1010.842m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 497,
+                                    Amount = 1015.800m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 498,
+                                    Amount = 1021.194m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 499,
+                                    Amount = 1026.647m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 500,
+                                    Amount = 1032.276m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 501,
+                                    Amount = 1037.904m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 502,
+                                    Amount = 1043.533m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 503,
+                                    Amount = 1049.162m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 504,
+                                    Amount = 1054.791m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 505,
+                                    Amount = 969.700m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 506,
+                                    Amount = 983.820m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 507,
+                                    Amount = 989.658m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 508,
+                                    Amount = 995.299m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 509,
+                                    Amount = 1000.511m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 510,
+                                    Amount = 1005.722m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 511,
+                                    Amount = 1010.935m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 512,
+                                    Amount = 1019.181m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 513,
+                                    Amount = 1024.394m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 514,
+                                    Amount = 1029.813m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 515,
+                                    Amount = 1035.546m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 516,
+                                    Amount = 1041.279m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 517,
+                                    Amount = 1047.013m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 518,
+                                    Amount = 1052.960m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 519,
+                                    Amount = 1058.907m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 520,
+                                    Amount = 1064.854m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 521,
+                                    Amount = 1070.800m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 522,
+                                    Amount = 1076.747m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 523,
+                                    Amount = 985.257m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 524,
+                                    Amount = 997.517m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 525,
+                                    Amount = 1003.355m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 526,
+                                    Amount = 1009.181m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 527,
+                                    Amount = 1014.301m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 528,
+                                    Amount = 1019.774m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 529,
+                                    Amount = 1028.281m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 530,
+                                    Amount = 1033.754m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 531,
+                                    Amount = 1039.662m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 532,
+                                    Amount = 1045.688m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 533,
+                                    Amount = 1051.708m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 534,
+                                    Amount = 1057.729m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 535,
+                                    Amount = 1063.707m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 536,
+                                    Amount = 1069.742m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 537,
+                                    Amount = 1075.776m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 538,
+                                    Amount = 1081.810m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 539,
+                                    Amount = 1087.844m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 540,
+                                    Amount = 1093.878m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 541,
+                                    Amount = 1008.293m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 542,
+                                    Amount = 1020.763m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 543,
+                                    Amount = 1026.628m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 544,
+                                    Amount = 1032.491m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 545,
+                                    Amount = 1041.389m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 546,
+                                    Amount = 1047.252m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 547,
+                                    Amount = 1053.518m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 548,
+                                    Amount = 1059.968m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 549,
+                                    Amount = 1066.419m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 550,
+                                    Amount = 1072.869m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 551,
+                                    Amount = 1079.319m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 552,
+                                    Amount = 1085.769m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 553,
+                                    Amount = 1092.219m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 554,
+                                    Amount = 1098.674m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 555,
+                                    Amount = 1105.129m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 556,
+                                    Amount = 1111.585m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 557,
+                                    Amount = 1118.040m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 558,
+                                    Amount = 1124.495m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 559,
+                                    Amount = 1030.961m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 560,
+                                    Amount = 1043.470m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 561,
+                                    Amount = 1049.725m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 562,
+                                    Amount = 1059.014m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 563,
+                                    Amount = 1065.475m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 564,
+                                    Amount = 1072.355m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 565,
+                                    Amount = 1079.237m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 566,
+                                    Amount = 1086.117m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 567,
+                                    Amount = 1092.997m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 568,
+                                    Amount = 1099.876m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 569,
+                                    Amount = 1106.756m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 570,
+                                    Amount = 1113.637m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 571,
+                                    Amount = 1120.517m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 572,
+                                    Amount = 1127.405m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 573,
+                                    Amount = 1134.294m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 574,
+                                    Amount = 1141.182m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 575,
+                                    Amount = 1148.071m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 576,
+                                    Amount = 1154.959m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 577,
+                                    Amount = 1067.918m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 578,
+                                    Amount = 1084.764m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 579,
+                                    Amount = 1092.123m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 580,
+                                    Amount = 1099.721m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 581,
+                                    Amount = 1107.318m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 582,
+                                    Amount = 1114.915m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 583,
+                                    Amount = 1122.512m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 584,
+                                    Amount = 1130.110m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 585,
+                                    Amount = 1137.634m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 586,
+                                    Amount = 1145.302m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 587,
+                                    Amount = 1152.899m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 588,
+                                    Amount = 1160.379m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 589,
+                                    Amount = 1167.662m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 590,
+                                    Amount = 1175.334m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 591,
+                                    Amount = 1183.007m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 592,
+                                    Amount = 1190.679m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 593,
+                                    Amount = 1198.352m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 594,
+                                    Amount = 1206.024m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 595,
+                                    Amount = 1104.700m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 596,
+                                    Amount = 1121.012m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 597,
+                                    Amount = 1129.325m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 598,
+                                    Amount = 1137.639m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 599,
+                                    Amount = 1145.953m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 600,
+                                    Amount = 1154.265m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 601,
+                                    Amount = 1162.705m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 602,
+                                    Amount = 1170.892m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 603,
+                                    Amount = 1179.205m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 604,
+                                    Amount = 1186.830m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 605,
+                                    Amount = 1194.387m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 606,
+                                    Amount = 1201.945m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 607,
+                                    Amount = 1209.503m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 608,
+                                    Amount = 1217.565m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 609,
+                                    Amount = 1225.627m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 610,
+                                    Amount = 1233.689m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 611,
+                                    Amount = 1241.751m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 612,
+                                    Amount = 1249.814m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 613,
+                                    Amount = 1137.515m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 614,
+                                    Amount = 1155.575m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 615,
+                                    Amount = 1164.605m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 616,
+                                    Amount = 1173.63m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 617,
+                                    Amount = 1182.666m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 618,
+                                    Amount = 1191.696m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 619,
+                                    Amount = 1200.544m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 620,
+                                    Amount = 1208.753m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 621,
+                                    Amount = 1216.963m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 622,
+                                    Amount = 1225.172m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 623,
+                                    Amount = 1233.381m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 624,
+                                    Amount = 1241.591m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 625,
+                                    Amount = 1249.800m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 626,
+                                    Amount = 1258.437m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 627,
+                                    Amount = 1267.075m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 628,
+                                    Amount = 1275.712m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 629,
+                                    Amount = 1284.349m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 630,
+                                    Amount = 1292.987m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 631,
+                                    Amount = 1204.815m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 632,
+                                    Amount = 1226.31m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 633,
+                                    Amount = 1236.571m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 634,
+                                    Amount = 1246.093m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 635,
+                                    Amount = 1256.116m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 636,
+                                    Amount = 1265.890m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 637,
+                                    Amount = 1275.663m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 638,
+                                    Amount = 1285.436m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 639,
+                                    Amount = 1295.208m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 640,
+                                    Amount = 1304.981m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 641,
+                                    Amount = 1314.755m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 642,
+                                    Amount = 1324.527m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 643,
+                                    Amount = 1334.300m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 644,
+                                    Amount = 1344.260m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 645,
+                                    Amount = 1354.220m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 646,
+                                    Amount = 1364.181m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 647,
+                                    Amount = 1374.141m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 648,
+                                    Amount = 1384.101m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 4
+                                },
+                                new
+                                {
+                                    Id = 649,
+                                    Amount = 634.102m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 650,
+                                    Amount = 644.286m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 651,
+                                    Amount = 644.852m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 652,
+                                    Amount = 645.420m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 653,
+                                    Amount = 645.987m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 654,
+                                    Amount = 646.124m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 655,
+                                    Amount = 647.233m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 656,
+                                    Amount = 647.890m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 657,
+                                    Amount = 648.548m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 658,
+                                    Amount = 649.205m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 659,
+                                    Amount = 651.248m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 660,
+                                    Amount = 653.442m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 661,
+                                    Amount = 655.655m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 662,
+                                    Amount = 657.313m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 663,
+                                    Amount = 658.972m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 664,
+                                    Amount = 660.630m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 665,
+                                    Amount = 662.288m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 666,
+                                    Amount = 663.946m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 667,
+                                    Amount = 667.708m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 668,
+                                    Amount = 668.950m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 669,
+                                    Amount = 669.571m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 670,
+                                    Amount = 670.194m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 671,
+                                    Amount = 670.849m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 672,
+                                    Amount = 671.569m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 673,
+                                    Amount = 672.289m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 674,
+                                    Amount = 673.009m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 675,
+                                    Amount = 674.025m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 676,
+                                    Amount = 676.660m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 677,
+                                    Amount = 679.029m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 678,
+                                    Amount = 681.499m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 679,
+                                    Amount = 683.919m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 680,
+                                    Amount = 685.166m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 681,
+                                    Amount = 686.413m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 682,
+                                    Amount = 687.661m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 683,
+                                    Amount = 688.908m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 684,
+                                    Amount = 690.155m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 685,
+                                    Amount = 677.570m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 686,
+                                    Amount = 679.146m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 687,
+                                    Amount = 680.024m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 688,
+                                    Amount = 680.901m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 689,
+                                    Amount = 681.635m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 690,
+                                    Amount = 684.360m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 691,
+                                    Amount = 687.125m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 692,
+                                    Amount = 689.880m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 693,
+                                    Amount = 692.651m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 694,
+                                    Amount = 695.393m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 695,
+                                    Amount = 698.148m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 696,
+                                    Amount = 700.904m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 697,
+                                    Amount = 704.064m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 698,
+                                    Amount = 706.102m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 699,
+                                    Amount = 708.141m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 700,
+                                    Amount = 710.179m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 701,
+                                    Amount = 712.217m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 702,
+                                    Amount = 714.256m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 703,
+                                    Amount = 783.023m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 704,
+                                    Amount = 785.399m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 705,
+                                    Amount = 788.130m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 706,
+                                    Amount = 791.299m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 707,
+                                    Amount = 794.465m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 708,
+                                    Amount = 797.629m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 709,
+                                    Amount = 800.793m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 710,
+                                    Amount = 803.958m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 711,
+                                    Amount = 807.122m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 712,
+                                    Amount = 813.333m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 713,
+                                    Amount = 816.060m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 714,
+                                    Amount = 818.788m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 715,
+                                    Amount = 821.515m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 716,
+                                    Amount = 824.477m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 717,
+                                    Amount = 827.438m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 718,
+                                    Amount = 830.399m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 719,
+                                    Amount = 833.360m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 720,
+                                    Amount = 836.321m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 721,
+                                    Amount = 824.116m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 722,
+                                    Amount = 832.060m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 723,
+                                    Amount = 835.602m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 724,
+                                    Amount = 839.146m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 725,
+                                    Amount = 842.692m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 726,
+                                    Amount = 846.236m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 727,
+                                    Amount = 852.825m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 728,
+                                    Amount = 855.605m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 729,
+                                    Amount = 858.380m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 730,
+                                    Amount = 861.156m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 731,
+                                    Amount = 863.931m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 732,
+                                    Amount = 866.707m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 733,
+                                    Amount = 869.774m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 734,
+                                    Amount = 873.285m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 735,
+                                    Amount = 876.797m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 736,
+                                    Amount = 880.309m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 737,
+                                    Amount = 883.821m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 738,
+                                    Amount = 887.332m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 739,
+                                    Amount = 855.054m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 740,
+                                    Amount = 862.460m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 741,
+                                    Amount = 866.163m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 742,
+                                    Amount = 872.660m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 743,
+                                    Amount = 875.851m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 744,
+                                    Amount = 879.044m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 745,
+                                    Amount = 882.235m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 746,
+                                    Amount = 885.428m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 747,
+                                    Amount = 888.995m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 748,
+                                    Amount = 892.186m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 749,
+                                    Amount = 895.379m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 750,
+                                    Amount = 898.570m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 751,
+                                    Amount = 901.762m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 752,
+                                    Amount = 905.355m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 753,
+                                    Amount = 908.949m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 754,
+                                    Amount = 912.542m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 755,
+                                    Amount = 916.135m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 756,
+                                    Amount = 919.728m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 757,
+                                    Amount = 956.800m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 758,
+                                    Amount = 965.417m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 759,
+                                    Amount = 969.664m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 760,
+                                    Amount = 973.827m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 761,
+                                    Amount = 977.990m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 762,
+                                    Amount = 982.153m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 763,
+                                    Amount = 986.317m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 764,
+                                    Amount = 990.849m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 765,
+                                    Amount = 995.514m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 766,
+                                    Amount = 1003.407m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 767,
+                                    Amount = 1008.447m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 768,
+                                    Amount = 1012.191m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 769,
+                                    Amount = 1016.354m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 770,
+                                    Amount = 1020.935m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 771,
+                                    Amount = 1025.516m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 772,
+                                    Amount = 1030.096m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 773,
+                                    Amount = 1034.677m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 774,
+                                    Amount = 1039.258m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 775,
+                                    Amount = 973.820m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 776,
+                                    Amount = 983.328m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 777,
+                                    Amount = 987.894m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 778,
+                                    Amount = 992.460m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 779,
+                                    Amount = 1000.257m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 780,
+                                    Amount = 1005.118m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 781,
+                                    Amount = 1010.234m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 782,
+                                    Amount = 1015.348m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 783,
+                                    Amount = 1020.349m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 784,
+                                    Amount = 1024.915m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 785,
+                                    Amount = 1029.482m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 786,
+                                    Amount = 1034.048m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 787,
+                                    Amount = 1038.615m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 788,
+                                    Amount = 1043.598m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 789,
+                                    Amount = 1048.582m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 790,
+                                    Amount = 1053.566m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 791,
+                                    Amount = 1058.550m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 792,
+                                    Amount = 1063.534m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 793,
+                                    Amount = 997.690m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 794,
+                                    Amount = 1007.682m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 795,
+                                    Amount = 1015.910m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 796,
+                                    Amount = 1021.343m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 797,
+                                    Amount = 1026.937m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 798,
+                                    Amount = 1032.533m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 799,
+                                    Amount = 1037.719m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 800,
+                                    Amount = 1042.716m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 801,
+                                    Amount = 1047.712m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 802,
+                                    Amount = 1052.707m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 803,
+                                    Amount = 1060.934m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 804,
+                                    Amount = 1065.931m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 805,
+                                    Amount = 1070.979m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 806,
+                                    Amount = 1076.617m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 807,
+                                    Amount = 1082.255m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 808,
+                                    Amount = 1087.893m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 809,
+                                    Amount = 1093.531m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 810,
+                                    Amount = 1099.169m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 811,
+                                    Amount = 1015.456m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 812,
+                                    Amount = 1029.247m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 813,
+                                    Amount = 1035.149m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 814,
+                                    Amount = 1041.063m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 815,
+                                    Amount = 1046.915m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 816,
+                                    Amount = 1052.195m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 817,
+                                    Amount = 1057.476m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 818,
+                                    Amount = 1062.889m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 819,
+                                    Amount = 1068.035m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 820,
+                                    Amount = 1076.547m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 821,
+                                    Amount = 1081.826m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 822,
+                                    Amount = 1087.572m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 823,
+                                    Amount = 1093.379m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 824,
+                                    Amount = 1099.374m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 825,
+                                    Amount = 1105.368m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 826,
+                                    Amount = 1111.363m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 827,
+                                    Amount = 1117.357m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 828,
+                                    Amount = 1123.352m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 829,
+                                    Amount = 1032.730m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 830,
+                                    Amount = 1047.768m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 831,
+                                    Amount = 1053.985m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 832,
+                                    Amount = 1059.993m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 833,
+                                    Amount = 1065.544m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 834,
+                                    Amount = 1071.094m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 835,
+                                    Amount = 1076.646m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 836,
+                                    Amount = 1085.428m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 837,
+                                    Amount = 1090.980m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 838,
+                                    Amount = 1096.751m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 839,
+                                    Amount = 1102.856m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 840,
+                                    Amount = 1108.962m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 841,
+                                    Amount = 1115.069m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 842,
+                                    Amount = 1121.403m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 843,
+                                    Amount = 1127.736m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 844,
+                                    Amount = 1134.069m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 845,
+                                    Amount = 1140.402m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 846,
+                                    Amount = 1146.736m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 847,
+                                    Amount = 1049.298m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 848,
+                                    Amount = 1062.355m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 849,
+                                    Amount = 1068.573m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 850,
+                                    Amount = 1074.777m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 851,
+                                    Amount = 1080.230m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 852,
+                                    Amount = 1086.060m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 853,
+                                    Amount = 1095.119m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 854,
+                                    Amount = 1100.948m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 855,
+                                    Amount = 1107.240m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 856,
+                                    Amount = 1113.657m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 857,
+                                    Amount = 1120.069m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 858,
+                                    Amount = 1126.481m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 859,
+                                    Amount = 1132.848m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 860,
+                                    Amount = 1139.275m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 861,
+                                    Amount = 1145.701m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 862,
+                                    Amount = 1152.127m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 863,
+                                    Amount = 1158.554m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 864,
+                                    Amount = 1164.980m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 865,
+                                    Amount = 1073.833m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 866,
+                                    Amount = 1087.113m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 867,
+                                    Amount = 1093.358m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 868,
+                                    Amount = 1099.602m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 869,
+                                    Amount = 1109.079m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 870,
+                                    Amount = 1115.323m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 871,
+                                    Amount = 1121.996m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 872,
+                                    Amount = 1128.866m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 873,
+                                    Amount = 1135.736m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 874,
+                                    Amount = 1142.605m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 875,
+                                    Amount = 1149.475m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 876,
+                                    Amount = 1156.344m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 877,
+                                    Amount = 1163.213m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 878,
+                                    Amount = 1170.088m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 879,
+                                    Amount = 1176.963m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 880,
+                                    Amount = 1183.838m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 881,
+                                    Amount = 1190.713m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 882,
+                                    Amount = 1197.587m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 883,
+                                    Amount = 1097.974m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 884,
+                                    Amount = 1111.296m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 885,
+                                    Amount = 1117.957m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 886,
+                                    Amount = 1127.850m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 887,
+                                    Amount = 1134.731m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 888,
+                                    Amount = 1142.059m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 889,
+                                    Amount = 1149.387m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 890,
+                                    Amount = 1156.714m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 891,
+                                    Amount = 1164.041m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 892,
+                                    Amount = 1171.367m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 893,
+                                    Amount = 1178.695m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 894,
+                                    Amount = 1186.023m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 895,
+                                    Amount = 1193.350m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 896,
+                                    Amount = 1200.687m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 897,
+                                    Amount = 1208.023m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 898,
+                                    Amount = 1215.359m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 899,
+                                    Amount = 1222.695m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 900,
+                                    Amount = 1230.032m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 901,
+                                    Amount = 1137.332m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 902,
+                                    Amount = 1155.274m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 903,
+                                    Amount = 1163.111m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 904,
+                                    Amount = 1171.202m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 905,
+                                    Amount = 1179.294m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 906,
+                                    Amount = 1187.385m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 907,
+                                    Amount = 1195.476m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 908,
+                                    Amount = 1203.567m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 909,
+                                    Amount = 1211.580m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 910,
+                                    Amount = 1219.746m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 911,
+                                    Amount = 1227.838m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 912,
+                                    Amount = 1235.803m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 913,
+                                    Amount = 1243.560m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 914,
+                                    Amount = 1251.731m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 915,
+                                    Amount = 1259.902m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 916,
+                                    Amount = 1268.073m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 917,
+                                    Amount = 1276.244m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 918,
+                                    Amount = 1284.416m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 919,
+                                    Amount = 1176.505m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 920,
+                                    Amount = 1193.878m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 921,
+                                    Amount = 1202.731m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 922,
+                                    Amount = 1211.585m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 923,
+                                    Amount = 1220.440m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 924,
+                                    Amount = 1229.292m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 925,
+                                    Amount = 1238.280m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 926,
+                                    Amount = 1247.000m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 927,
+                                    Amount = 1255.853m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 928,
+                                    Amount = 1263.974m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 929,
+                                    Amount = 1272.023m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 930,
+                                    Amount = 1280.071m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 931,
+                                    Amount = 1288.121m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 932,
+                                    Amount = 1296.707m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 933,
+                                    Amount = 1305.293m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 934,
+                                    Amount = 1313.879m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 935,
+                                    Amount = 1322.465m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 936,
+                                    Amount = 1331.051m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 937,
+                                    Amount = 1211.453m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 938,
+                                    Amount = 1230.687m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 939,
+                                    Amount = 1240.304m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 940,
+                                    Amount = 1249.921m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 941,
+                                    Amount = 1259.540m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 942,
+                                    Amount = 1269.156m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 943,
+                                    Amount = 1278.579m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 944,
+                                    Amount = 1287.322m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 945,
+                                    Amount = 1296.066m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 946,
+                                    Amount = 1304.808m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 947,
+                                    Amount = 1313.551m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 948,
+                                    Amount = 1322.295m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 949,
+                                    Amount = 1331.037m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 950,
+                                    Amount = 1340.236m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 951,
+                                    Amount = 1349.435m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 952,
+                                    Amount = 1358.633m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 953,
+                                    Amount = 1367.832m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 954,
+                                    Amount = 1377.031m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 955,
+                                    Amount = 1283.128m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 956,
+                                    Amount = 1306.026m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 957,
+                                    Amount = 1316.948m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 958,
+                                    Amount = 1327.089m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 959,
+                                    Amount = 1337.764m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 960,
+                                    Amount = 1348.172m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 961,
+                                    Amount = 1358.581m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 962,
+                                    Amount = 1368.989m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 963,
+                                    Amount = 1379.397m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 964,
+                                    Amount = 1389.805m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 965,
+                                    Amount = 1400.214m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 966,
+                                    Amount = 1410.621m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 967,
+                                    Amount = 1421.030m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 968,
+                                    Amount = 1431.637m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 969,
+                                    Amount = 1442.245m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 970,
+                                    Amount = 1452.852m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 971,
+                                    Amount = 1463.460m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 972,
+                                    Amount = 1474.068m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 5
+                                },
+                                new
+                                {
+                                    Id = 973,
+                                    Amount = 678.490m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 974,
+                                    Amount = 689.386m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 975,
+                                    Amount = 689.992m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 976,
+                                    Amount = 690.599m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 977,
+                                    Amount = 691.206m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 978,
+                                    Amount = 691.353m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 979,
+                                    Amount = 692.539m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 980,
+                                    Amount = 693.242m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 981,
+                                    Amount = 693.946m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 982,
+                                    Amount = 694.650m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 983,
+                                    Amount = 696.835m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 984,
+                                    Amount = 699.183m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 985,
+                                    Amount = 701.551m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 986,
+                                    Amount = 703.325m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 987,
+                                    Amount = 705.100m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 988,
+                                    Amount = 706.874m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 989,
+                                    Amount = 708.648m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 990,
+                                    Amount = 710.423m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 991,
+                                    Amount = 714.448m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 992,
+                                    Amount = 715.777m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 993,
+                                    Amount = 716.441m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 994,
+                                    Amount = 717.107m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 995,
+                                    Amount = 717.808m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 996,
+                                    Amount = 718.579m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 997,
+                                    Amount = 719.349m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 998,
+                                    Amount = 720.119m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 999,
+                                    Amount = 721.206m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1000,
+                                    Amount = 724.026m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1001,
+                                    Amount = 726.561m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1002,
+                                    Amount = 729.204m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1003,
+                                    Amount = 731.793m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1004,
+                                    Amount = 733.128m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1005,
+                                    Amount = 734.462m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1006,
+                                    Amount = 735.797m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1007,
+                                    Amount = 737.131m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1008,
+                                    Amount = 738.466m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1009,
+                                    Amount = 725.000m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1010,
+                                    Amount = 726.686m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1011,
+                                    Amount = 727.625m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1012,
+                                    Amount = 728.564m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1013,
+                                    Amount = 729.350m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1014,
+                                    Amount = 732.265m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1015,
+                                    Amount = 735.223m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1016,
+                                    Amount = 738.172m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1017,
+                                    Amount = 741.137m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1018,
+                                    Amount = 744.070m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1019,
+                                    Amount = 747.019m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1020,
+                                    Amount = 749.967m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1021,
+                                    Amount = 753.349m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1022,
+                                    Amount = 755.530m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1023,
+                                    Amount = 757.711m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1024,
+                                    Amount = 759.892m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1025,
+                                    Amount = 762.073m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1026,
+                                    Amount = 764.253m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1027,
+                                    Amount = 837.835m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1028,
+                                    Amount = 840.377m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1029,
+                                    Amount = 843.299m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1030,
+                                    Amount = 846.690m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1031,
+                                    Amount = 850.077m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1032,
+                                    Amount = 853.463m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1033,
+                                    Amount = 856.848m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1034,
+                                    Amount = 860.235m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1035,
+                                    Amount = 863.621m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1036,
+                                    Amount = 870.266m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1037,
+                                    Amount = 873.184m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1038,
+                                    Amount = 876.103m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1039,
+                                    Amount = 879.022m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1040,
+                                    Amount = 882.190m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1041,
+                                    Amount = 885.358m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1042,
+                                    Amount = 888.527m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1043,
+                                    Amount = 891.695m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1044,
+                                    Amount = 894.864m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1045,
+                                    Amount = 881.804m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1046,
+                                    Amount = 890.304m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1047,
+                                    Amount = 894.095m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1048,
+                                    Amount = 897.887m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1049,
+                                    Amount = 901.680m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1050,
+                                    Amount = 905.472m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1051,
+                                    Amount = 912.523m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1052,
+                                    Amount = 915.498m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1053,
+                                    Amount = 918.467m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1054,
+                                    Amount = 921.437m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1055,
+                                    Amount = 924.407m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1056,
+                                    Amount = 927.376m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1057,
+                                    Amount = 930.658m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1058,
+                                    Amount = 934.415m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1059,
+                                    Amount = 938.173m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1060,
+                                    Amount = 941.930m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1061,
+                                    Amount = 945.688m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1062,
+                                    Amount = 949.446m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1063,
+                                    Amount = 914.907m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1064,
+                                    Amount = 922.832m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1065,
+                                    Amount = 926.794m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1066,
+                                    Amount = 933.746m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1067,
+                                    Amount = 937.161m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1068,
+                                    Amount = 940.577m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1069,
+                                    Amount = 943.991m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1070,
+                                    Amount = 947.407m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1071,
+                                    Amount = 951.224m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1072,
+                                    Amount = 954.639m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1073,
+                                    Amount = 958.055m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1074,
+                                    Amount = 961.470m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1075,
+                                    Amount = 964.886m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1076,
+                                    Amount = 968.730m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1077,
+                                    Amount = 972.575m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1078,
+                                    Amount = 976.420m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1079,
+                                    Amount = 980.264m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1080,
+                                    Amount = 984.109m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1081,
+                                    Amount = 1023.776m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1082,
+                                    Amount = 1032.996m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1083,
+                                    Amount = 1037.540m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1084,
+                                    Amount = 1041.995m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1085,
+                                    Amount = 1046.450m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1086,
+                                    Amount = 1050.904m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1087,
+                                    Amount = 1055.359m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1088,
+                                    Amount = 1060.209m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1089,
+                                    Amount = 1065.200m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1090,
+                                    Amount = 1073.646m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1091,
+                                    Amount = 1079.038m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1092,
+                                    Amount = 1083.045m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1093,
+                                    Amount = 1087.499m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1094,
+                                    Amount = 1092.401m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1095,
+                                    Amount = 1097.302m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1096,
+                                    Amount = 1102.203m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1097,
+                                    Amount = 1107.104m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1098,
+                                    Amount = 1112.006m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1099,
+                                    Amount = 1041.987m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1100,
+                                    Amount = 1052.161m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1101,
+                                    Amount = 1057.047m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1102,
+                                    Amount = 1061.933m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1103,
+                                    Amount = 1070.275m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1104,
+                                    Amount = 1075.476m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1105,
+                                    Amount = 1080.950m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1106,
+                                    Amount = 1086.422m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1107,
+                                    Amount = 1091.773m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1108,
+                                    Amount = 1096.659m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1109,
+                                    Amount = 1101.545m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1110,
+                                    Amount = 1106.431m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1111,
+                                    Amount = 1111.318m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1112,
+                                    Amount = 1116.650m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1113,
+                                    Amount = 1121.983m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1114,
+                                    Amount = 1127.316m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1115,
+                                    Amount = 1132.649m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1116,
+                                    Amount = 1137.981m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1117,
+                                    Amount = 1067.529m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1118,
+                                    Amount = 1078.219m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1119,
+                                    Amount = 1087.023m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1120,
+                                    Amount = 1092.837m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1121,
+                                    Amount = 1098.823m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1122,
+                                    Amount = 1104.810m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1123,
+                                    Amount = 1110.360m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1124,
+                                    Amount = 1115.706m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1125,
+                                    Amount = 1121.052m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1126,
+                                    Amount = 1126.397m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1127,
+                                    Amount = 1135.199m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1128,
+                                    Amount = 1140.546m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1129,
+                                    Amount = 1145.948m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1130,
+                                    Amount = 1151.981m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1131,
+                                    Amount = 1158.013m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1132,
+                                    Amount = 1164.046m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1133,
+                                    Amount = 1170.078m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1134,
+                                    Amount = 1176.111m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1135,
+                                    Amount = 1086.538m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1136,
+                                    Amount = 1101.295m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1137,
+                                    Amount = 1107.609m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1138,
+                                    Amount = 1113.938m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1139,
+                                    Amount = 1120.199m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1140,
+                                    Amount = 1125.848m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1141,
+                                    Amount = 1131.499m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1142,
+                                    Amount = 1137.291m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1143,
+                                    Amount = 1142.798m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1144,
+                                    Amount = 1151.905m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1145,
+                                    Amount = 1157.554m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1146,
+                                    Amount = 1163.702m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1147,
+                                    Amount = 1169.915m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1148,
+                                    Amount = 1176.330m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1149,
+                                    Amount = 1182.744m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1150,
+                                    Amount = 1189.158m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1151,
+                                    Amount = 1195.573m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1152,
+                                    Amount = 1201.987m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1153,
+                                    Amount = 1105.021m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1154,
+                                    Amount = 1121.112m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1155,
+                                    Amount = 1127.764m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1156,
+                                    Amount = 1134.192m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1157,
+                                    Amount = 1140.132m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1158,
+                                    Amount = 1146.071m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1159,
+                                    Amount = 1152.011m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1160,
+                                    Amount = 1161.408m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1161,
+                                    Amount = 1167.348m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1162,
+                                    Amount = 1173.523m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1163,
+                                    Amount = 1180.056m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1164,
+                                    Amount = 1186.590m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1165,
+                                    Amount = 1193.124m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1166,
+                                    Amount = 1199.901m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1167,
+                                    Amount = 1206.677m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1168,
+                                    Amount = 1213.454m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1169,
+                                    Amount = 1220.231m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1170,
+                                    Amount = 1227.007m,
+                                    CategoryKey = "cat-11",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1171,
+                                    Amount = 1122.749m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1172,
+                                    Amount = 1136.720m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1173,
+                                    Amount = 1143.373m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1174,
+                                    Amount = 1150.012m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1175,
+                                    Amount = 1155.847m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1176,
+                                    Amount = 1162.084m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1177,
+                                    Amount = 1171.777m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1178,
+                                    Amount = 1178.014m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1179,
+                                    Amount = 1184.747m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1180,
+                                    Amount = 1191.613m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1181,
+                                    Amount = 1198.474m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1182,
+                                    Amount = 1205.335m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1183,
+                                    Amount = 1212.148m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1184,
+                                    Amount = 1219.024m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1185,
+                                    Amount = 1225.900m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1186,
+                                    Amount = 1232.776m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1187,
+                                    Amount = 1239.652m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1188,
+                                    Amount = 1246.529m,
+                                    CategoryKey = "cat-12",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1189,
+                                    Amount = 1149.001m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1190,
+                                    Amount = 1163.211m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1191,
+                                    Amount = 1169.893m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1192,
+                                    Amount = 1176.575m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1193,
+                                    Amount = 1186.715m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1194,
+                                    Amount = 1193.396m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1195,
+                                    Amount = 1200.536m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1196,
+                                    Amount = 1207.887m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1197,
+                                    Amount = 1215.237m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1198,
+                                    Amount = 1222.588m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1199,
+                                    Amount = 1229.938m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1200,
+                                    Amount = 1237.288m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1201,
+                                    Amount = 1244.638m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1202,
+                                    Amount = 1251.994m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1203,
+                                    Amount = 1259.350m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1204,
+                                    Amount = 1266.706m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1205,
+                                    Amount = 1274.062m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1206,
+                                    Amount = 1281.419m,
+                                    CategoryKey = "cat-13",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1207,
+                                    Amount = 1174.832m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1208,
+                                    Amount = 1189.086m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1209,
+                                    Amount = 1196.214m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1210,
+                                    Amount = 1206.800m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1211,
+                                    Amount = 1214.163m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1212,
+                                    Amount = 1222.003m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1213,
+                                    Amount = 1229.844m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1214,
+                                    Amount = 1237.684m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1215,
+                                    Amount = 1245.524m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1216,
+                                    Amount = 1253.363m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1217,
+                                    Amount = 1261.203m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1218,
+                                    Amount = 1269.045m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1219,
+                                    Amount = 1276.885m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1220,
+                                    Amount = 1284.735m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1221,
+                                    Amount = 1292.584m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1222,
+                                    Amount = 1300.434m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1223,
+                                    Amount = 1308.284m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1224,
+                                    Amount = 1316.134m,
+                                    CategoryKey = "cat-14",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1225,
+                                    Amount = 1216.946m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1226,
+                                    Amount = 1236.143m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1227,
+                                    Amount = 1244.529m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1228,
+                                    Amount = 1253.187m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1229,
+                                    Amount = 1261.844m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1230,
+                                    Amount = 1270.502m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1231,
+                                    Amount = 1279.159m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1232,
+                                    Amount = 1287.817m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1233,
+                                    Amount = 1296.391m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1234,
+                                    Amount = 1305.129m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1235,
+                                    Amount = 1313.786m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1236,
+                                    Amount = 1322.309m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1237,
+                                    Amount = 1330.609m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1238,
+                                    Amount = 1339.352m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1239,
+                                    Amount = 1348.095m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1240,
+                                    Amount = 1356.838m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1241,
+                                    Amount = 1365.582m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1242,
+                                    Amount = 1374.325m,
+                                    CategoryKey = "cat-15",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1243,
+                                    Amount = 1258.861m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1244,
+                                    Amount = 1277.449m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1245,
+                                    Amount = 1286.923m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1246,
+                                    Amount = 1296.396m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1247,
+                                    Amount = 1305.871m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1248,
+                                    Amount = 1315.343m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1249,
+                                    Amount = 1324.960m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1250,
+                                    Amount = 1334.290m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1251,
+                                    Amount = 1343.763m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1252,
+                                    Amount = 1352.452m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1253,
+                                    Amount = 1361.064m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1254,
+                                    Amount = 1369.676m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1255,
+                                    Amount = 1378.289m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1256,
+                                    Amount = 1387.476m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1257,
+                                    Amount = 1396.664m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1258,
+                                    Amount = 1405.851m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1259,
+                                    Amount = 1415.038m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1260,
+                                    Amount = 1424.225m,
+                                    CategoryKey = "cat-16",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1261,
+                                    Amount = 1296.255m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1262,
+                                    Amount = 1316.835m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1263,
+                                    Amount = 1327.126m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1264,
+                                    Amount = 1337.415m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1265,
+                                    Amount = 1347.707m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1266,
+                                    Amount = 1357.997m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1267,
+                                    Amount = 1368.080m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1268,
+                                    Amount = 1377.434m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1269,
+                                    Amount = 1386.790m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1270,
+                                    Amount = 1396.145m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1271,
+                                    Amount = 1405.499m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1272,
+                                    Amount = 1414.855m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1273,
+                                    Amount = 1424.210m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1274,
+                                    Amount = 1434.052m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1275,
+                                    Amount = 1443.895m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1276,
+                                    Amount = 1453.738m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1277,
+                                    Amount = 1463.580m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1278,
+                                    Amount = 1473.423m,
+                                    CategoryKey = "cat-17",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1279,
+                                    Amount = 1372.947m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1280,
+                                    Amount = 1397.448m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1281,
+                                    Amount = 1409.134m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1282,
+                                    Amount = 1419.985m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1283,
+                                    Amount = 1431.407m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1284,
+                                    Amount = 1442.544m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1285,
+                                    Amount = 1453.682m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1286,
+                                    Amount = 1464.819m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1287,
+                                    Amount = 1475.954m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1288,
+                                    Amount = 1487.092m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1289,
+                                    Amount = 1498.229m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1290,
+                                    Amount = 1509.365m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1291,
+                                    Amount = 1520.502m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1292,
+                                    Amount = 1531.852m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-14",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1293,
+                                    Amount = 1543.202m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-15",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1294,
+                                    Amount = 1554.552m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-16",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1295,
+                                    Amount = 1565.902m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-17",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1296,
+                                    Amount = 1577.252m,
+                                    CategoryKey = "cat-18",
+                                    DegreeKey = "deg-18",
+                                    SalaryTableId = 6
+                                },
+                                new
+                                {
+                                    Id = 1297,
+                                    Amount = 175.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1298,
+                                    Amount = 176.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1299,
+                                    Amount = 178.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1300,
+                                    Amount = 179.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1301,
+                                    Amount = 181.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1302,
+                                    Amount = 182.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1303,
+                                    Amount = 184.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1304,
+                                    Amount = 185.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1305,
+                                    Amount = 187.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1306,
+                                    Amount = 188.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1307,
+                                    Amount = 190.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1308,
+                                    Amount = 191.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1309,
+                                    Amount = 193.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1310,
+                                    Amount = 202.545m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1311,
+                                    Amount = 204.145m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1312,
+                                    Amount = 205.745m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1313,
+                                    Amount = 207.345m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1314,
+                                    Amount = 208.945m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1315,
+                                    Amount = 210.545m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1316,
+                                    Amount = 212.145m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1317,
+                                    Amount = 213.745m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1318,
+                                    Amount = 215.345m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1319,
+                                    Amount = 216.945m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1320,
+                                    Amount = 218.545m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1321,
+                                    Amount = 220.145m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1322,
+                                    Amount = 221.745m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1323,
+                                    Amount = 215.014m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1324,
+                                    Amount = 216.714m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1325,
+                                    Amount = 218.414m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1326,
+                                    Amount = 220.114m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1327,
+                                    Amount = 221.814m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1328,
+                                    Amount = 223.514m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1329,
+                                    Amount = 225.214m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1330,
+                                    Amount = 226.914m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1331,
+                                    Amount = 228.614m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1332,
+                                    Amount = 230.314m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1333,
+                                    Amount = 232.014m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1334,
+                                    Amount = 233.714m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1335,
+                                    Amount = 235.414m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1336,
+                                    Amount = 226.049m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1337,
+                                    Amount = 228.149m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1338,
+                                    Amount = 230.249m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1339,
+                                    Amount = 232.349m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1340,
+                                    Amount = 234.449m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1341,
+                                    Amount = 236.549m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1342,
+                                    Amount = 238.649m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1343,
+                                    Amount = 240.749m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1344,
+                                    Amount = 242.849m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1345,
+                                    Amount = 244.949m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1346,
+                                    Amount = 247.049m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1347,
+                                    Amount = 249.149m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1348,
+                                    Amount = 251.249m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1349,
+                                    Amount = 248.124m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1350,
+                                    Amount = 250.724m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1351,
+                                    Amount = 253.324m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1352,
+                                    Amount = 255.924m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1353,
+                                    Amount = 258.524m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1354,
+                                    Amount = 261.124m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1355,
+                                    Amount = 263.724m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1356,
+                                    Amount = 266.324m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1357,
+                                    Amount = 268.924m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1358,
+                                    Amount = 271.524m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1359,
+                                    Amount = 274.124m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1360,
+                                    Amount = 276.724m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1361,
+                                    Amount = 279.324m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1362,
+                                    Amount = 268.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1363,
+                                    Amount = 271.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1364,
+                                    Amount = 274.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1365,
+                                    Amount = 277.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1366,
+                                    Amount = 280.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1367,
+                                    Amount = 283.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1368,
+                                    Amount = 286.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1369,
+                                    Amount = 289.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1370,
+                                    Amount = 292.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1371,
+                                    Amount = 295.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1372,
+                                    Amount = 298.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1373,
+                                    Amount = 301.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1374,
+                                    Amount = 304.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1375,
+                                    Amount = 285.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1376,
+                                    Amount = 288.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1377,
+                                    Amount = 292.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1378,
+                                    Amount = 295.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1379,
+                                    Amount = 299.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1380,
+                                    Amount = 302.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1381,
+                                    Amount = 306.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1382,
+                                    Amount = 309.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1383,
+                                    Amount = 313.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1384,
+                                    Amount = 316.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1385,
+                                    Amount = 320.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1386,
+                                    Amount = 323.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1387,
+                                    Amount = 327.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1388,
+                                    Amount = 318.724m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1389,
+                                    Amount = 323.124m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1390,
+                                    Amount = 327.524m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1391,
+                                    Amount = 331.924m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1392,
+                                    Amount = 336.324m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1393,
+                                    Amount = 340.724m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1394,
+                                    Amount = 345.124m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1395,
+                                    Amount = 349.524m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1396,
+                                    Amount = 353.924m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1397,
+                                    Amount = 358.324m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1398,
+                                    Amount = 362.724m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1399,
+                                    Amount = 367.124m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1400,
+                                    Amount = 371.524m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1401,
+                                    Amount = 338.104m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1402,
+                                    Amount = 342.904m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1403,
+                                    Amount = 347.704m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1404,
+                                    Amount = 352.504m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1405,
+                                    Amount = 357.304m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1406,
+                                    Amount = 362.104m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1407,
+                                    Amount = 366.904m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1408,
+                                    Amount = 371.704m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1409,
+                                    Amount = 376.504m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1410,
+                                    Amount = 381.304m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1411,
+                                    Amount = 386.104m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1412,
+                                    Amount = 390.904m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1413,
+                                    Amount = 395.704m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1414,
+                                    Amount = 357.484m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1415,
+                                    Amount = 362.684m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1416,
+                                    Amount = 367.884m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1417,
+                                    Amount = 373.084m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1418,
+                                    Amount = 378.284m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1419,
+                                    Amount = 383.484m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1420,
+                                    Amount = 388.684m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1421,
+                                    Amount = 393.884m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1422,
+                                    Amount = 399.084m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1423,
+                                    Amount = 404.284m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1424,
+                                    Amount = 409.484m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1425,
+                                    Amount = 414.684m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1426,
+                                    Amount = 419.884m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 7
+                                },
+                                new
+                                {
+                                    Id = 1427,
+                                    Amount = 183.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1428,
+                                    Amount = 184.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1429,
+                                    Amount = 186.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1430,
+                                    Amount = 187.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1431,
+                                    Amount = 189.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1432,
+                                    Amount = 190.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1433,
+                                    Amount = 192.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1434,
+                                    Amount = 193.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1435,
+                                    Amount = 195.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1436,
+                                    Amount = 196.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1437,
+                                    Amount = 198.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1438,
+                                    Amount = 199.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1439,
+                                    Amount = 201.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1440,
+                                    Amount = 213.545m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1441,
+                                    Amount = 215.145m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1442,
+                                    Amount = 216.745m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1443,
+                                    Amount = 218.345m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1444,
+                                    Amount = 219.945m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1445,
+                                    Amount = 221.545m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1446,
+                                    Amount = 223.145m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1447,
+                                    Amount = 224.745m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1448,
+                                    Amount = 226.345m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1449,
+                                    Amount = 227.945m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1450,
+                                    Amount = 229.545m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1451,
+                                    Amount = 231.145m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1452,
+                                    Amount = 232.745m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1453,
+                                    Amount = 227.514m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1454,
+                                    Amount = 229.214m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1455,
+                                    Amount = 230.914m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1456,
+                                    Amount = 232.614m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1457,
+                                    Amount = 234.314m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1458,
+                                    Amount = 236.014m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1459,
+                                    Amount = 237.714m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1460,
+                                    Amount = 239.414m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1461,
+                                    Amount = 241.114m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1462,
+                                    Amount = 242.814m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1463,
+                                    Amount = 244.514m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1464,
+                                    Amount = 246.214m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1465,
+                                    Amount = 247.914m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1466,
+                                    Amount = 239.549m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1467,
+                                    Amount = 241.649m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1468,
+                                    Amount = 243.749m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1469,
+                                    Amount = 245.849m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1470,
+                                    Amount = 247.949m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1471,
+                                    Amount = 250.049m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1472,
+                                    Amount = 252.149m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1473,
+                                    Amount = 254.249m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1474,
+                                    Amount = 256.349m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1475,
+                                    Amount = 258.449m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1476,
+                                    Amount = 260.549m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1477,
+                                    Amount = 262.649m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1478,
+                                    Amount = 264.749m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1479,
+                                    Amount = 262.624m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1480,
+                                    Amount = 265.224m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1481,
+                                    Amount = 267.824m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1482,
+                                    Amount = 270.424m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1483,
+                                    Amount = 273.024m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1484,
+                                    Amount = 275.624m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1485,
+                                    Amount = 278.224m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1486,
+                                    Amount = 280.824m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1487,
+                                    Amount = 283.424m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1488,
+                                    Amount = 286.024m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1489,
+                                    Amount = 288.624m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1490,
+                                    Amount = 291.224m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1491,
+                                    Amount = 293.824m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1492,
+                                    Amount = 284.484m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1493,
+                                    Amount = 287.484m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1494,
+                                    Amount = 290.484m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1495,
+                                    Amount = 293.484m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1496,
+                                    Amount = 296.484m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1497,
+                                    Amount = 299.484m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1498,
+                                    Amount = 302.484m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1499,
+                                    Amount = 305.484m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1500,
+                                    Amount = 308.484m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1501,
+                                    Amount = 311.484m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1502,
+                                    Amount = 314.484m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1503,
+                                    Amount = 317.484m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1504,
+                                    Amount = 320.484m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1505,
+                                    Amount = 302.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1506,
+                                    Amount = 305.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1507,
+                                    Amount = 309.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1508,
+                                    Amount = 312.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1509,
+                                    Amount = 316.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1510,
+                                    Amount = 319.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1511,
+                                    Amount = 323.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1512,
+                                    Amount = 326.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1513,
+                                    Amount = 330.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1514,
+                                    Amount = 333.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1515,
+                                    Amount = 337.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1516,
+                                    Amount = 340.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1517,
+                                    Amount = 344.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1518,
+                                    Amount = 337.724m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1519,
+                                    Amount = 342.124m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1520,
+                                    Amount = 346.524m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1521,
+                                    Amount = 350.924m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1522,
+                                    Amount = 355.324m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1523,
+                                    Amount = 359.724m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1524,
+                                    Amount = 364.124m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1525,
+                                    Amount = 368.524m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1526,
+                                    Amount = 372.924m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1527,
+                                    Amount = 377.324m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1528,
+                                    Amount = 381.724m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1529,
+                                    Amount = 386.124m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1530,
+                                    Amount = 390.524m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1531,
+                                    Amount = 358.104m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1532,
+                                    Amount = 362.904m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1533,
+                                    Amount = 367.704m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1534,
+                                    Amount = 372.504m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1535,
+                                    Amount = 377.304m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1536,
+                                    Amount = 382.104m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1537,
+                                    Amount = 386.904m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1538,
+                                    Amount = 391.704m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1539,
+                                    Amount = 396.504m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1540,
+                                    Amount = 401.304m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1541,
+                                    Amount = 406.104m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1542,
+                                    Amount = 410.904m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1543,
+                                    Amount = 415.704m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1544,
+                                    Amount = 378.484m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1545,
+                                    Amount = 383.684m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1546,
+                                    Amount = 388.884m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1547,
+                                    Amount = 394.084m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1548,
+                                    Amount = 399.284m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1549,
+                                    Amount = 404.484m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1550,
+                                    Amount = 409.684m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1551,
+                                    Amount = 414.884m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1552,
+                                    Amount = 420.084m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1553,
+                                    Amount = 425.284m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1554,
+                                    Amount = 430.484m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1555,
+                                    Amount = 435.684m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1556,
+                                    Amount = 440.884m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 8
+                                },
+                                new
+                                {
+                                    Id = 1557,
+                                    Amount = 191.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1558,
+                                    Amount = 192.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1559,
+                                    Amount = 194.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1560,
+                                    Amount = 195.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1561,
+                                    Amount = 197.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1562,
+                                    Amount = 198.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1563,
+                                    Amount = 200.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1564,
+                                    Amount = 201.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1565,
+                                    Amount = 203.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1566,
+                                    Amount = 204.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1567,
+                                    Amount = 206.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1568,
+                                    Amount = 207.532m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1569,
+                                    Amount = 209.032m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1570,
+                                    Amount = 224.545m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1571,
+                                    Amount = 226.145m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1572,
+                                    Amount = 227.745m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1573,
+                                    Amount = 229.345m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1574,
+                                    Amount = 230.945m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1575,
+                                    Amount = 232.545m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1576,
+                                    Amount = 234.145m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1577,
+                                    Amount = 235.745m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1578,
+                                    Amount = 237.345m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1579,
+                                    Amount = 238.945m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1580,
+                                    Amount = 240.545m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1581,
+                                    Amount = 242.145m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1582,
+                                    Amount = 243.745m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1583,
+                                    Amount = 240.014m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1584,
+                                    Amount = 241.714m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1585,
+                                    Amount = 243.414m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1586,
+                                    Amount = 245.114m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1587,
+                                    Amount = 246.814m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1588,
+                                    Amount = 248.514m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1589,
+                                    Amount = 250.214m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1590,
+                                    Amount = 251.914m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1591,
+                                    Amount = 253.614m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1592,
+                                    Amount = 255.314m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1593,
+                                    Amount = 257.014m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1594,
+                                    Amount = 258.714m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1595,
+                                    Amount = 260.414m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1596,
+                                    Amount = 253.049m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1597,
+                                    Amount = 255.149m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1598,
+                                    Amount = 257.249m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1599,
+                                    Amount = 259.349m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1600,
+                                    Amount = 261.449m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1601,
+                                    Amount = 263.549m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1602,
+                                    Amount = 265.649m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1603,
+                                    Amount = 267.749m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1604,
+                                    Amount = 269.849m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1605,
+                                    Amount = 271.949m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1606,
+                                    Amount = 274.049m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1607,
+                                    Amount = 276.149m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1608,
+                                    Amount = 278.249m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1609,
+                                    Amount = 277.124m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1610,
+                                    Amount = 279.724m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1611,
+                                    Amount = 282.324m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1612,
+                                    Amount = 284.924m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1613,
+                                    Amount = 287.524m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1614,
+                                    Amount = 290.124m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1615,
+                                    Amount = 292.724m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1616,
+                                    Amount = 295.324m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1617,
+                                    Amount = 297.924m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1618,
+                                    Amount = 300.524m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1619,
+                                    Amount = 303.124m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1620,
+                                    Amount = 305.724m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1621,
+                                    Amount = 308.324m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1622,
+                                    Amount = 299.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1623,
+                                    Amount = 302.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1624,
+                                    Amount = 305.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1625,
+                                    Amount = 308.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1626,
+                                    Amount = 311.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1627,
+                                    Amount = 314.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1628,
+                                    Amount = 317.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1629,
+                                    Amount = 320.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1630,
+                                    Amount = 323.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1631,
+                                    Amount = 326.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1632,
+                                    Amount = 329.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1633,
+                                    Amount = 332.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1634,
+                                    Amount = 335.984m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1635,
+                                    Amount = 319.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1636,
+                                    Amount = 322.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1637,
+                                    Amount = 326.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1638,
+                                    Amount = 329.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1639,
+                                    Amount = 333.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1640,
+                                    Amount = 336.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1641,
+                                    Amount = 340.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1642,
+                                    Amount = 343.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1643,
+                                    Amount = 347.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1644,
+                                    Amount = 350.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1645,
+                                    Amount = 354.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1646,
+                                    Amount = 357.764m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1647,
+                                    Amount = 361.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1648,
+                                    Amount = 356.724m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1649,
+                                    Amount = 361.124m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1650,
+                                    Amount = 365.524m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1651,
+                                    Amount = 369.924m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1652,
+                                    Amount = 374.324m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1653,
+                                    Amount = 378.724m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1654,
+                                    Amount = 383.124m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1655,
+                                    Amount = 387.524m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1656,
+                                    Amount = 391.924m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1657,
+                                    Amount = 396.324m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1658,
+                                    Amount = 400.724m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1659,
+                                    Amount = 405.124m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1660,
+                                    Amount = 409.524m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1661,
+                                    Amount = 378.104m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1662,
+                                    Amount = 382.904m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1663,
+                                    Amount = 387.704m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1664,
+                                    Amount = 392.504m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1665,
+                                    Amount = 397.304m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1666,
+                                    Amount = 402.104m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1667,
+                                    Amount = 406.904m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1668,
+                                    Amount = 411.704m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1669,
+                                    Amount = 416.504m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1670,
+                                    Amount = 421.304m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1671,
+                                    Amount = 426.104m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1672,
+                                    Amount = 430.904m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1673,
+                                    Amount = 435.704m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1674,
+                                    Amount = 399.484m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1675,
+                                    Amount = 404.684m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1676,
+                                    Amount = 409.884m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1677,
+                                    Amount = 415.084m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1678,
+                                    Amount = 420.284m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1679,
+                                    Amount = 425.484m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1680,
+                                    Amount = 430.684m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1681,
+                                    Amount = 435.884m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1682,
+                                    Amount = 441.084m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1683,
+                                    Amount = 446.284m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1684,
+                                    Amount = 451.484m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1685,
+                                    Amount = 456.684m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1686,
+                                    Amount = 461.884m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 9
+                                },
+                                new
+                                {
+                                    Id = 1687,
+                                    Amount = 413.471m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1688,
+                                    Amount = 423.807m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1689,
+                                    Amount = 434.144m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1690,
+                                    Amount = 444.480m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1691,
+                                    Amount = 454.817m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1692,
+                                    Amount = 465.154m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1693,
+                                    Amount = 475.491m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1694,
+                                    Amount = 485.827m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1695,
+                                    Amount = 496.164m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1696,
+                                    Amount = 506.501m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1697,
+                                    Amount = 516.838m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1698,
+                                    Amount = 527.175m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1699,
+                                    Amount = 537.511m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1700,
+                                    Amount = 471.318m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1701,
+                                    Amount = 483.102m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1702,
+                                    Amount = 494.885m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1703,
+                                    Amount = 506.668m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1704,
+                                    Amount = 518.451m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1705,
+                                    Amount = 530.234m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1706,
+                                    Amount = 542.017m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1707,
+                                    Amount = 553.800m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1708,
+                                    Amount = 565.583m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1709,
+                                    Amount = 577.366m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1710,
+                                    Amount = 589.149m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1711,
+                                    Amount = 600.932m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1712,
+                                    Amount = 612.715m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1713,
+                                    Amount = 498.021m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1714,
+                                    Amount = 510.471m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1715,
+                                    Amount = 522.922m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1716,
+                                    Amount = 535.372m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1717,
+                                    Amount = 547.823m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1718,
+                                    Amount = 560.274m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1719,
+                                    Amount = 572.724m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1720,
+                                    Amount = 585.175m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1721,
+                                    Amount = 597.625m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1722,
+                                    Amount = 610.076m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1723,
+                                    Amount = 622.526m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1724,
+                                    Amount = 634.977m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1725,
+                                    Amount = 647.427m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1726,
+                                    Amount = 520.522m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1727,
+                                    Amount = 533.534m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1728,
+                                    Amount = 546.547m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1729,
+                                    Amount = 559.560m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1730,
+                                    Amount = 572.574m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1731,
+                                    Amount = 585.587m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1732,
+                                    Amount = 598.600m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1733,
+                                    Amount = 611.613m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1734,
+                                    Amount = 624.626m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1735,
+                                    Amount = 637.639m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1736,
+                                    Amount = 650.652m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1737,
+                                    Amount = 663.665m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1738,
+                                    Amount = 676.678m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1739,
+                                    Amount = 562.079m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1740,
+                                    Amount = 576.131m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1741,
+                                    Amount = 590.183m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1742,
+                                    Amount = 604.235m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1743,
+                                    Amount = 618.287m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1744,
+                                    Amount = 632.338m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1745,
+                                    Amount = 646.390m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1746,
+                                    Amount = 660.442m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1747,
+                                    Amount = 674.494m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1748,
+                                    Amount = 688.546m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1749,
+                                    Amount = 702.598m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1750,
+                                    Amount = 716.650m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1751,
+                                    Amount = 730.702m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1752,
+                                    Amount = 619.663m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1753,
+                                    Amount = 635.155m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1754,
+                                    Amount = 650.646m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1755,
+                                    Amount = 666.138m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1756,
+                                    Amount = 681.630m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1757,
+                                    Amount = 697.121m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1758,
+                                    Amount = 712.613m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1759,
+                                    Amount = 728.104m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1760,
+                                    Amount = 743.596m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1761,
+                                    Amount = 759.088m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1762,
+                                    Amount = 774.579m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1763,
+                                    Amount = 790.071m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1764,
+                                    Amount = 805.562m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1765,
+                                    Amount = 652.944m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1766,
+                                    Amount = 669.267m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1767,
+                                    Amount = 685.591m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1768,
+                                    Amount = 701.914m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1769,
+                                    Amount = 718.238m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1770,
+                                    Amount = 734.562m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1771,
+                                    Amount = 750.885m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1772,
+                                    Amount = 767.209m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1773,
+                                    Amount = 783.532m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1774,
+                                    Amount = 799.856m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1775,
+                                    Amount = 816.180m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1776,
+                                    Amount = 832.503m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1777,
+                                    Amount = 848.827m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1778,
+                                    Amount = 717.605m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1779,
+                                    Amount = 735.546m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1780,
+                                    Amount = 753.486m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1781,
+                                    Amount = 771.426m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1782,
+                                    Amount = 789.366m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1783,
+                                    Amount = 807.306m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1784,
+                                    Amount = 825.246m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1785,
+                                    Amount = 843.186m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1786,
+                                    Amount = 861.127m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1787,
+                                    Amount = 879.067m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1788,
+                                    Amount = 897.007m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1789,
+                                    Amount = 914.947m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1790,
+                                    Amount = 932.887m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1791,
+                                    Amount = 769.201m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1792,
+                                    Amount = 788.431m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1793,
+                                    Amount = 807.661m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1794,
+                                    Amount = 826.891m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1795,
+                                    Amount = 846.122m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1796,
+                                    Amount = 865.352m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1797,
+                                    Amount = 884.582m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1798,
+                                    Amount = 903.812m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1799,
+                                    Amount = 923.042m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1800,
+                                    Amount = 942.272m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1801,
+                                    Amount = 961.502m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1802,
+                                    Amount = 980.732m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1803,
+                                    Amount = 999.962m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1804,
+                                    Amount = 805.576m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1805,
+                                    Amount = 825.716m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1806,
+                                    Amount = 845.856m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1807,
+                                    Amount = 865.995m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1808,
+                                    Amount = 886.135m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1809,
+                                    Amount = 906.274m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1810,
+                                    Amount = 926.413m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1811,
+                                    Amount = 946.553m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1812,
+                                    Amount = 966.692m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1813,
+                                    Amount = 986.832m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1814,
+                                    Amount = 1006.971m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1815,
+                                    Amount = 1027.111m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1816,
+                                    Amount = 1047.250m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 10
+                                },
+                                new
+                                {
+                                    Id = 1817,
+                                    Amount = 504.153m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1818,
+                                    Amount = 516.756m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1819,
+                                    Amount = 529.359m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1820,
+                                    Amount = 541.963m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1821,
+                                    Amount = 554.567m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1822,
+                                    Amount = 567.171m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1823,
+                                    Amount = 579.775m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1824,
+                                    Amount = 592.378m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1825,
+                                    Amount = 604.982m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1826,
+                                    Amount = 617.586m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1827,
+                                    Amount = 630.190m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1828,
+                                    Amount = 642.794m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1829,
+                                    Amount = 655.397m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1830,
+                                    Amount = 574.687m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1831,
+                                    Amount = 589.055m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1832,
+                                    Amount = 603.422m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1833,
+                                    Amount = 617.790m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1834,
+                                    Amount = 632.157m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1835,
+                                    Amount = 646.524m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1836,
+                                    Amount = 660.891m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1837,
+                                    Amount = 675.258m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1838,
+                                    Amount = 689.626m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1839,
+                                    Amount = 703.993m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1840,
+                                    Amount = 718.360m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1841,
+                                    Amount = 732.727m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1842,
+                                    Amount = 747.094m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1843,
+                                    Amount = 607.246m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1844,
+                                    Amount = 622.427m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1845,
+                                    Amount = 637.608m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1846,
+                                    Amount = 652.790m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1847,
+                                    Amount = 667.971m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1848,
+                                    Amount = 683.152m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1849,
+                                    Amount = 698.333m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1850,
+                                    Amount = 713.514m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1851,
+                                    Amount = 728.695m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1852,
+                                    Amount = 743.876m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1853,
+                                    Amount = 759.058m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1854,
+                                    Amount = 774.239m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1855,
+                                    Amount = 789.420m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1856,
+                                    Amount = 634.682m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1857,
+                                    Amount = 650.548m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1858,
+                                    Amount = 666.415m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1859,
+                                    Amount = 682.282m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1860,
+                                    Amount = 698.149m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1861,
+                                    Amount = 714.017m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1862,
+                                    Amount = 729.884m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1863,
+                                    Amount = 745.751m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1864,
+                                    Amount = 761.618m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1865,
+                                    Amount = 777.485m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1866,
+                                    Amount = 793.352m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1867,
+                                    Amount = 809.219m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1868,
+                                    Amount = 825.086m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1869,
+                                    Amount = 685.353m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1870,
+                                    Amount = 702.487m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1871,
+                                    Amount = 719.621m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1872,
+                                    Amount = 736.754m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1873,
+                                    Amount = 753.888m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1874,
+                                    Amount = 771.022m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1875,
+                                    Amount = 788.156m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1876,
+                                    Amount = 805.290m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1877,
+                                    Amount = 822.423m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1878,
+                                    Amount = 839.557m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1879,
+                                    Amount = 856.691m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1880,
+                                    Amount = 873.825m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1881,
+                                    Amount = 890.959m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1882,
+                                    Amount = 755.566m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1883,
+                                    Amount = 774.456m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1884,
+                                    Amount = 793.345m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1885,
+                                    Amount = 812.234m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1886,
+                                    Amount = 831.124m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1887,
+                                    Amount = 850.013m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1888,
+                                    Amount = 868.902m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1889,
+                                    Amount = 887.791m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1890,
+                                    Amount = 906.680m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1891,
+                                    Amount = 925.569m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1892,
+                                    Amount = 944.459m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1893,
+                                    Amount = 963.348m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1894,
+                                    Amount = 982.237m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1895,
+                                    Amount = 796.146m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1896,
+                                    Amount = 816.050m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1897,
+                                    Amount = 835.954m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1898,
+                                    Amount = 855.857m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1899,
+                                    Amount = 875.761m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1900,
+                                    Amount = 895.665m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1901,
+                                    Amount = 915.568m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1902,
+                                    Amount = 935.472m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1903,
+                                    Amount = 955.375m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1904,
+                                    Amount = 975.279m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1905,
+                                    Amount = 995.183m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1906,
+                                    Amount = 1015.086m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1907,
+                                    Amount = 1034.990m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1908,
+                                    Amount = 874.989m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1909,
+                                    Amount = 896.864m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1910,
+                                    Amount = 918.739m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1911,
+                                    Amount = 940.614m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1912,
+                                    Amount = 962.489m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1913,
+                                    Amount = 984.363m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1914,
+                                    Amount = 1006.238m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1915,
+                                    Amount = 1028.113m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1916,
+                                    Amount = 1049.988m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1917,
+                                    Amount = 1071.862m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1918,
+                                    Amount = 1093.737m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1919,
+                                    Amount = 1115.612m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1920,
+                                    Amount = 1137.487m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1921,
+                                    Amount = 937.901m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1922,
+                                    Amount = 961.349m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1923,
+                                    Amount = 984.797m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1924,
+                                    Amount = 1008.244m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1925,
+                                    Amount = 1031.692m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1926,
+                                    Amount = 1055.139m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1927,
+                                    Amount = 1078.587m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1928,
+                                    Amount = 1102.034m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1929,
+                                    Amount = 1125.482m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1930,
+                                    Amount = 1148.929m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1931,
+                                    Amount = 1172.377m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1932,
+                                    Amount = 1195.824m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1933,
+                                    Amount = 1219.272m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1934,
+                                    Amount = 982.254m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1935,
+                                    Amount = 1006.811m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1936,
+                                    Amount = 1031.368m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1937,
+                                    Amount = 1055.924m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1938,
+                                    Amount = 1080.480m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1939,
+                                    Amount = 1105.037m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1940,
+                                    Amount = 1129.593m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1941,
+                                    Amount = 1154.149m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1942,
+                                    Amount = 1178.706m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1943,
+                                    Amount = 1203.262m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1944,
+                                    Amount = 1227.819m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1945,
+                                    Amount = 1252.375m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1946,
+                                    Amount = 1276.931m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 11
+                                },
+                                new
+                                {
+                                    Id = 1947,
+                                    Amount = 536.922m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1948,
+                                    Amount = 550.345m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1949,
+                                    Amount = 563.768m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1950,
+                                    Amount = 577.191m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1951,
+                                    Amount = 590.614m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1952,
+                                    Amount = 604.037m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1953,
+                                    Amount = 617.460m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1954,
+                                    Amount = 630.883m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1955,
+                                    Amount = 644.306m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1956,
+                                    Amount = 657.729m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1957,
+                                    Amount = 671.152m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1958,
+                                    Amount = 684.575m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1959,
+                                    Amount = 697.998m,
+                                    CategoryKey = "cat-1",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1960,
+                                    Amount = 612.042m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1961,
+                                    Amount = 627.344m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1962,
+                                    Amount = 642.645m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1963,
+                                    Amount = 657.946m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1964,
+                                    Amount = 673.247m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1965,
+                                    Amount = 688.548m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1966,
+                                    Amount = 703.849m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1967,
+                                    Amount = 719.150m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1968,
+                                    Amount = 734.451m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1969,
+                                    Amount = 749.752m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1970,
+                                    Amount = 765.053m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1971,
+                                    Amount = 780.354m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1972,
+                                    Amount = 795.655m,
+                                    CategoryKey = "cat-2",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1973,
+                                    Amount = 646.717m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1974,
+                                    Amount = 662.885m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1975,
+                                    Amount = 679.053m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1976,
+                                    Amount = 695.221m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1977,
+                                    Amount = 711.389m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1978,
+                                    Amount = 727.557m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1979,
+                                    Amount = 743.725m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1980,
+                                    Amount = 759.893m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1981,
+                                    Amount = 776.061m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1982,
+                                    Amount = 792.228m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1983,
+                                    Amount = 808.396m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1984,
+                                    Amount = 824.564m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1985,
+                                    Amount = 840.732m,
+                                    CategoryKey = "cat-3",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1986,
+                                    Amount = 675.936m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1987,
+                                    Amount = 692.834m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1988,
+                                    Amount = 709.732m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1989,
+                                    Amount = 726.631m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1990,
+                                    Amount = 743.529m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1991,
+                                    Amount = 760.428m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1992,
+                                    Amount = 777.326m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1993,
+                                    Amount = 794.224m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1994,
+                                    Amount = 811.123m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1995,
+                                    Amount = 828.021m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1996,
+                                    Amount = 844.920m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1997,
+                                    Amount = 861.818m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1998,
+                                    Amount = 878.716m,
+                                    CategoryKey = "cat-4",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 1999,
+                                    Amount = 729.901m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2000,
+                                    Amount = 748.148m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2001,
+                                    Amount = 766.396m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2002,
+                                    Amount = 784.643m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2003,
+                                    Amount = 802.891m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2004,
+                                    Amount = 821.138m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2005,
+                                    Amount = 839.386m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2006,
+                                    Amount = 857.633m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2007,
+                                    Amount = 875.881m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2008,
+                                    Amount = 894.129m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2009,
+                                    Amount = 912.376m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2010,
+                                    Amount = 930.624m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2011,
+                                    Amount = 948.871m,
+                                    CategoryKey = "cat-5",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2012,
+                                    Amount = 804.678m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2013,
+                                    Amount = 824.796m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2014,
+                                    Amount = 844.913m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2015,
+                                    Amount = 865.030m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2016,
+                                    Amount = 885.147m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2017,
+                                    Amount = 905.264m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2018,
+                                    Amount = 925.381m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2019,
+                                    Amount = 945.498m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2020,
+                                    Amount = 965.615m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2021,
+                                    Amount = 985.731m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2022,
+                                    Amount = 1005.848m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2023,
+                                    Amount = 1025.965m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2024,
+                                    Amount = 1046.082m,
+                                    CategoryKey = "cat-6",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2025,
+                                    Amount = 847.896m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2026,
+                                    Amount = 869.093m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2027,
+                                    Amount = 890.291m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2028,
+                                    Amount = 911.488m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2029,
+                                    Amount = 932.685m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2030,
+                                    Amount = 953.883m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2031,
+                                    Amount = 975.080m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2032,
+                                    Amount = 996.278m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2033,
+                                    Amount = 1017.475m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2034,
+                                    Amount = 1038.672m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2035,
+                                    Amount = 1059.870m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2036,
+                                    Amount = 1081.067m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2037,
+                                    Amount = 1102.264m,
+                                    CategoryKey = "cat-7",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2038,
+                                    Amount = 931.863m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2039,
+                                    Amount = 955.161m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2040,
+                                    Amount = 978.457m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2041,
+                                    Amount = 1001.754m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2042,
+                                    Amount = 1025.050m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2043,
+                                    Amount = 1048.347m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2044,
+                                    Amount = 1071.644m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2045,
+                                    Amount = 1094.940m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2046,
+                                    Amount = 1118.237m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2047,
+                                    Amount = 1141.533m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2048,
+                                    Amount = 1164.830m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2049,
+                                    Amount = 1188.127m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2050,
+                                    Amount = 1211.423m,
+                                    CategoryKey = "cat-8",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2051,
+                                    Amount = 998.865m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2052,
+                                    Amount = 1023.837m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2053,
+                                    Amount = 1048.808m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2054,
+                                    Amount = 1073.780m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2055,
+                                    Amount = 1098.752m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2056,
+                                    Amount = 1123.723m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2057,
+                                    Amount = 1148.695m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2058,
+                                    Amount = 1173.666m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2059,
+                                    Amount = 1198.638m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2060,
+                                    Amount = 1223.610m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2061,
+                                    Amount = 1248.581m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2062,
+                                    Amount = 1273.553m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2063,
+                                    Amount = 1298.525m,
+                                    CategoryKey = "cat-9",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2064,
+                                    Amount = 1046.101m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-1",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2065,
+                                    Amount = 1072.254m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-2",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2066,
+                                    Amount = 1098.406m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-3",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2067,
+                                    Amount = 1124.559m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-4",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2068,
+                                    Amount = 1150.712m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-5",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2069,
+                                    Amount = 1176.864m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-6",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2070,
+                                    Amount = 1203.017m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-7",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2071,
+                                    Amount = 1229.169m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-8",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2072,
+                                    Amount = 1255.322m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-9",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2073,
+                                    Amount = 1281.474m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-10",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2074,
+                                    Amount = 1307.627m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-11",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2075,
+                                    Amount = 1333.779m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-12",
+                                    SalaryTableId = 12
+                                },
+                                new
+                                {
+                                    Id = 2076,
+                                    Amount = 1359.932m,
+                                    CategoryKey = "cat-10",
+                                    DegreeKey = "deg-13",
+                                    SalaryTableId = 12
+                                });
                         });
+
+                    b.Navigation("ApplicationPeriod")
+                        .IsRequired();
 
                     b.Navigation("Categories");
 

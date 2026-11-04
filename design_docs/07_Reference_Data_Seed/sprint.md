@@ -79,7 +79,7 @@ Yes, but as two buffers in files, with the tool as a maintainer's command line f
 |---|---|---|---|
 | 1. Upload | `data/jort/inbox/`: drop the PDFs there | `payroll-seed catalogue` files them under `files/`, hashes them, refuses a copy of a file already there, and adds them to the manifest as "unidentified" | **Done** (07.2) |
 | 2. Identify | `data/jort/manifest.json` (status unidentified → partial → identified) | `payroll-seed text <key>`: the text layer with the JORT digits decoded, to read the issue, date and page; a person completes the entry | **Done**, 9 of 15 files partly identified |
-| 3. Extract | `data/seed/drafts/{agreement}/*.json`: events not yet approved, the file equivalent of the Draft status | An LLM with vision writes them from the page images (07.13); `payroll-seed verify` checks them | To do (07.3, 07.4, 07.13) |
+| 3. Extract | `data/seed/agreements/{agreement}/*.json`: events not yet approved, the file equivalent of the Draft status | An LLM with vision writes them from the page images (07.13); `payroll-seed verify` checks them | To do (07.3, 07.4, 07.13) |
 | 4. Approve | moving a draft to `data/seed/agreements/{agreement}.json`, through a reviewed git change | `seed verify` must pass; the reviewer compares the diff with the page images | To do |
 | 5. Ship | `payroll.seed.db` / embedded seed | `seed build` | To do (07.4, 07.9) |
 
@@ -177,5 +177,11 @@ acceptable. Checked on a clean **Windows Sandbox** (no .NET), offline, in 07.9.
 - **07.5 done.** `run.ps1 -Reset` deletes the database, which the app recreates from the seed on startup. The Electron
   sample moved to `dotnet/tests/fixtures/legacy-sample.sqlite`; the real-data tests now fail if it is missing instead
   of skipping silently.
+- **Grids and primes seeded (2026-11-04).** The transcribed drafts moved to `data/seed/agreements/{code}/`, each
+  folder with a `seed.json` (tables: file, number, unit, weekly hours, start, source; primes: unit, beneficiaries,
+  conditions, dated rates with their sources). `ReferenceSeed` reads them (embedded resources) and the single
+  `InitialCreate` seeds 12 grids (2,076 cells) and 11 primes, read-only like the agreements. Successive versions share a
+  table number and apply until the next one, so the missing travel riders (1–8, 10) show as the last known amount.
+  The PDF ingestion pipeline (07.3/07.4) will write these same files.
 - **Next:** 07.3 (seed file format and `drafts/`), 07.4 (`verify` / `build`), 07.11 (prime catalogue), 07.13 (light
   loop), then identify the remaining files.

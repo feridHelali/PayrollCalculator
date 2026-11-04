@@ -132,6 +132,10 @@ public sealed partial class SalaryTableEditorViewModel(IServiceRunner runner, ID
     [ObservableProperty]
     public partial CategoryRowViewModel? SelectedCategory { get; set; }
 
+    /// <summary>Shipped with the product: shown for reading only (D4).</summary>
+    [ObservableProperty]
+    public partial bool IsSeeded { get; private set; }
+
     public Task LoadAsync(int? id, int? agreementId = null) => TryAsync(async () =>
     {
         var agreements = await Runner.RunAsync<AgreementService, IReadOnlyList<AgreementDto>>(s => s.ListAsync()).ConfigureAwait(true);
@@ -291,6 +295,7 @@ public sealed partial class SalaryTableEditorViewModel(IServiceRunner runner, ID
     {
         _filling = true;
         Id = dto.Id;
+        IsSeeded = dto.IsSeeded;
         TableNumber = dto.TableNumber;
         SalaryType = dto.SalaryType;
         WeeklyHours = dto.WeeklyHours;

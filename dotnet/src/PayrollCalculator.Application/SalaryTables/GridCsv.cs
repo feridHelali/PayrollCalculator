@@ -10,7 +10,7 @@ public sealed record GridCsvRow(string Category, IReadOnlyList<decimal?> Amounts
 public sealed record GridCsvContent(IReadOnlyList<int> Degrees, IReadOnlyList<int> YearsInDegree, IReadOnlyList<GridCsvRow> Rows);
 
 /// <summary>
-/// Reads a salary grid typed or transcribed in a spreadsheet (for example the drafts in <c>data/seed/drafts</c>):
+/// Reads a salary grid typed or transcribed in a spreadsheet (for example the drafts in <c>data/seed/agreements</c>):
 /// <code>
 /// category,1,2,3,...          (the degrees)
 /// years_in_degree,1,1,1,2,... (years to spend in each degree)

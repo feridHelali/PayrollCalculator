@@ -54,6 +54,7 @@ public static class Labels
     public const string GridKind = "نوع الجدول";
     public const string WeeklyHours = "نظام العمل (ساعة في الأسبوع)";
     public const string ImportCsv = "استيراد من ملف CSV";
+    public const string SeededReadOnly = "بيانات مرفقة بالبرنامج (مصدرها الرائد الرسمي): للاطلاع فقط";
     public const string CsvFilter = "CSV (*.csv)|*.csv";
     public const string ConfirmReplaceGrid = "سيتم تعويض الأصناف والدرجات الحالية بمحتوى الملف. هل تريد المواصلة؟";
     public const string GridImported = "تم استيراد الجدول: يرجى مراجعته قبل الحفظ";

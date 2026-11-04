@@ -34,7 +34,7 @@
       "vetements_tisses_et_prets_a_porter"
     ],
     "language": "ar",
-    "notes": "Rider 18 of the woven and ready-to-wear clothing agreement, signed 29 February 2024, in force 1 January 2024; JORT pp. 3513-3523. Primes on p. 3516 (article 49). Six scanned grids on PDF pages 6-11, transcribed in data/seed/drafts/vetements_tisses_et_prets_a_porter (checked: monotonic, and 2025/2026 = 2024 x 1.065 / x 1.07). To confirm by a person, then mark identified.",
+    "notes": "Rider 18 of the woven and ready-to-wear clothing agreement, signed 29 February 2024, in force 1 January 2024; JORT pp. 3513-3523. Primes on p. 3516 (article 49). Six scanned grids on PDF pages 6-11, transcribed in data/seed/agreements/vetements_tisses_et_prets_a_porter (checked: monotonic, and 2025/2026 = 2024 x 1.065 / x 1.07). To confirm by a person, then mark identified.",
     "title": "قرار وزير الشؤون الاجتماعية المؤرخ في 8 أفريل 2024 المتعلق بالمصادقة على الملحق التعديلي عدد 18 للاتفاقية المشتركة القطاعية لصناعة الملابس المنسوجة والجاهزة"
   },
   {
@@ -63,7 +63,7 @@
       "agences_de_voyages"
     ],
     "language": "ar",
-    "notes": "JORT 41 of 23 May 1997: publishes the travel agencies agreement (signed 22 April 1997, approved 15 May 1997). Classification of categories on pp. 932-933 (PDF 14-15), three grids (1996, 1997, 1998) on p. 934 (PDF 16), transcribed in data/seed/drafts/agences_de_voyages. PDF pages 26-30 are an unrelated list of names. Old font: words not decoded. To confirm by a person.",
+    "notes": "JORT 41 of 23 May 1997: publishes the travel agencies agreement (signed 22 April 1997, approved 15 May 1997). Classification of categories on pp. 932-933 (PDF 14-15), three grids (1996, 1997, 1998) on p. 934 (PDF 16), transcribed in data/seed/agreements/agences_de_voyages. PDF pages 26-30 are an unrelated list of names. Old font: words not decoded. To confirm by a person.",
     "kind": "Agreement",
     "signedOn": "1997-04-22",
     "title": "الاتفاقية المشتركة القطاعية لوكالات الأسفار (القرار المؤرخ في 15 ماي 1997)"
@@ -171,7 +171,7 @@
       "agences_de_voyages"
     ],
     "language": "ar",
-    "notes": "Rider 9 (signed 11 July 2017), in force 1 May 2017; JORT 62/2017 pp. 2494-2496 (page 1 also carries an unrelated erratum). Grid on PDF page 3, transcribed in data/seed/drafts/agences_de_voyages. To confirm by a person.",
+    "notes": "Rider 9 (signed 11 July 2017), in force 1 May 2017; JORT 62/2017 pp. 2494-2496 (page 1 also carries an unrelated erratum). Grid on PDF page 3, transcribed in data/seed/agreements/agences_de_voyages. To confirm by a person.",
     "signedOn": "2017-07-31",
     "title": "قرار وزير الشؤون الاجتماعية المؤرخ في 31 جويلية 2017 المتعلق بالمصادقة على الملحق التعديلي عدد 9 للاتفاقية المشتركة القطاعية لوكالات الأسفار"
   },
@@ -207,7 +207,7 @@
       "agences_de_voyages"
     ],
     "language": "ar",
-    "notes": "Rider 11 (signed 14 September 2022), in force 1 May 2022; JORT 120/2022 pp. 3263-3267 (page 1 starts with unrelated decrees). Two grids on PDF pages 4-5 and the primes on p. 3265, transcribed in data/seed/drafts/agences_de_voyages. To confirm by a person.",
+    "notes": "Rider 11 (signed 14 September 2022), in force 1 May 2022; JORT 120/2022 pp. 3263-3267 (page 1 starts with unrelated decrees). Two grids on PDF pages 4-5 and the primes on p. 3265, transcribed in data/seed/agreements/agences_de_voyages. To confirm by a person.",
     "title": "قرار وزير الشؤون الاجتماعية المؤرخ في 20 أكتوبر 2022 المتعلق بالمصادقة على الملحق التعديلي عدد 11 للاتفاقية المشتركة القطاعية لوكالات الأسفار"
   }
 ]

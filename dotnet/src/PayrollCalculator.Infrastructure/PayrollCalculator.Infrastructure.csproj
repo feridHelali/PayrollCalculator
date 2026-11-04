@@ -14,6 +14,12 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.14" />
   </ItemGroup>
 
+  <!-- The grids and primes shipped with the product (ReferenceSeed): seed/{agreement}/{file}. -->
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\..\data\seed\agreements\**\seed.json;..\..\..\data\seed\agreements\**\*.csv"
+                      LogicalName="seed/%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

@@ -23,7 +23,8 @@ public sealed record SalaryTableDto(
     IReadOnlyList<CategoryDto> Categories,
     IReadOnlyList<DegreeDto> Degrees,
     IReadOnlyList<CellDto> Cells,
-    int WeeklyHours = SalaryTable.DefaultWeeklyHours);
+    int WeeklyHours = SalaryTable.DefaultWeeklyHours,
+    bool IsSeeded = false);
 
 /// <summary>Row of the salary tables list.</summary>
 public sealed record SalaryTableSummaryDto(
@@ -34,7 +35,8 @@ public sealed record SalaryTableSummaryDto(
     SalaryType SalaryType,
     string ConcernedEmployees,
     DateOnly StartDate,
-    DateOnly? EndDate);
+    DateOnly? EndDate,
+    bool IsSeeded = false);
 
 /// <summary>Use cases for salary tables.</summary>
 public sealed class SalaryTableService(ISalaryTableRepository tables, IAgreementRepository agreements, IUnitOfWork unitOfWork)
@@ -51,7 +53,7 @@ public sealed class SalaryTableService(ISalaryTableRepository tables, IAgreement
             .ThenBy(t => t.TableNumber, StringComparer.CurrentCulture)
             .ThenBy(t => t.ApplicationPeriod.Start)
             .Select(t => new SalaryTableSummaryDto(t.Id, t.AgreementId, names.GetValueOrDefault(t.AgreementId) ?? string.Empty,
-                t.TableNumber, t.SalaryType, t.ConcernedEmployees, t.ApplicationPeriod.Start, t.ApplicationPeriod.End))
+                t.TableNumber, t.SalaryType, t.ConcernedEmployees, t.ApplicationPeriod.Start, t.ApplicationPeriod.End, t.IsSeeded))
             .ToList();
     }
 
@@ -76,6 +78,7 @@ public sealed class SalaryTableService(ISalaryTableRepository tables, IAgreement
         else
         {
             table = await Load(dto.Id, ct).ConfigureAwait(false);
+            table.EnsureEditable();
             if (table.AgreementId != dto.AgreementId)
             {
                 throw new DomainException(DomainError.TableAgreementLocked, DomainField.Agreement);
@@ -92,7 +95,9 @@ public sealed class SalaryTableService(ISalaryTableRepository tables, IAgreement
 
     public async Task DeleteAsync(int id, CancellationToken ct = default)
     {
-        tables.Remove(await Load(id, ct).ConfigureAwait(false));
+        var table = await Load(id, ct).ConfigureAwait(false);
+        table.EnsureEditable();
+        tables.Remove(table);
         await unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
     }
 
@@ -111,5 +116,6 @@ public sealed class SalaryTableService(ISalaryTableRepository tables, IAgreement
         t.Categories.Select(c => new CategoryDto(c.Key, c.Label)).ToList(),
         t.Degrees.Select(d => new DegreeDto(d.Key, d.Number, d.YearsInDegree)).ToList(),
         t.Cells.Select(c => new CellDto(c.CategoryKey, c.DegreeKey, c.Amount)).ToList(),
-        t.WeeklyHours);
+        t.WeeklyHours,
+        t.IsSeeded);
 }

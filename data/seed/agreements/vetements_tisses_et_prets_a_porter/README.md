@@ -1,6 +1,6 @@
-# Drafts: clothing agreement (الاتفاقية المشتركة القطاعية لصناعة الملابس المنسوجة والجاهزة), rider 18
+# Seed: clothing agreement (الاتفاقية المشتركة القطاعية لصناعة الملابس المنسوجة والجاهزة), rider 18
 
-**Status: draft, read from the page images; to be checked by a person against the PDF before it is used.**
+**Status: seeded in the app (read-only) from `seed.json` and the CSVs of this folder. Read from the page images: still to be checked by a person against the PDF.**
 
 ## Source
 
@@ -44,8 +44,6 @@ lost in printing (5 millimes per month). **Decision for the domain expert.**
 
 ## Not grids: the primes of the same rider (article 49, page 3516)
 
-There is no screen for primes yet; they will become allowance events (sprint 05, Phase D).
-
 | Prime | 2024 | 2025 | 2026 | Notes |
 |---|---|---|---|---|
 | Presence (منحة الحضور), all workers | 7.930 | 8.445 | 9.036 | per month; includes the half-day prime of article 5 of the decree of 8 January 1948 |
@@ -57,9 +55,7 @@ There is no screen for primes yet; they will become allowance events (sprint 05,
 - **Promotion:** a worker promoted to a higher category keeps the same degree.
 - **Moving up a degree:** each step gives a 1% raise, computed on the amount of the degree held before the step.
 
-## Using a draft in the app
+## In the app
 
-1. Open **جداول الأجور**, choose **جديد**, and pick the agreement and the grid type. The monthly grid is «جدول الأجور الخاص بالإطارات وأعوان التسيير (شهري)»; the hourly one is «… بأعوان التنفيذ (ساعي)».
-2. Enter the table number and the start date.
-3. Click **استيراد من ملف CSV** and choose the file.
-4. Check the grid against the page, then save.
+The six grids and the four primes above are seeded (see `seed.json`): they appear in **جداول الأجور** and
+**المنح والمنافع** on a new database, read-only. To change a value, edit the CSV or `seed.json` and add a migration.

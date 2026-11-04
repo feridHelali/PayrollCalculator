@@ -15,7 +15,8 @@ public sealed record AllowanceDto(
     AllowanceUnit Unit,
     string? AppliesTo,
     string? Conditions,
-    IReadOnlyList<AllowanceRateDto> Rates);
+    IReadOnlyList<AllowanceRateDto> Rates,
+    bool IsSeeded = false);
 
 /// <summary>Row of the primes list; <see cref="CurrentValue"/> is the amount in force today.</summary>
 public sealed record AllowanceSummaryDto(
@@ -27,7 +28,8 @@ public sealed record AllowanceSummaryDto(
     string? AppliesTo,
     decimal? CurrentValue,
     DateOnly? FirstDate,
-    int RateCount);
+    int RateCount,
+    bool IsSeeded = false);
 
 /// <summary>Use cases for the primes and allowances of the agreements.</summary>
 public sealed class AllowanceService(IAllowanceRepository allowances, IAgreementRepository agreements, IUnitOfWork unitOfWork, TimeProvider clock)
@@ -40,7 +42,7 @@ public sealed class AllowanceService(IAllowanceRepository allowances, IAgreement
             .OrderBy(a => names.GetValueOrDefault(a.AgreementId), StringComparer.CurrentCulture)
             .ThenBy(a => a.Name, StringComparer.CurrentCulture)
             .Select(a => new AllowanceSummaryDto(a.Id, a.AgreementId, names.GetValueOrDefault(a.AgreementId) ?? string.Empty, a.Name, a.Unit,
-                a.AppliesTo, a.RateOn(today)?.Value, a.Rates.Count > 0 ? a.Rates[0].EffectiveFrom : null, a.Rates.Count))
+                a.AppliesTo, a.RateOn(today)?.Value, a.Rates.Count > 0 ? a.Rates[0].EffectiveFrom : null, a.Rates.Count, a.IsSeeded))
             .ToList();
     }
 
@@ -48,7 +50,7 @@ public sealed class AllowanceService(IAllowanceRepository allowances, IAgreement
     {
         var a = await Load(id, ct).ConfigureAwait(false);
         return new AllowanceDto(a.Id, a.AgreementId, a.Name, a.Unit, a.AppliesTo, a.Conditions,
-            a.Rates.Select(r => new AllowanceRateDto(r.EffectiveFrom, r.Value, r.Source)).ToList());
+            a.Rates.Select(r => new AllowanceRateDto(r.EffectiveFrom, r.Value, r.Source)).ToList(), a.IsSeeded);
     }
 
     /// <returns>The id of the saved prime.</returns>
@@ -65,6 +67,7 @@ public sealed class AllowanceService(IAllowanceRepository allowances, IAgreement
         else
         {
             allowance = await Load(dto.Id, ct).ConfigureAwait(false);
+            allowance.EnsureEditable();
             if (allowance.AgreementId != dto.AgreementId)
             {
                 throw new DomainException(DomainError.TableAgreementLocked, DomainField.Agreement);
@@ -80,7 +83,9 @@ public sealed class AllowanceService(IAllowanceRepository allowances, IAgreement
 
     public async Task DeleteAsync(int id, CancellationToken ct = default)
     {
-        allowances.Remove(await Load(id, ct).ConfigureAwait(false));
+        var allowance = await Load(id, ct).ConfigureAwait(false);
+        allowance.EnsureEditable();
+        allowances.Remove(allowance);
         await unitOfWork.SaveChangesAsync(ct).ConfigureAwait(false);
     }
 

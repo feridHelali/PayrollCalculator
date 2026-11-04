@@ -27,9 +27,13 @@ dotnet ef migrations add <Name> -p src/PayrollCalculator.Infrastructure -s src/P
   from the grid, monthly primes prorated, per-day primes × working days, percentages of the base. The work regime is
   the grid's weekly hours (48 h: 208 h and 26 days a month; 40 h: 173.333 h and 22 days). CSV export with one column
   per prime.
-- **One migration, `InitialCreate`**, creates the schema and seeds the 20 sectoral agreements (Arabic label, stable
-  code, display order) from `Infrastructure/Persistence/AgreementSeed.cs` with EF `HasData`. Seeded agreements are
-  read-only in the app. The migrations were squashed in sprint 07, so a database created before that must be reset
+- **One migration, `InitialCreate`**, creates the schema and seeds, with EF `HasData`:
+  - the 20 sectoral agreements (Arabic label, stable code, display order) from `Infrastructure/Persistence/AgreementSeed.cs`;
+  - the salary grids and primes of `data/seed/agreements/{code}/` (a `seed.json` plus one CSV per grid, embedded in
+    the Infrastructure assembly and read by `ReferenceSeed.cs`). Today: clothing (rider 18, 6 grids, 4 primes) and
+    travel agencies (6 grids from 1996 to 2023, 7 primes).
+
+  Seeded rows are read-only in the app (no save, no delete). Editing a seed file changes the model: add a migration. The migrations were squashed in sprint 07, so a database created before that must be reset
   (`.\run.ps1 -Reset`). The JORT PDFs live in `data/jort/files`, described by `data/jort/manifest.json`;
   they are not shipped with the app.
 

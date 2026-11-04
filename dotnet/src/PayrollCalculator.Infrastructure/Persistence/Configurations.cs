@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PayrollCalculator.Domain.Affairs;
 using PayrollCalculator.Domain.Agreements;
 using PayrollCalculator.Domain.Allowances;
+using PayrollCalculator.Domain.Common;
 using PayrollCalculator.Domain.SalaryTables;
 
 namespace PayrollCalculator.Infrastructure.Persistence;
@@ -67,13 +68,29 @@ internal sealed class SalaryTableConfiguration : IEntityTypeConfiguration<Salary
         b.Property(t => t.WeeklyHours).HasDefaultValue(SalaryTable.DefaultWeeklyHours);
         b.HasOne<SectorialJointAgreement>().WithMany().HasForeignKey(t => t.AgreementId).OnDelete(DeleteBehavior.Cascade);
         b.HasIndex(t => new { t.AgreementId, t.TableNumber });
+        b.Property(t => t.Origin).HasConversion<string>().HasMaxLength(10);
+        b.Ignore(t => t.IsSeeded);
+        var seed = ReferenceSeed.All;
+        b.HasData(seed.Tables.Select(t => new
+        {
+            t.Id,
+            t.AgreementId,
+            t.TableNumber,
+            t.SalaryType,
+            t.ConcernedEmployees,
+            t.WeeklyHours,
+            Origin = DataOrigin.Seed,
+        }));
 
-        b.ComplexProperty(t => t.ApplicationPeriod, p =>
+        // Owned (same table) rather than complex: EF seeds owned types with HasData, not complex ones.
+        b.OwnsOne(t => t.ApplicationPeriod, p =>
         {
             p.Property(r => r.Start).HasColumnName("ApplicationStart");
             p.Property(r => r.End).HasColumnName("ApplicationEnd");
             p.Ignore(r => r.IsOpenEnded);
+            p.HasData(seed.Tables.Select(t => new { SalaryTableId = t.Id, t.Start, End = (DateOnly?)null }));
         });
+        b.Navigation(t => t.ApplicationPeriod).IsRequired();
 
         b.OwnsMany(t => t.Categories, c =>
         {
@@ -83,6 +100,7 @@ internal sealed class SalaryTableConfiguration : IEntityTypeConfiguration<Salary
             c.HasKey("Id");
             c.Property(x => x.Key).IsRequired().HasMaxLength(64);
             c.Property(x => x.Label).IsRequired().HasMaxLength(500);
+            c.HasData(seed.Categories.Select(x => new { x.Id, x.SalaryTableId, x.Key, x.Label, x.Position }));
         });
         b.Navigation(t => t.Categories).UsePropertyAccessMode(PropertyAccessMode.Field);
 
@@ -93,6 +111,7 @@ internal sealed class SalaryTableConfiguration : IEntityTypeConfiguration<Salary
             d.Property<int>("Id");
             d.HasKey("Id");
             d.Property(x => x.Key).IsRequired().HasMaxLength(64);
+            d.HasData(seed.Degrees.Select(x => new { x.Id, x.SalaryTableId, x.Key, x.Number, x.YearsInDegree }));
         });
         b.Navigation(t => t.Degrees).UsePropertyAccessMode(PropertyAccessMode.Field);
 
@@ -105,6 +124,7 @@ internal sealed class SalaryTableConfiguration : IEntityTypeConfiguration<Salary
             c.Property(x => x.CategoryKey).IsRequired().HasMaxLength(64);
             c.Property(x => x.DegreeKey).IsRequired().HasMaxLength(64);
             c.Property(x => x.Amount).HasPrecision(18, 4);
+            c.HasData(seed.Cells.Select(x => new { x.Id, x.SalaryTableId, x.CategoryKey, x.DegreeKey, x.Amount }));
         });
         b.Navigation(t => t.Cells).UsePropertyAccessMode(PropertyAccessMode.Field);
     }
@@ -123,6 +143,10 @@ internal sealed class AllowanceConfiguration : IEntityTypeConfiguration<Allowanc
         b.Property(a => a.Conditions).HasMaxLength(2000);
         b.HasOne<SectorialJointAgreement>().WithMany().HasForeignKey(a => a.AgreementId).OnDelete(DeleteBehavior.Cascade);
         b.HasIndex(a => a.AgreementId);
+        b.Property(a => a.Origin).HasConversion<string>().HasMaxLength(10);
+        b.Ignore(a => a.IsSeeded);
+        var seed = ReferenceSeed.All;
+        b.HasData(seed.Allowances.Select(a => new { a.Id, a.AgreementId, a.Name, a.Unit, a.AppliesTo, a.Conditions, Origin = DataOrigin.Seed }));
 
         b.OwnsMany(a => a.Rates, r =>
         {
@@ -132,6 +156,7 @@ internal sealed class AllowanceConfiguration : IEntityTypeConfiguration<Allowanc
             r.HasKey("Id");
             r.Property(x => x.Value).HasPrecision(18, 4);
             r.Property(x => x.Source).HasMaxLength(500);
+            r.HasData(seed.Rates.Select(x => new { x.Id, x.AllowanceId, x.EffectiveFrom, x.Value, x.Source }));
         });
         b.Navigation(a => a.Rates).UsePropertyAccessMode(PropertyAccessMode.Field);
     }

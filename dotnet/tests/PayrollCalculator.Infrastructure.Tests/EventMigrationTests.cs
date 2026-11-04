@@ -157,7 +157,7 @@ public sealed class EventMigrationTests(ITestOutputHelper output) : IDisposable
         var report = await MigrateAsync();
         var counts = await CompareAsync();
 
-        Assert.Equal((2, 2), (report.Agreements, report.Careers));
+        Assert.Equal((2 + 2, 2), (report.Agreements, report.Careers)); // the sample agreements, plus the two with seeded grids
         Assert.Empty(report.Failures);
         Assert.Equal(0, counts[Difference.Unexplained]);
         Assert.True(counts[Difference.None] > 0);

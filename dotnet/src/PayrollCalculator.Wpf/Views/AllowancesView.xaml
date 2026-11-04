@@ -33,6 +33,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Style="{StaticResource RowDeleteButton}"
+                                    Visibility="{Binding IsSeeded, Converter={StaticResource InverseBoolToVisibility}}"
                                     Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                     CommandParameter="{Binding}" />
                         </DataTemplate>
